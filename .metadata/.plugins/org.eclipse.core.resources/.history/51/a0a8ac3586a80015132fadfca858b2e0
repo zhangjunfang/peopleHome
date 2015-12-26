@@ -1,0 +1,6 @@
+package com.ocean.session.sessionCluster;
+
+public class Snippet {
+	第三步，将RedisHttpSessionConfig加入到WebInitializer#getRootConfigClasses()中，让Spring容器加载RedisHttpSessionConfig类。WebInitializer是一个自定义的AbstractAnnotationConfigDispatcherServletInitializer实现类，该类会在Servlet启动时加载（当然也可以采用别的加载方法，比如采用扫描@Configuration注解类的方式等等）。
+}
+

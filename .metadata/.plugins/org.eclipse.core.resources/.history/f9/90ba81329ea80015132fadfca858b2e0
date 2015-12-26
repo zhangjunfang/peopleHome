@@ -1,0 +1,8 @@
+@EnableRedisHttpSession 
+public class Config {
+
+        @Bean
+        public JedisConnectionFactory connectionFactory() {
+                return new JedisConnectionFactory(); 
+        }
+}

@@ -1,0 +1,24 @@
+package com.ocean.session.sessionCluster;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+
+/**
+ * 
+ * @author windows10
+ *         第二步，编写一个配置类，用来启用RedisHttpSession功能，并向Spring容器中注册一个RedisConnectionFactory
+ *         。
+ */
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 7200)
+public class RedisHttpSessionConfig {
+
+	@Bean
+	public RedisConnectionFactory connectionFactory() {
+		JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
+		connectionFactory.setPort(6379);
+		connectionFactory.setHostName("10.18.15.190");
+		return connectionFactory;
+	}
+}

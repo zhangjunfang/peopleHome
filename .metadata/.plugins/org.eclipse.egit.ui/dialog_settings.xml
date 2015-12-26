@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="2" key="org.eclipse.egit.ui.internal.clone.GitSelectWizardPageWizardSel"/>
+	<item value="670" key="DIALOG_WIDTH"/>
+	<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+	<item value="556" key="DIALOG_HEIGHT"/>
+	<item value="356" key="DIALOG_X_ORIGIN"/>
+	<item value="8" key="DIALOG_Y_ORIGIN"/>
+	<list key="RepositorySelectionPage.UsedUris">
+		<item value="https://github.com/spring-projects/spring-session/"/>
+	</list>
+	<section name="GitImportWizard">
+	</section>
+</section>

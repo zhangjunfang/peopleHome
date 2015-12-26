@@ -1,0 +1,5 @@
+@Configuration
+@EnableWebMvc
+@ComponentScan
+public class MvcConfig {
+}

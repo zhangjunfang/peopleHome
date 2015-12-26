@@ -1,0 +1,7 @@
+1450761745452	Delete 6 resources
+1450761754861	Delete resource 'spring-session/spring-session/build.gradle'
+1450761763287	Delete resource 'spring-session/spring-session-data-redis/build.gradle'
+1450762907109	Delete resource 'spring-session/gradle'
+1450793052192	Rename Java project 'sessionCluster-rest'
+1450796407605	Rename Java project 'sessionCluster-users'
+1450796981078	Delete resource 'spring-session/samples/users/src/main/java/sample/sample'

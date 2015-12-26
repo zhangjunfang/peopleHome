@@ -1,0 +1,5 @@
+//com.springsource.config.ui.prefs.activePageIndex\:/sessionCluster-rest/webapp/WEB-INF/spring/session.xml=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<activePage index\="0"/>
+//com.springsource.config.ui.prefs.activePageIndex\:/sessionCluster-xml/src/main/webapp/spring/session.xml=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<activePage index\="0"/>
+//com.springsource.config.ui.prefs.activePageIndex\:/sessionCluster/webapp/WEB-INF/spring/session.xml=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<activePage index\="0"/>
+//com.springsource.config.ui.prefs.activePageIndex\:/spring-session/samples/httpsession-xml/src/main/webapp/WEB-INF/spring/session.xml=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<activePage index\="0"/>
+eclipse.preferences.version=1
