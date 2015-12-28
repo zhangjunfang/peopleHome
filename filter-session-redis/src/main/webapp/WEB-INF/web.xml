@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="schedule-console" version="3.0">
-	<display-name>wepay-demo</display-name>
+	<display-name>session-cluster-demo</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -36,10 +36,11 @@
 	</servlet-mapping>
 
 	<filter>
-		<filter-name>RedisSessionFilter</filter-name>
+		<filter-name>redisSessionFilter</filter-name>
 		<filter-class>com.ocean.session.redis.RedisSessionFilter</filter-class>
 		<init-param>
 			<param-name>sessionCookieName</param-name>
+			<!--sessionCookieName  对应的值，可以根据实际情况修改  -->
 			<param-value>scn</param-value>
 		</init-param>
 		<init-param>
@@ -52,6 +53,7 @@
 		</init-param>
 		<init-param>
 			<param-name>cookieDomain</param-name>
+			<!-- cookieDomain  根据实际情况修改 -->
 			<param-value>session.com</param-value>
 		</init-param>
 		<init-param>
@@ -60,7 +62,7 @@
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>RedisSessionFilter</filter-name>
+		<filter-name>redisSessionFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

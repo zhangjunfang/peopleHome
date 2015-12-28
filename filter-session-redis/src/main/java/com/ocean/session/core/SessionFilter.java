@@ -133,14 +133,14 @@ public abstract class SessionFilter implements Filter{
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        if (request instanceof HttpServletRequest2) {
+        if (request instanceof HttpServletRequestWrapper) {
             chain.doFilter(request, response);
             return;
         }
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        HttpServletRequest2 request2 = new HttpServletRequest2(httpRequest, httpResponse, sessionManager);
+        HttpServletRequestWrapper request2 = new HttpServletRequestWrapper(httpRequest, httpResponse, sessionManager);
         request2.setSessionCookieName(sessionCookieName);
         request2.setMaxInactiveInterval(maxInactiveInterval);
         request2.setCookieDomain(cookieDomain);
@@ -151,7 +151,7 @@ public abstract class SessionFilter implements Filter{
         chain.doFilter(request2, response);
 
         // update session when request is handled
-        HttpSession2 session = request2.currentSession();
+        HttpSessionWrapper session = request2.currentSession();
         if (session != null) {
             if(!session.isValid()){
                 // if invalidate , delete session

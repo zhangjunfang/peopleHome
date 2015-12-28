@@ -18,7 +18,7 @@ import com.ocean.session.api.SessionManager;
  * Http Session Wrapper
  */
 @SuppressWarnings("deprecation")
-public class HttpSession2 implements HttpSession {
+public class HttpSessionWrapper implements HttpSession {
 
     /**
      * session id
@@ -72,7 +72,7 @@ public class HttpSession2 implements HttpSession {
      */
     private volatile boolean dirty;
 
-    public HttpSession2(String id, SessionManager sessionManager, ServletContext servletContext) {
+    public HttpSessionWrapper(String id, SessionManager sessionManager, ServletContext servletContext) {
         this.id = id;
         this.sessionManager = sessionManager;
         this.sessionStore = sessionManager.loadById(id);

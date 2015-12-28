@@ -15,9 +15,9 @@ import javax.servlet.http.HttpSession;
 /**
  * HttpServletRequest Wrapper
  */
-public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWrapper {
+public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletRequestWrapper {
 
-    private final static Logger log = LoggerFactory.getLogger(HttpServletRequest2.class);
+    private final static Logger log = LoggerFactory.getLogger(HttpServletRequestWrapper.class);
 
     private final HttpServletRequest request;
 
@@ -25,7 +25,7 @@ public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWr
 
     private final SessionManager sessionManager;
 
-    private HttpSession2 session;
+    private HttpSessionWrapper session;
 
     private String sessionCookieName;
 
@@ -37,7 +37,7 @@ public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWr
 
     private int cookieMaxAge;
 
-    public HttpServletRequest2(HttpServletRequest request, HttpServletResponse response, SessionManager sessionManager) {
+    public HttpServletRequestWrapper(HttpServletRequest request, HttpServletResponse response, SessionManager sessionManager) {
         super(request);
         this.request = request;
         this.response = response;
@@ -123,7 +123,7 @@ public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWr
      * get current session
      * @return the current session instance
      */
-    public HttpSession2 currentSession() {
+    public HttpSessionWrapper currentSession() {
         return session;
     }
 
@@ -154,8 +154,8 @@ public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWr
      * @param refresh refresh cookie or not
      * @return session
      */
-    private HttpSession2 buildSession(String id, boolean refresh) {
-        HttpSession2 session = new HttpSession2(id, sessionManager, request.getServletContext());
+    private HttpSessionWrapper buildSession(String id, boolean refresh) {
+        HttpSessionWrapper session = new HttpSessionWrapper(id, sessionManager, request.getServletContext());
         session.setMaxInactiveInterval(maxInactiveInterval);
         if (refresh) {
             WebUtil.addCookie(this, response, getSessionCookieName(), id,
@@ -169,7 +169,7 @@ public class HttpServletRequest2 extends javax.servlet.http.HttpServletRequestWr
      * @param create create session or not
      * @return session
      */
-    private HttpSession2 buildSession(boolean create) {
+    private HttpSessionWrapper buildSession(boolean create) {
         if (create) {
             session = buildSession(sessionManager.getSessionIdGenerator().generate(request), true);
             log.debug("Build new session[{}].", session.getId());
