@@ -1,6 +1,0 @@
-package com.ocean.session.sessionCluster;
-@Configuration
-@EnableWebMvc
-@ComponentScan
-public class MvcConfig {
-}

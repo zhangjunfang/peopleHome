@@ -1,3 +1,5 @@
 eclipse.m2.downloadJavadoc=true
 eclipse.m2.downloadSources=true
+eclipse.m2.globalSettingsFile=G\:\\.m2\\repository\\settings.xml
+eclipse.m2.userSettingsFile=G\:\\.m2\\repository\\settings.xml
 eclipse.preferences.version=1

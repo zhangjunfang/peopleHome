@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="Pool" key="selection"/>
+		<list key="findhistory">
+			<item value="pool"/>
+			<item value="Pool"/>
+			<item value="sessionIdGenerator"/>
+			<item value="SessionIdGenerator"/>
+			<item value="executor"/>
+			<item value="dirty"/>
+			<item value="Executor"/>
+			<item value="maxInactiveInterval"/>
+		</list>
+	</section>
+</section>

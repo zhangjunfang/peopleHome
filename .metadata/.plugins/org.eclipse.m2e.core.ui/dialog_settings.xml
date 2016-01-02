@@ -2,10 +2,13 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
+			<item value="com.ocean.zk.rpc"/>
 		</list>
 		<list key="name">
 		</list>
 		<list key="artifactId">
+			<item value="zk-rpc-server"/>
+			<item value="zk-rpc"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -16,7 +19,7 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
-			<item value="0.0.1-SNAPSHOT"/>
+			<item value="1.0.0"/>
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.dependencies">
@@ -31,6 +34,26 @@
 		<list key="issueManagementUrl">
 		</list>
 	</section>
+	<section name="org.eclipse.m2e.core.ui.internal.dialogs.EditDependencyDialog">
+		<item value="480" key="width"/>
+		<item value="443" key="x"/>
+		<item value="64" key="y"/>
+		<item value="450" key="height"/>
+	</section>
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="D:\peopleHome\"/>
+			<item value="D:\peopleHome\jsonp"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
 	<section name="MavenProjectWizardArchetypePage">
 		<item value="All Catalogs" key="catalog"/>
 		<list key="projectNameTemplate">
@@ -42,8 +65,37 @@
 			<item value="[name]"/>
 		</list>
 	</section>
+	<section name="wizardPage">
+		<list key="groupId">
+			<item value="com.ocean.test"/>
+		</list>
+		<list key="name">
+		</list>
+		<list key="artifactId">
+			<item value="hprose-Java-test"/>
+		</list>
+		<list key="version">
+			<item value="1.0.0"/>
+		</list>
+	</section>
+	<section name="MavenModuleWizardParentPage">
+		<list key="moduleName">
+			<item value="zk-rpc-server"/>
+			<item value="zk-rpc-cliet"/>
+			<item value="zk-rpc-core"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="D:\peopleHome"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -56,12 +108,24 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="org.zk.rpc.server"/>
+			<item value="org.zk.rpc.cliet"/>
+			<item value="org.zk.rpc.core"/>
+			<item value="com.ocean.zk.rpc.zk_rpc"/>
+			<item value="com.ocean.session.filter.filter_session_redis"/>
 			<item value="com.ocean.session.sessionCluster"/>
 		</list>
 		<list key="groupId">
+			<item value="com.ocean.zk.rpc"/>
+			<item value="com.ocean.session.filter"/>
 			<item value="com.ocean.session"/>
 		</list>
 		<list key="artifactId">
+			<item value="zk-rpc-server"/>
+			<item value="zk-rpc-cliet"/>
+			<item value="zk-rpc-core"/>
+			<item value="zk-rpc"/>
+			<item value="filter-session-redis"/>
 			<item value="sessionCluster"/>
 		</list>
 		<list key="projectNameTemplate">
@@ -73,7 +137,14 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
+			<item value="1.0.0"/>
 			<item value="0.0.1-SNAPSHOT"/>
 		</list>
+	</section>
+	<section name="org.eclipse.m2e.editor.dialogs.ManageDependenciesDialog">
+		<item value="713" key="width"/>
+		<item value="327" key="x"/>
+		<item value="64" key="y"/>
+		<item value="450" key="height"/>
 	</section>
 </section>

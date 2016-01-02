@@ -1,0 +1,9 @@
+1451193028314	Move compilation units
+1451193032855	Delete element
+1451193051480	Rename package 'me.hao0.session.core'
+1451193068698	Rename package 'me.hao0.session.exception'
+1451193078787	Rename package 'me.hao0.session.redis'
+1451193089464	Rename package 'me.hao0.session.util'
+1451309360848	Rename type 'HttpServletRequest2'
+1451309380044	Rename type 'HttpSession2'
+1451309441834	Delete element

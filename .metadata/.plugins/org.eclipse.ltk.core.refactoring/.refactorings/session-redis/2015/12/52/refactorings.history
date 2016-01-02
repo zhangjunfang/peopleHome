@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;me.hao0.session.redis&apos; to &apos;filter-session-redis/src/main/java&apos;&#x0D;&#x0A;- Original project: &apos;session-redis&apos;&#x0D;&#x0A;- Destination element: &apos;filter-session-redis/src/main/java&apos;&#x0D;&#x0A;- Original element: &apos;session-redis/src/main/java/me.hao0.session.redis&apos;" description="Copy package" destination="=filter-session-redis/src\/main\/java" element1="/src\/main\/java&lt;me.hao0.session.redis" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1451123562226" version="1.0"/>
+</session>

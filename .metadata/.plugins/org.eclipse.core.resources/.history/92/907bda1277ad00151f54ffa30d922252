@@ -1,0 +1,9 @@
+package com.ocean.exam.rpc.server;
+
+/**
+ * Created by ocean on 15/11/31.
+ */
+public interface  HelloService {
+
+    String sayHello(String name);
+}

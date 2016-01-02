@@ -6,3 +6,4 @@ PLUGINS_NOT_ACTIVATED_ON_STARTUP=org.eclipse.m2e.discovery;
 RUN_IN_BACKGROUND=true
 eclipse.preferences.version=1
 org.eclipse.jface.textfont=1|\u5B8B\u4F53|15.75|1|WINDOWS|1|-21|0|0|0|700|0|0|0|0|3|2|1|2|\u5B8B\u4F53;
+org.eclipse.ui.commands=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<org.eclipse.ui.commands/>

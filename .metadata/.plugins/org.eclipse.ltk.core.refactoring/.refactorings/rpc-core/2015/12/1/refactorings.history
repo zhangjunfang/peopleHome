@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 packages to &apos;zk-rpc-core/src/main/java&apos;&#x0D;&#x0A;- Original project: &apos;rpc-core&apos;&#x0D;&#x0A;- Destination element: &apos;zk-rpc-core/src/main/java&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     rpc-core/src/main/java/com.hipac.service.common&#x0D;&#x0A;     rpc-core/src/main/java/com.hipac.service&#x0D;&#x0A;     rpc-core/src/main/java/com.hipac.service.rpc" description="Copy packages" destination="=zk-rpc-core/src\/main\/java" element1="/src\/main\/java&lt;com.hipac.service.common" element2="/src\/main\/java&lt;com.hipac.service" element3="/src\/main\/java&lt;com.hipac.service.rpc" flags="589830" fragments="3" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1451314659392" version="1.0"/>
+</session>
