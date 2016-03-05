@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mfa.mapper">
+
+	<insert id="bindUserInfo" parameterType="java.util.Map">
+		insert into tpa_user_releation
+		(user_id,plat_token,bind_type,ins_date,plat_code,plat_username)
+		values
+		(#{userId,jdbcType=VARCHAR},
+		#{platToken,jdbcType=VARCHAR},
+		#{bindType,jdbcType=VARCHAR},
+		#{insDate,jdbcType=VARCHAR},
+		#{platCode,jdbcType=VARCHAR},
+		#{platUsername,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

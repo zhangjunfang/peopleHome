@@ -1,0 +1,44 @@
+[
+    {
+        "id": "1",
+        "seriesName": "聚金优选",
+        "interestManagement": 0,
+        "transferFee": "持有3月以上，成交金额2%",
+        "overduePayment": "逾期30天后垫付100%本金",
+        "minInvestment": 1000,
+        "interestPaymentList": [
+            {
+                "id": "3",
+                "interestPaymentType": "到期还本还息",
+                "calcPeriodType": "按月"
+            },
+            {
+                "id": "4",
+                "interestPaymentType": "按月还息，到期还本",
+                "calcPeriodType": "按月"
+            }
+        ],
+        "guaranteeList": []
+    },
+    {
+        "id": "2",
+        "seriesName": "散标",
+        "interestManagement": 0,
+        "transferFee": "持有3月以上，成交金额2%",
+        "overduePayment": "逾期30天后垫付100%本金",
+        "minInvestment": 50,
+        "interestPaymentList": [
+            {
+                "id": "3",
+                "interestPaymentType": "到期还本还息",
+                "calcPeriodType": "按月"
+            },
+            {
+                "id": "4",
+                "interestPaymentType": "按月还息，到期还本",
+                "calcPeriodType": "按月"
+            }
+        ],
+        "guaranteeList": []
+    }
+]

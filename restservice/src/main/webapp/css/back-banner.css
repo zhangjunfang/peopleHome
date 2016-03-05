@@ -1,0 +1,90 @@
+/**
+ * Created by w8 on 15-10-13.
+ * author:YuanJiMing
+ * page:jujinsou.html
+ * time:morning
+ */
+
+@charset "UTF-8";
+*{border: 0;padding: 0;margin: 0;}
+
+.s-skin-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-position: center 0;
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    zoom:1;
+}
+
+#head_wrapper {
+    position: relative;
+    z-index: 5;
+    width: 680px;
+    margin: 0 auto;
+    padding-top: 36px;
+}
+#head_wrapper .s-p-top {
+    text-align: center;
+    padding-top: 42px;
+    padding-bottom: 42px;
+}
+.s_form {
+    text-align: left;
+    padding-left: 50px;
+    z-index: 300;
+    height: auto;
+}
+.fm
+{
+    position: relative;
+}
+#kw {
+    width: 521px;
+    height: 20px;
+    padding: 9px 7px;
+    padding: 11px 7px 7px\9;
+    font: 16px arial;
+    border: 1px solid #d8d8d8;
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+    outline: none;
+}
+.btn-yi{
+    color: white;
+    background-color: #38f;
+    width: 102px;
+    height: 38px;
+    font-size: 16px;
+    border: 0;
+    outline: none;
+}
+
+
+/**list**/
+
+.yi_list
+{
+    position: relative;
+    top:30px;
+    z-index: 5;
+    width: 800px;
+    margin: 0 auto;
+    padding-top: 36px;
+}
+.yi_list table
+{
+    background: url("../img/list-back.png");
+    opacity: 0.8;
+}
+.yi_list table tr th,.yi_list table tr td
+{
+    border: solid 1px #a0c6e5;
+    padding: 5px 0px;
+}

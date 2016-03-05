@@ -1,10 +1,14 @@
+content_assist_autoactivation_delay=20
+content_assist_autoactivation_triggers_java=.zxcvbnmasdfghjklqwertyuiop
 content_assist_disabled_computers=org.eclipse.jdt.ui.textProposalCategory\u0000org.eclipse.jdt.ui.javaAllProposalCategory\u0000org.eclipse.jdt.ui.javaTypeProposalCategory\u0000org.eclipse.jdt.ui.javaNoTypeProposalCategory\u0000
-content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"/>
-content_assist_number_of_computers=26
+content_assist_favorite_static_members=
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.lang.Enum"><rhs name\="org.springframework.web.bind.annotation.RequestMethod"/></lhs><lhs name\="org.springframework.web.servlet.ModelAndView"><rhs name\="org.springframework.web.servlet.ModelAndView"/></lhs><lhs name\="java.lang.CharSequence"><rhs name\="java.lang.String"/></lhs><lhs name\="com.isea533.mybatis.model.QueryModel"><rhs name\="com.isea533.mybatis.model.CountryQueryModel"/></lhs><lhs name\="com.isea533.mybatis.model.CountryQueryModel"><rhs name\="com.isea533.mybatis.model.CountryQueryModel"/></lhs><lhs name\="com.isea533.mybatis.model.Country"><rhs name\="com.isea533.mybatis.model.Country"/></lhs></history>
+content_assist_number_of_computers=27
 content_assist_proposals_background=255,255,255
 content_assist_proposals_foreground=0,0,0
 eclipse.preferences.version=1
 fontPropagated=true
+markOccurrences=false
 org.eclipse.jdt.internal.ui.navigator.layout=2
 org.eclipse.jdt.ui.editor.tab.width=
 org.eclipse.jdt.ui.formatterprofiles.version=12

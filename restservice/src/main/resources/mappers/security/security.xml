@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="ClientTicket" id="ClientTicket">
+		<result column="USER_ID" property="userId" />
+		<result column="TICKET" property="ticket" />
+		<result column="UPD_TIME" property="updTime" />
+		<result column="CLIENT_INFO" property="clientInfo" />
+		<result column="CLIENT_VERSION" property="clientVersion" />
+		<result column="CLIENT_TYPE" property="clientType" />
+	</resultMap>
+
+
+	<resultMap type="RegisterEntity" id="SRegisterEntity">
+		<result column="USER_ID" property="userName" />
+		<result column="USER_PWD" property="pwd" />
+		<result column="IS_TIMEOUT" property="ischeck" />
+	</resultMap>
+
+
+	<select id="QueryUserTicket" parameterType="String" resultMap="SRegisterEntity">
+		SELECT U.USER_ID,USER_PWD,CASE WHEN (SYSDATE-3/144)>T.UPD_TIME THEN 1
+		ELSE 0 END IS_TIMEOUT FROM USERS U
+		INNER JOIN TPA_MOBILE_TICKET T
+		ON
+		U.USER_ID=T.USER_ID
+		WHERE T.TICKET=#{ticket}
+	</select>
+
+	<insert id="InsertUserTicket" parameterType="String">
+		INSERT INTO
+		TPA_MOBILE_TICKET_LOG(USER_ID,TICKET,CLIENT_INFO,CLIENT_VERSION,CLIENT_TYPE,VERIFY_STATUS,MEMO)
+		SELECT USER_ID,TICKET,CLIENT_INFO,CLIENT_VERSION,CLIENT_TYPE,CASE WHEN
+		TICKET=#{ticket} THEN 0 ELSE 1 END VERIFY_STATUS,'获取新票据' MEMO FROM
+		TPA_MOBILE_TICKET
+		WHERE TICKET=#{ticket}
+	</insert>
+
+	<insert id="InsertNewUserTicketLog" parameterType="java.util.Map">
+		INSERT INTO
+		TPA_MOBILE_TICKET_LOG(USER_ID,TICKET,MEMO)
+		VALUES
+		(#{USERID},#{TICKET},'获取新票据')
+	</insert>
+
+	<insert id="InsertNewUserTicket" parameterType="java.util.Map">
+		INSERT INTO
+		TPA_MOBILE_TICKET(USER_ID,TICKET)
+		VALUES (#{USERID},#{TICKET})
+	</insert>
+
+	<update id="UpdateUserTicketByUser" parameterType="java.util.Map">
+		UPDATE
+		TPA_MOBILE_TICKET SET TICKET=#{TICKET},UPD_TIME=SYSDATE WHERE
+		USER_ID=#{USERID}
+	</update>
+
+	<update id="UpdateUserTicket" parameterType="java.util.Map">
+		UPDATE
+		TPA_MOBILE_TICKET SET TICKET=#{TICKETNEW},UPD_TIME=SYSDATE WHERE
+		USER_ID=#{TICKET}
+	</update>
+
+	<select id="QueryNewUserTicket" parameterType="String"
+		resultMap="ClientTicket">
+		SELECT USER_ID,
+		TICKET,
+		UPD_TIME,
+		CLIENT_INFO,
+		CLIENT_VERSION,
+		CLIENT_TYPE
+		FROM TPA_MOBILE_TICKET T
+		WHERE T.USER_ID=#{userId}
+	</select>
+
+
+</mapper>
+ 

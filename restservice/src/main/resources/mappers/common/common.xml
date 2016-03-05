@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="AppVersion" id="AppVersion">
+		<result column="MEMO" property="memo"></result>
+		<result column="PATH" property="path"></result>
+		<result column="VERSION" property="version" />
+		<result column="TYPE" property="type" />
+	</resultMap>
+
+
+
+	<resultMap type="DeviceLocInfo" id="DeviceLocInfo">
+		<result column="ADDRESS" property="formatted_address" />
+		<result column="VERSION" property="version" />
+		<result column="TYPE" property="type" />
+		<result column="USER_ID" property="userId" />
+		<result column="LAT" property="location.lat" />
+		<result column="LNG" property="location.lng" />
+		<result column="PROVINCE" property="addressComponent.province" />
+		<result column="STREET_NUMBER" property="addressComponent.street_number" />
+		<result column="DISTRICT" property="addressComponent.district" />
+		<result column="STREET" property="addressComponent.street" />
+		<result column="CITY" property="addressComponent.city" />
+
+	</resultMap>
+
+	<resultMap type="KeyValuePair" id="KeyValuePair">
+		<result column="NAME" property="name" />
+		<result column="VALUE" property="value" />
+		<result column="DESCRIPTION" property="memo" />
+	</resultMap>
+
+
+	<!-- 版本判断 -->
+	<select id="QueryVersion" parameterType="String" resultMap="AppVersion">
+		SELECT VERSION,TYPE,MEMO,PATH FROM APP_VERSION WHERE TYPE=#{type}
+	</select>
+
+	<!-- 地区 -->
+	<insert id="InsertDeviceLocInfo" parameterType="DeviceLocInfo">
+		INSERT INTO
+		TPA_DEVICE_INFO(ADDRESS,LAT,LNG,PROVINCE,STREET_NUMBER,STREET,CITY,DISTRICT,VERSION,TYPE,USER_ID)
+		VALUES(#{formatted_address,jdbcType=VARCHAR},
+		#{location.lat,jdbcType=VARCHAR},
+		#{location.lng,jdbcType=VARCHAR},
+		#{addressComponent.province,jdbcType=VARCHAR},
+		#{addressComponent.street_number,jdbcType=VARCHAR},
+		#{addressComponent.district,jdbcType=VARCHAR},
+		#{addressComponent.street,jdbcType=VARCHAR},
+		#{addressComponent.city,jdbcType=VARCHAR},
+		#{version,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 聚金宝配置 -->
+	<select id="QueryConfig" parameterType="String" resultMap="KeyValuePair">
+		SELECT NAME,VALUE,DESCRIPTION MEMO FROM ADMIN_SYSTEM WHERE
+		CATEGORY_ID=#{CATEGORY_ID,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="QueryJuJinBaoConfig" parameterType="String"
+		resultMap="KeyValuePair">
+		SELECT NAME,
+		CASE
+		WHEN NAME = 'BEGIN_TIME' THEN
+		TO_CHAR(SYSDATE, 'YYYY-MM-DD') || ' ' || VALUE || ':00:00'
+		WHEN NAME =
+		'END_TIME' THEN
+		CASE
+		WHEN NVL((SELECT TO_NUMBER(VALUE)
+		FROM ADMIN_SYSTEM
+		WHERE CATEGORY_ID = 'JUJINBAO'
+		AND NAME = 'BEGIN_TIME'),
+		0) >
+		NVL((SELECT TO_NUMBER(VALUE)
+		FROM ADMIN_SYSTEM
+		WHERE CATEGORY_ID =
+		'JUJINBAO'
+		AND NAME = 'END_TIME'),
+		0) THEN
+		TO_CHAR(SYSDATE + 1,
+		'YYYY-MM-DD')
+		ELSE
+		TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+		END || ' ' || VALUE ||
+		':00:00'
+		ELSE
+		VALUE
+		END VALUE,
+		DESCRIPTION MEMO
+		FROM ADMIN_SYSTEM WHERE
+		CATEGORY_ID=#{CATEGORY_ID,jdbcType=VARCHAR}
+		UNION
+		ALL
+		SELECT
+		'TOTAL_AMOUNT' NAME,
+		TO_CHAR(NVL((SELECT
+		ROUND(SUM(BORROW_ACCOUNT_YES) /
+		10000, 2)
+		FROM BORROW
+		WHERE BORROW_TYPE
+		= '10'),
+		0)) VALUE,
+		'聚金宝总金额' MEMO
+		FROM DUAL
+		UNION ALL
+		SELECT
+		'ACCOUNT_INTEREST' NAME,
+		TO_CHAR(NVL((SELECT
+		ROUND(SUM(CURRENT_ACCOUNT_AMOUNT)) FROM USERS_ACCOUNT),
+		0)) VALUE,
+		'为用户赚取总金额' MEMO
+		FROM DUAL
+		UNION ALL
+		SELECT 'USER_JOIN_COUNT' NAME,
+		TO_CHAR(NVL((SELECT COUNT(*)
+		FROM BORROW B
+		INNER JOIN BORROW_TENDER BR
+		ON B.BORROW_ID = BR.BORROW_ID
+		AND B.BORROW_TYPE = 10),
+		0)) VALUE,
+		'已加入总人次'
+		FROM DUAL
+	</select>
+
+	<select id="QuerySmsAddress" parameterType="String" resultType="String">
+		SELECT VALUE FROM ADMIN_SYSTEM WHERE APPLICATION_ID = 'GLOBAL' AND
+		CATEGORY_ID = 'CONFIG' AND NAME = 'SMSURL'
+	</select>
+
+
+	<select id="CheckUserById" parameterType="String" resultType="String">
+		SELECT COUNT(*) FROM USERS WHERE USER_ID=#{USER_ID}
+	</select>
+
+
+
+
+
+
+</mapper>
+ 

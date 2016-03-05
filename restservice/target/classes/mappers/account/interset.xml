@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+
+	<resultMap type="InterestDetail" id="InterestDetail">
+		<result column="COMPRESS_DATE" property="compressDate" />
+		<result column="REWARD" property="amount" />
+		<result column="BP_FLG" property="bpFlg" />
+		<result column="BP_MEMO" property="bpMemo" />
+	</resultMap>
+
+	<resultMap type="InterestBean" id="InterestBean">
+		<result column="INTEREST_AMOUNT" property="interestAmount" />
+		<result column="CAPITAL_TOTAL" property="capitalTotal" />
+		<result column="DAY_INTEREST" property="dayInterest" />
+		<result column="WANINTEREST" property="wanInterest" />
+		<result column="WEEKINTEREST" property="weekAmount" />
+		<result column="MONTHINTEREST" property="monthAmount" />
+	</resultMap>
+
+	<resultMap type="ZhaiQuan" id="ZhaiQuan">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="BORROW_TITLE" property="borrowTtile" />
+		<result column="BORROW_TYPE" property="borrowType" />
+		<result column="TENDER_SEQ" property="tenderSeq" />
+		<result column="VALID_ACCOUNT_TENDER" property="validAccountTender" />
+	</resultMap>
+
+
+
+
+
+	<!-- 获取总收益金额 -->
+	<select id="getInterestAmount" parameterType="String" resultMap="InterestBean"> 
+		<![CDATA[SELECT TO_CHAR(INTEREST_AMOUNT, 'fm999990.99999') INTEREST_AMOUNT,
+       CAPITAL_TOTAL,
+       NVL((SELECT CASE  WHEN COMPRESS_DATE = TRUNC(SYSDATE) - 1 THEN  to_char(REWARD,'fm999990.99999')  ELSE '客官请稍等片刻'  END REWARD  FROM TPA_USER_ACCOUNT_SNAP  WHERE COMPRESS_DATE =(SELECT MAX(COMPRESS_DATE) FROM TPA_USER_ACCOUNT_SNAP)    AND USER_ID =#{user_id}),'客官请稍等片刻') DAY_INTEREST,
+       (SELECT  to_char(ROUND(VALUE * 100 / 365, 3),'fm999990.99999')
+          FROM ADMIN_SYSTEM
+         WHERE APPLICATION_ID = 'GLOBAL'
+           AND CATEGORY_ID = 'INTEREST'
+           AND GROUP_ID = 'FEE'
+           AND NAME = 'RATE') WANINTEREST,
+       NVL((SELECT SUM(REWARD)
+          FROM TPA_USER_ACCOUNT_SNAP
+         WHERE COMPRESS_DATE >= TRUNC(SYSDATE) - 7 AND USER_ID =#{user_id}),0) WEEKINTEREST,
+       NVL((SELECT SUM(REWARD)
+          FROM TPA_USER_ACCOUNT_SNAP
+         WHERE COMPRESS_DATE >= TRUNC(SYSDATE) - 30 AND USER_ID =#{user_id}),0) MONTHINTEREST
+  FROM USERS_ACCOUNT UA
+ WHERE UA.USER_ID =#{userId}
+		     ]]>
+	</select>
+
+	<!-- 获取收益列表 -->
+	<select id="getInterestList" parameterType="String" resultMap="InterestDetail"> 
+		<![CDATA[SELECT TO_CHAR(TUAS.COMPRESS_DATE, 'yy-mm-dd') AS COMPRESSDATE,
+       TUAS.REWARD AS AMOUNT,
+       0 BP_FLG,
+       '收益' BP_MEMO
+  FROM TPA_USER_ACCOUNT_SNAP TUAS
+ WHERE TUAS.USER_ID = #{USERID,jdbcType=VARCHAR}
+ ORDER BY TUAS.COMPRESS_DATE DESC]]>
+	</select>
+
+
+
+	<!-- 获取总收益金额 -->
+	<select id="getJuJinBaoInterestAmount" parameterType="String"
+		resultMap="InterestBean"> 
+		<![CDATA[SELECT TO_CHAR(CURRENT_ACCOUNT_AMOUNT, 'fm999990.99999') INTEREST_AMOUNT,
+       CURRENT_ACCOUNT CAPITAL_TOTAL,
+       NVL((SELECT CASE
+                    WHEN COMPRESS_DATE = TRUNC(SYSDATE) - 1 THEN
+                     TO_CHAR(REWARD, 'fm999990.99999')
+                    ELSE
+                     '客官请稍等片刻'
+                  END REWARD
+             FROM TPA_JUJINBAO_SNAP
+            WHERE COMPRESS_DATE =
+                  (SELECT MAX(COMPRESS_DATE) FROM TPA_JUJINBAO_SNAP)
+              AND USER_ID = #{USER_ID,jdbcType=VARCHAR}),
+           '客官请稍等片刻') DAY_INTEREST,
+           
+       (SELECT VALUE 
+          FROM ADMIN_SYSTEM
+         WHERE APPLICATION_ID = 'GLOBAL'
+           AND CATEGORY_ID = 'JUJINBAO'
+           AND GROUP_ID = 'CONFIG'
+           AND NAME = 'WAN_INTEREST') WANINTEREST,
+           
+       NVL((SELECT SUM(REWARD)
+             FROM TPA_JUJINBAO_SNAP
+            WHERE COMPRESS_DATE >= TRUNC(SYSDATE) - 7
+              AND USER_ID =#{USER_ID,jdbcType=VARCHAR}),
+           0) WEEKINTEREST,
+       NVL((SELECT SUM(REWARD)
+             FROM TPA_JUJINBAO_SNAP
+            WHERE COMPRESS_DATE >= TRUNC(SYSDATE) - 30
+              AND USER_ID =#{USER_ID,jdbcType=VARCHAR}),
+           0) MONTHINTEREST
+           
+  FROM USERS_ACCOUNT UA
+ WHERE UA.USER_ID = #{USER_ID,jdbcType=VARCHAR}
+		     ]]>
+	</select>
+
+	<!-- 获取收益列表 -->
+	<select id="getJuJinBaoInterestList" parameterType="String"
+		resultMap="InterestDetail"> 
+		<![CDATA[SELECT TO_CHAR(INS_DATE, 'YYYY-MM-DD') COMPRESSDATE,
+       MONEY AMOUNT,
+       CASE
+         WHEN LOG_TYPE = 402 THEN
+          1
+         WHEN LOG_TYPE = 400 THEN
+          0
+         WHEN LOG_TYPE = 401 THEN
+          1
+         ELSE
+          0
+       END BP_FLG,
+       LOG_TYPE,
+       DECODE(LOG_TYPE, '400', '收益', '401', '赎回', '402', '投资', '--') BP_MEMO
+  FROM USERS_ACCOUNT_LOG
+ WHERE USER_ID = #{USER_ID,jdbcType=VARCHAR}
+   AND LOG_TYPE IN ('400', '401', '402', '403')
+ ORDER BY INS_DATE DESC]]>
+	</select>
+
+	<!-- 聚金宝债权 -->
+	<select id="getJuJinBaoZhaiQuan" parameterType="String"
+		resultMap="ZhaiQuan"> 
+		<![CDATA[SELECT B.BORROW_ID,
+		 B.BORROW_TITLE,
+		 B.BORROW_TYPE,
+		 A.TENDER_SEQ,
+		 A.VALID_ACCOUNT_TENDER
+		 FROM TPA_JUJINBAO_INVEST A
+		 INNER JOIN BORROW B
+		 ON A.BORROW_ID = B.BORROW_ID
+		 WHERE  A.USER_ID =#{USER_ID,jdbcType=VARCHAR}
+		 ORDER BY INS_DATE DESC]]>
+	</select>
+
+
+
+
+
+
+
+</mapper>
+ 

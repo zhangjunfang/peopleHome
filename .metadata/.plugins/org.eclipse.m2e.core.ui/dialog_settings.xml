@@ -2,13 +2,10 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
-			<item value="com.ocean.zk.rpc"/>
 		</list>
 		<list key="name">
 		</list>
 		<list key="artifactId">
-			<item value="zk-rpc-server"/>
-			<item value="zk-rpc"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -19,7 +16,7 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
-			<item value="1.0.0"/>
+			<item value="0.0.1-SNAPSHOT"/>
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.dependencies">
@@ -42,6 +39,7 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="D:\peopleHome"/>
 			<item value="D:\peopleHome\"/>
 			<item value="D:\peopleHome\jsonp"/>
 		</list>
@@ -108,6 +106,7 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="com.anyang.xingqingshu.ocean.core.anyang_core"/>
 			<item value="org.zk.rpc.server"/>
 			<item value="org.zk.rpc.cliet"/>
 			<item value="org.zk.rpc.core"/>
@@ -116,11 +115,13 @@
 			<item value="com.ocean.session.sessionCluster"/>
 		</list>
 		<list key="groupId">
+			<item value="com.anyang.xingqingshu.ocean.core"/>
 			<item value="com.ocean.zk.rpc"/>
 			<item value="com.ocean.session.filter"/>
 			<item value="com.ocean.session"/>
 		</list>
 		<list key="artifactId">
+			<item value="anyang-core"/>
 			<item value="zk-rpc-server"/>
 			<item value="zk-rpc-cliet"/>
 			<item value="zk-rpc-core"/>
@@ -137,8 +138,8 @@
 			<item value="[name]"/>
 		</list>
 		<list key="version">
-			<item value="1.0.0"/>
 			<item value="0.0.1-SNAPSHOT"/>
+			<item value="1.0.0"/>
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.editor.dialogs.ManageDependenciesDialog">

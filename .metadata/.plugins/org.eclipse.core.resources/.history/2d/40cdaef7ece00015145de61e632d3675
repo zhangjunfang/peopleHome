@@ -1,0 +1,11 @@
+package com.ocean.test;
+
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
+
+public class A {
+
+	public static void main(String[] args) {
+       XMLConfigBuilder  xmlConfigBuilder=null;
+	}
+
+}

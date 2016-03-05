@@ -1,8 +1,0 @@
-package com.ocean.web.security;
-
-public class Snippet {
-	public static void main(String[] args) {
-		com.ocean.web.security
-	}
-}
-

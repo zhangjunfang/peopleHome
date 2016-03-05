@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+
+	<resultMap type="XglcUser" id="XglcUser">
+		<result column="USER_ID" property="userId" />
+		<result column="ACCOUNT_KEY" property="accountKey" />
+		<result column="EXPIRE_TIME" property="expireTime" />
+	</resultMap>
+
+
+	<resultMap type="XglcUserTender" id="XglcUserTender">
+		<result column="USER_ID" property="userId" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="USER_BOR_ID" property="userBorId" />
+		<result column="XG_ORDER_SN" property="xgOrderSn" />
+	</resultMap>
+
+
+	<!-- 获取用户名 -->
+	<select id="QueryUserName" parameterType="String" resultType="String">
+		SELECT CASE
+		WHEN AM.PHONE_NUMBER IS NULL THEN U.USER_ID
+		WHEN
+		REGEXP_LIKE(U.USER_ID, '^'||AM.PHONE_NUMBER||'_\d*$') THEN
+		AM.PHONE_NUMBER ELSE U.USER_ID END LOGIN_NAME
+		FROM USERS U
+		LEFT OUTER
+		JOIN APPROVE_MOBILE AM
+		ON U.USER_ID=AM.USER_ID
+		WHERE U.USER_ID
+		=#{USER_ID,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 查询用户是否为西瓜理财用户 -->
+	<select id="QueryXglcUser" parameterType="String" resultType="String">
+		SELECT USER_ID
+		FROM TPA_XGLC_USER_RELEATION U
+		WHERE
+		USER_ID=#{USER_ID,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 西瓜理财单个标 -->
+	<select id="QueryXglcBorrow" parameterType="String" resultMap="Borrow">
+			<![CDATA[SELECT * FROM BORROWS WHERE BORROW_ID=#{BORROW_ID,jdbcType=VARCHAR} ]]>
+	</select>
+
+	<insert id="InsertXglcUser" parameterType="XglcUser">
+		<![CDATA[INSERT INTO TPA_XGLC_USER_RELEATION(USER_ID,ACCOUNT_KEY,EXPIRE_TIME) VALUES(#{userId,jdbcType=VARCHAR},#{accountKey,jdbcType=VARCHAR},#{expireTime,jdbcType=DATE}) ]]>
+	</insert>
+
+	<insert id="InsertXglcUserTender" parameterType="XglcUserTender">
+		<![CDATA[INSERT INTO TPA_XGLC_RECORD(USER_ID,USER_BOR_ID,XG_ORDER_SN,BORROW_ID) VALUES(#{userId,jdbcType=VARCHAR},#{userBorId,jdbcType=VARCHAR},#{xgOrderSn,jdbcType=VARCHAR},#{borrowId,jdbcType=VARCHAR}) ]]>
+	</insert>
+
+
+
+
+</mapper>
+ 

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.sign.mapper">
+
+	<resultMap type="SignConfBean" id="SignConfBean">
+		<result property="name" column="name" />
+		<result property="keyName" column="keyName" />
+		<result property="value" column="value" />
+		<result property="description" column="description" />
+	</resultMap>
+
+	<resultMap type="TpaUserCoinBean" id="TpaUserCoinBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="USER_ID" property="userId" />
+		<result column="AMOUNT" property="amount" />
+		<result column="FROST" property="frost" />
+	</resultMap>
+
+	<resultMap type="SignDetailBean" id="SignDetailBean">
+		<result column="userId" property="userId" />
+		<result column="signDate" property="signDate" />
+		<result column="reward" property="reward" />
+	</resultMap>
+
+	<!-- 获取签到配置 -->
+	<select id="getSignConf" resultMap="SignConfBean">
+    <![CDATA[
+    	select t.name name,t.key_name keyName,t.value value,t.description description from ADMIN_SYSTEM t WHERE t.category_id = 'SIGN' and t.group_id = 'SETTING'
+    ]]>
+	</select>
+
+	<!-- 保存签到配置 -->
+	<insert id="saveSignConf" parameterType="java.util.List">
+		INSERT INTO ADMIN_SYSTEM
+		(APPLICATION_ID,CATEGORY_ID,GROUP_ID,NAME,KEY_NAME,VALUE,DESCRIPTION,TYPE,ORBY,COMP_SIZE)
+		<foreach item="item" index="index" collection="list"
+			separator="union all">
+			select
+			'GLOBAL','SIGN','SETTING',#{item.name},#{item.keyName},#{item.value},#{item.description},'TEXT','','10'
+			from dual
+		</foreach>
+	</insert>
+
+	<!-- 清除签到配置 -->
+	<delete id="clearSignConf">
+      <![CDATA[
+    	DELETE FROM ADMIN_SYSTEM WHERE CATEGORY_ID = 'SIGN' AND GROUP_ID = 'SETTING'
+      ]]>
+	</delete>
+
+
+	<!-- 获取聚金币 -->
+	<select id="getTpaUserCoinByUserId" parameterType="String"
+		resultMap="TpaUserCoinBean"> 
+		<![CDATA[
+		SELECT RECORD_ID, PHONE_NUMBER, USER_ID, AMOUNT, FROST, TYPE
+  		FROM (
+  			SELECT RECORD_ID, PHONE_NUMBER, USER_ID, AMOUNT, FROST, 1 TYPE
+          	FROM TPA_USER_COIN A
+         	WHERE PHONE_NUMBER = (
+         		SELECT MAX(PHONE_NUMBER)
+                FROM APPROVE_MOBILE
+                WHERE USER_ID = #{userId}
+                )
+        	UNION ALL
+        	SELECT RECORD_ID, PHONE_NUMBER, USER_ID, AMOUNT, FROST, 2 TYPE
+          	FROM TPA_USER_COIN A
+        	WHERE USER_ID = #{userId}
+         	ORDER BY TYPE
+         	)
+ 		WHERE ROWNUM = 1
+		]]>
+	</select>
+
+	<!-- 发放签到聚金币 -->
+	<insert id="insertTpaUserCoin" parameterType="TpaUserCoinBean">
+		INSERT INTO
+		TPA_USER_COIN(PHONE_NUMBER,USER_ID,AMOUNT,FROST)
+		SELECT
+		AM.PHONE_NUMBER,#{userId,jdbcType=VARCHAR}
+		,#{amount,jdbcType=NUMERIC},#{frost,jdbcType=NUMERIC} FROM
+		APPROVE_MOBILE AM
+		WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+	</insert>
+
+	<!-- 发放签到聚金币 -->
+	<update id="updateTpaUserCoin" parameterType="TpaUserCoinBean">
+		UPDATE
+		TPA_USER_COIN SET
+		PHONE_NUMBER=#{phoneNumber,jdbcType=VARCHAR},
+		USER_ID=#{userId,jdbcType=VARCHAR},
+		AMOUNT=#{amount,jdbcType=FLOAT},
+		FROST=#{frost,jdbcType=FLOAT}
+		WHERE
+		RECORD_ID=#{recordId,jdbcType=NUMERIC}
+	</update>
+
+	<!-- 生成签到流水 -->
+	<insert id="insertTpaUserCoinDetail" parameterType="TpaUserCoinDetailBean">
+		INSERT INTO
+		TPA_USER_COIN_DETAIL(PHONE_NUMBER,BP_FLG,USER_ID, AMOUNT,
+		MEMO,INS_DATE,ACTIVITY_ID)
+		SELECT
+		#{phoneNumber,jdbcType=VARCHAR},
+		0,
+		#{userId,jdbcType=VARCHAR},
+		#{amount,jdbcType=FLOAT},
+		#{memo,jdbcType=VARCHAR},
+		SYSDATE,
+		1004
+		FROM DUAL
+	</insert>
+
+
+	<!-- TOKEN转USERID -->
+	<select id="getUserId" parameterType="String" resultType="String"> 
+		<![CDATA[
+			SELECT T.USER_ID FROM TPA_MOBILE_TICKET T WHERE T.TICKET = #{token}
+		]]>
+	</select>
+
+	<!-- 分页 -->
+	<select id="getAllSignDetail" parameterType="String" resultMap="SignDetailBean">
+		<![CDATA[
+			SELECT T.USER_ID userId,TO_CHAR(T.INS_DATE,'yyyy-MM-dd') signDate,TO_CHAR(T.AMOUNT,'0.00') reward FROM TPA_USER_COIN_DETAIL T WHERE T.USER_ID = #{userId} AND T.BP_FLG = 0 AND T.ACTIVITY_ID = 1004 ORDER BY INS_DATE DESC
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,1237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="UserNickName" id="UserNickName">
+		<result column="USER_ID" property="userId" />
+		<result column="NICK_NAME" property="nickName" />
+		<result column="FILE_URL" property="userHeadImage" />
+		<result column="TYPE_ID" property="typeId" />
+		<result column="VIP_FLG" property="vipFlg" />
+		<result column="VIP_NAME" property="vipName" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="TYPE_IMG_FILE_ID" property="typeImageFileId" />
+	</resultMap>
+
+	<resultMap type="UserEmail" id="UserEmail" extends="UserNickName">
+		<result column="MAIL_ADDRESS" property="mailAddress" />
+	</resultMap>
+
+	<resultMap type="UserPhone" id="UserPhone" extends="UserNickName">
+		<result column="PHONE_NUMBER" property="mobilephone" />
+	</resultMap>
+
+	<resultMap type="User" id="User" extends="UserNickName">
+		<result column="VEDIO_FLG" property="videoFlg" />
+		<result column="IDENTITY_FLG" property="identityFlg" />
+		<result column="MOBILE_FLG" property="mobileFlg" />
+		<result column="MAIL_FLG" property="mailFlg" />
+		<result column="REGDATE" property="regdate" />
+		<result column="MESSAGECOUNT" property="messageCount" />
+		<result column="CUSTOMER_QQ_NUMBER" property="customerQqNumber" />
+		<result column="ADMIN_USER_NAME" property="adminUserName" />
+	</resultMap>
+
+	<resultMap type="Account" id="Account">
+		<result column="CAPITAL_TOTAL" property="capitalTotal" />
+		<result column="BALANCE" property="balance" />
+		<result column="FROST" property="frost" />
+		<result column="AWAIT" property="await" />
+		<result column="RECOVER_ACCOUNT_INTEREST_YES" property="recoverInterest" />
+		<result column="REWARDMONEY" property="rewardMoney" />
+		<result column="SAFE_STATUS" property="safeStatus" />
+		<result column="RANK" property="rank" />
+		<result column="CONTINUE_TOTAL" property="continueTotal" />
+
+		<result column="DAY_INTEREST" property="dayInterest" />
+		<result column="INTEREST_AMOUNT" property="interestAmount" />
+		<result column="INTEREST_FLG" property="interestFlg" />
+		<result column="COIN" property="coin" />
+		<result column="CURRENT_ACCOUNT" property="jujinbao" />
+		<result column="CURRENT_ACCOUNT_AMOUNT" property="jujinbaoInterest" />
+		<result column="JJQUAN_COUNT" property="jujinQuan" />
+		<association property="user" resultMap="UserNickName" />
+
+	</resultMap>
+
+	<resultMap type="AccountCenter" id="AccountCenter">
+		<result column="RECOVE" property="recove" />
+		<result column="MESSAGE" property="message" />
+		<result column="REWARDRANK" property="rewardRank" />
+		<result column="PRIVILEGE" property="privilege" />
+		<result column="BANKCARD" property="bankCard" />
+		<result column="ATTESTION" property="attestion" />
+		<result column="INVITED" property="invited" />
+	</resultMap>
+
+	<resultMap type="AccountLog" id="AccountLog">
+		<result column="LOG_TYPE" property="logType" />
+		<result column="TYPE" property="type" />
+		<result column="RECORD_TYPE" property="recordType" />
+		<result column="INCOME" property="income" />
+		<result column="EXPEND" property="expend" />
+		<result column="BALANCE" property="balance" />
+		<result column="REMARK" property="remark" />
+		<result column="MONEY" property="money" />
+		<result column="INS_DATE" property="date" />
+	</resultMap>
+
+	<resultMap type="RecoveLogItem" id="RecoveLogItem">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="RECOVER_TIME" property="date" />
+		<result column="AWAIT" property="await" />
+		<result column="REPAY_ACCOUNT_TIMES" property="total" />
+		<result column="BORROW_TIMES" property="current" />
+		<result column="BORROW_TITLE" property="borowTitle" />
+		<result column="Type" property="type" />
+		<result column="ADD_RATE" property="addRate" />
+		<association property="borrower" resultMap="UserNickName" />
+	</resultMap>
+
+	<resultMap type="Message" id="Message">
+		<result column="USER_ID_FROM" property="fromNickName" />
+		<result column="USER_ID_FROM" property="fromUserId" />
+		<result column="NICK_NAME" property="toNickName" />
+		<result column="USER_ID_TO" property="toUserId" />
+		<result column="MSG_TITLE" property="title" />
+		<result column="MSG_CONTENT" property="content" />
+		<result column="MSG_DATE" property="sendTime" />
+	</resultMap>
+
+	<resultMap type="UserBankCard" id="UserBankCard">
+		<result column="USER_ID" property="userId" />
+		<result column="NICK_NAME" property="nickName" />
+		<result column="BANK_CODE" property="bankCode" />
+		<result column="CARD_ID" property="cardId" />
+		<result column="BANK_FULL_NAME" property="bankName" />
+		<result column="BRANCK" property="branck" />
+		<result column="PROVINCE" property="province" />
+		<result column="PROVINCE_NAME" property="provinceName" />
+		<result column="CITY" property="city" />
+		<result column="CITY_NAME" property="cityName" />
+		<result column="CITY_NAME" property="cityName" />
+	</resultMap>
+
+	<resultMap type="UserBankCard" id="UserBankCardMobile"
+		extends="UserBankCard">
+		<result column="RECORD_ID" property="id" />
+	</resultMap>
+
+
+
+	<resultMap type="FriendInvestment" id="FriendInvestment">
+		<result column="NICK_NAME" property="nickName" />
+		<result column="USER_ID" property="userId" />
+		<result column="PHONE_NUMBER" property="tel" />
+		<result column="REWARD" property="income" />
+		<result column="TENDER_ACCOUNT" property="investRange" />
+	</resultMap>
+
+	<resultMap type="RecoveEntity" id="RecoveEntity">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="VALID_ACCOUNT_TENDER" property="investment" />
+		<result column="REWARD" property="await" />
+		<result column="RECOVER_ACCOUNT_YES" property="recoverYes" />
+		<result column="BORROW_TYPE" property="borrowType" />
+		<result column="TRANSFER_FLG" property="transferFlg" />
+	</resultMap>
+
+	<resultMap type="RecoveEntityDetail" id="RecoveEntityDetail">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="RECOVER_TIME" property="date" />
+		<result column="AMOUNT" property="await" />
+		<result column="TYPE" property="type" />
+	</resultMap>
+
+
+	<resultMap type="UserRoi" id="UserRoi">
+		<result column="USER_ID" property="userId" />
+		<result column="RECOVER_TIME" property="recoverTime" />
+		<result column="RECOVER_ACCOUNT_CAPITAL" property="recoverAccountCapital" />
+
+		<result column="RECOVER_INTEREST1" property="recoverInterest1" />
+		<result column="RECOVER_INTEREST2" property="recoverInterest2" />
+		<result column="RECOVER_INTEREST3" property="recoverInterest3" />
+
+		<result column="BORROW_RATE1" property="borrowRate1" />
+		<result column="BORROW_RATE2" property="borrowRate2" />
+		<result column="BORROW_RATE3" property="borrowRate3" />
+
+
+	</resultMap>
+
+
+
+	<resultMap type="UserIdentityCard" id="UserIdentityCard">
+		<result column="REAL_NAME" property="realName" />
+		<result column="CARD_ID" property="cardId" />
+		<result column="CARD_FIELD1" property="cardFileId1" />
+		<result column="CARD_FIELD2" property="cardFileId2" />
+		<result column="SEX" property="sex" />
+		<result column="BANK_CARD_ID" property="bankCardId"></result>
+		<result column="USERINFO_DT_REGISTER" property="userInfoDtRegister"></result>
+		<result column="NO_AGREE" property="noAgree"></result>
+	</resultMap>
+
+
+
+
+	<select id="QueryUserInfo" parameterType="String" resultMap="User">
+			<![CDATA[SELECT NVL(UU.FILE_URL, '/web/cn/images/tx.gif') AS FILE_URL,
+    (SELECT
+    PHONE_NUMBER FROM (SELECT PHONE_NUMBER, ROW_NUMBER() OVER(ORDER BY
+    INS_DATE) ROW_NUM FROM APPROVE_MOBILE WHERE USER_ID =#{user_id}) WHERE
+    ROWNUM <= 1) PHONE_NUMBER,
+    INTEREST_AMOUNT,
+    INTEREST_FLG,
+    NVL((SELECT CASE  WHEN COMPRESS_DATE = TRUNC(SYSDATE) - 1 THEN  to_char(REWARD,'fm999990.99999')  ELSE '客官请稍等片刻'  END REWARD  FROM TPA_USER_ACCOUNT_SNAP  WHERE COMPRESS_DATE =(SELECT MAX(COMPRESS_DATE) FROM TPA_USER_ACCOUNT_SNAP)    AND USER_ID =#{user_id}),'客官请稍等片刻') DAY_INTEREST,
+    ROUND(NVL((SELECT AMOUNT FROM TPA_USER_COIN WHERE USER_ID=#{user_id}),0),2)  COIN,
+    U.NICK_NAME,
+    U.TYPE_ID,
+    U.USER_ID,
+    CASE
+    WHEN
+    UV.VERIFY_FLG = '1' THEN
+    1
+    ELSE
+    0
+    END AS
+    VIP_FLG,
+    CASE
+    WHEN UV.VIP_TYPE =
+    '04' THEN
+    'VIP'
+    WHEN
+    UV.VIP_TYPE = '05'
+    THEN
+    '高级VIP'
+    ELSE
+    '普通用户'
+    END AS
+    VIP_NAME,
+    UA.VIDEO_FLG,
+    UA.IDENTITY_FLG,
+    UA.MOBILE_FLG,
+    UM.VERIFY_FLG AS
+    MAIL_FLG,
+    TO_CHAR(U.INS_DATE,
+    'yyyy-mm-dd') AS REGDATE,
+    MR.MESSAGECOUNT,
+    NVL(T.TYPE_IMG_FILE_ID, 0) AS
+    TYPE_IMG_FILE_ID,
+    CU.CUSTOMER_QQ_NUMBER,
+    AU.ADMIN_USER_NAME,
+    CAPITAL_TOTAL+AWAIT+CURRENT_ACCOUNT+NVL((SELECT NVL(SUM(ADD_ACCOUNT), 0) - NVL(SUM(ADD_ACCOUNT_YES), 0) ADD_ACCOUNT_WAIT  FROM BORROW_TENDER  WHERE USER_ID = #{user_id}),0)  AS CAPITAL_TOTAL,
+    RECHARGE_TOTAL,
+    CASH_TOTAL,
+    ROUND(NVL(UAC.CONTINUE_TOTAL,0),2)) CONTINUE_TOTAL,
+    ROUND(NVL(BALANCE,0),2) BALANCE,
+    ROUND(NVL(FROST,0),2) FROST,
+    ROUND(AWAIT+NVL((SELECT NVL(SUM(ADD_ACCOUNT), 0) - NVL(SUM(ADD_ACCOUNT_YES), 0) ADD_ACCOUNT_WAIT  FROM BORROW_TENDER  WHERE USER_ID = #{user_id}),0),2) AWAIT,
+    ROUND(NVL(CURRENT_ACCOUNT_AMOUNT,0),2) CURRENT_ACCOUNT_AMOUNT,
+    ROUND(NVL(CURRENT_ACCOUNT,0),2) CURRENT_ACCOUNT,
+    (SELECT NVL(SUM(MONEY),
+    0) AS
+    REWARDMONEY
+    FROM USERS_ACCOUNT_LOG
+    WHERE
+    USER_ID = #{user_id}
+    AND
+    LOG_TYPE = '35') -
+    (SELECT NVL(SUM(MONEY), 0) AS
+    REWARDMONEY
+    FROM
+    USERS_ACCOUNT_LOG
+    WHERE USER_ID = #{user_id}
+    AND LOG_TYPE
+    = '39') AS
+    REWARDMONEY,
+    UIV.RECOVER_ACCOUNT_INTEREST_YES,
+    1 SAFE_STATUS,
+    CASE
+    WHEN
+    UIV.INTEREST_RANK IS NULL THEN
+    (SELECT COUNT(*) FROM USERS)
+    ELSE
+    UIV.INTEREST_RANK
+    END RANK
+    FROM USERS U
+    LEFT JOIN USERS_UPFILES UU
+    ON
+    UU.FILE_ID = U.USER_HEAD_FILE_ID
+    LEFT JOIN USERS_VIP UV
+    ON UV.USER_ID =
+    U.USER_ID
+    AND TO_CHAR(SYSDATE, 'yyyy-MM-dd') BETWEEN UV.START_DATE AND
+    UV.END_DATE
+    LEFT JOIN USERS_ATTESTATION UA
+    ON UA.USER_ID = U.USER_ID
+    LEFT JOIN USERS_MAIL UM
+    ON UM.USER_ID = U.USER_ID
+    LEFT JOIN (SELECT
+    USER_ID_TO AS USER_ID, COUNT(*) AS MESSAGECOUNT
+    FROM MESSAGE_RS
+    WHERE
+    OPEN_FLG = '0'
+    AND DEL_FLG = '0'
+    GROUP BY USER_ID_TO) MR
+    ON MR.USER_ID =
+    U.USER_ID
+    LEFT JOIN (SELECT UC.USER_ID, UU.FILE_URL AS TYPE_IMG_FILE_ID
+    FROM USERS_CREDIT UC
+    LEFT JOIN CREDIT_RANK CR
+    ON NVL(UC.CREDIT, 0)
+    BETWEEN CR.POINT_START AND
+    CR.POINT_END
+    LEFT JOIN USERS_UPFILES UU
+    ON
+    UU.FILE_ID = CR.TYPE_IMG_FILE_ID) T
+    ON U.USER_ID = T.USER_ID
+    LEFT JOIN
+    CUSTOMER_SERVICE CU
+    ON CU.ADMIN_USER_ID = UV.CUSTOM_SERVICE_ID
+    LEFT JOIN
+    ADMIN_USERS AU
+    ON AU.ADMIN_USER_ID = UV.CUSTOM_SERVICE_ID
+    LEFT JOIN
+    USERS_ACCOUNT UAC
+    ON U.USER_ID = UAC.USER_ID
+    LEFT OUTER JOIN
+    USER_INTEREST_VIEW UIV
+    ON U.USER_ID = UIV.USER_ID
+    WHERE U.USER_ID =#{user_id}]]>
+	</select>
+
+	<!-- 排名和密码安全状态暂时未做检查 -->
+	<select id="QueryAccountInfo" parameterType="String" resultMap="Account">
+	<![CDATA[SELECT NVL(UU.FILE_URL, '/web/cn/images/tx.gif') AS FILE_URL,
+    (SELECT
+    PHONE_NUMBER FROM (SELECT PHONE_NUMBER, ROW_NUMBER() OVER(ORDER BY
+    INS_DATE) ROW_NUM FROM APPROVE_MOBILE WHERE USER_ID =#{user_id}) WHERE
+    ROWNUM <= 1) PHONE_NUMBER,
+    INTEREST_AMOUNT,
+    INTEREST_FLG,
+    NVL((SELECT CASE  WHEN COMPRESS_DATE = TRUNC(SYSDATE) - 1 THEN  to_char(REWARD,'fm999990.99999')  ELSE '客官请稍等片刻'  END REWARD  FROM TPA_USER_ACCOUNT_SNAP  WHERE COMPRESS_DATE =(SELECT MAX(COMPRESS_DATE) FROM TPA_USER_ACCOUNT_SNAP)    AND USER_ID =#{user_id}),'客官请稍等片刻') DAY_INTEREST,
+    NVL((SELECT AMOUNT FROM TPA_USER_COIN WHERE USER_ID=#{user_id}),0) COIN,
+    U.NICK_NAME,
+    U.TYPE_ID,
+    U.USER_ID,
+    CASE
+    WHEN
+    UV.VERIFY_FLG = '1' THEN
+    1
+    ELSE
+    0
+    END AS
+    VIP_FLG,
+    CASE
+    WHEN UV.VIP_TYPE =
+    '04' THEN
+    'VIP'
+    WHEN
+    UV.VIP_TYPE = '05'
+    THEN
+    '高级VIP'
+    ELSE
+    '普通用户'
+    END AS
+    VIP_NAME,
+    UA.VIDEO_FLG,
+    UA.IDENTITY_FLG,
+    UA.MOBILE_FLG,
+    UM.VERIFY_FLG AS
+    MAIL_FLG,
+    TO_CHAR(U.INS_DATE,
+    'yyyy-mm-dd') AS REGDATE,
+    MR.MESSAGECOUNT,
+    NVL(T.TYPE_IMG_FILE_ID, 0) AS
+    TYPE_IMG_FILE_ID,
+    CU.CUSTOMER_QQ_NUMBER,
+    AU.ADMIN_USER_NAME,
+    CAPITAL_TOTAL+AWAIT+CURRENT_ACCOUNT+NVL((SELECT NVL(SUM(ADD_ACCOUNT), 0) - NVL(SUM(ADD_ACCOUNT_YES), 0) ADD_ACCOUNT_WAIT  FROM BORROW_TENDER  WHERE USER_ID = #{user_id}),0)  AS CAPITAL_TOTAL,
+    RECHARGE_TOTAL,
+    CASH_TOTAL,
+    UAC.CONTINUE_TOTAL,
+    BALANCE,
+    FROST,
+    NVL((SELECT COUNT(*) JJQUAN_COUNT FROM	TICKET_USER_RELATION B,		TICKET_ADDITION_INVEST A		WHERE A.TICKET_ID =		B.TICKET_ID		AND B.USER_ID=#{user_id} AND USE_FLAG=0 AND TRUNC(SYSDATE) BETWEEN B.START_DATE AND A.END_DATE),0) JJQUAN_COUNT,
+    AWAIT+NVL((SELECT NVL(SUM(ADD_ACCOUNT), 0) - NVL(SUM(ADD_ACCOUNT_YES), 0) ADD_ACCOUNT_WAIT  FROM BORROW_TENDER  WHERE USER_ID = #{user_id}),0) AWAIT,
+    NVL(CURRENT_ACCOUNT_AMOUNT,0) CURRENT_ACCOUNT_AMOUNT,
+    NVL(CURRENT_ACCOUNT,0) CURRENT_ACCOUNT,
+    (SELECT NVL(SUM(MONEY),
+    0) AS
+    REWARDMONEY
+    FROM USERS_ACCOUNT_LOG
+    WHERE
+    USER_ID = #{user_id}
+    AND
+    LOG_TYPE = '35') -
+    (SELECT NVL(SUM(MONEY), 0) AS
+    REWARDMONEY
+    FROM
+    USERS_ACCOUNT_LOG
+    WHERE USER_ID = #{user_id}
+    AND LOG_TYPE
+    = '39') AS
+    REWARDMONEY,
+    UIV.RECOVER_ACCOUNT_INTEREST_YES,
+    1 SAFE_STATUS,
+    CASE
+    WHEN
+    UIV.INTEREST_RANK IS NULL THEN
+    (SELECT COUNT(*) FROM USERS)
+    ELSE
+    UIV.INTEREST_RANK
+    END RANK
+    FROM USERS U
+    LEFT JOIN USERS_UPFILES UU
+    ON
+    UU.FILE_ID = U.USER_HEAD_FILE_ID
+    LEFT JOIN USERS_VIP UV
+    ON UV.USER_ID =
+    U.USER_ID
+    AND TO_CHAR(SYSDATE, 'yyyy-MM-dd') BETWEEN UV.START_DATE AND
+    UV.END_DATE
+    LEFT JOIN USERS_ATTESTATION UA
+    ON UA.USER_ID = U.USER_ID
+    LEFT JOIN USERS_MAIL UM
+    ON UM.USER_ID = U.USER_ID
+    LEFT JOIN (SELECT
+    USER_ID_TO AS USER_ID, COUNT(*) AS MESSAGECOUNT
+    FROM MESSAGE_RS
+    WHERE
+    OPEN_FLG = '0'
+    AND DEL_FLG = '0'
+    GROUP BY USER_ID_TO) MR
+    ON MR.USER_ID =
+    U.USER_ID
+    LEFT JOIN (SELECT UC.USER_ID, UU.FILE_URL AS TYPE_IMG_FILE_ID
+    FROM USERS_CREDIT UC
+    LEFT JOIN CREDIT_RANK CR
+    ON NVL(UC.CREDIT, 0)
+    BETWEEN CR.POINT_START AND
+    CR.POINT_END
+    LEFT JOIN USERS_UPFILES UU
+    ON
+    UU.FILE_ID = CR.TYPE_IMG_FILE_ID) T
+    ON U.USER_ID = T.USER_ID
+    LEFT JOIN
+    CUSTOMER_SERVICE CU
+    ON CU.ADMIN_USER_ID = UV.CUSTOM_SERVICE_ID
+    LEFT JOIN
+    ADMIN_USERS AU
+    ON AU.ADMIN_USER_ID = UV.CUSTOM_SERVICE_ID
+    LEFT JOIN
+    USERS_ACCOUNT UAC
+    ON U.USER_ID = UAC.USER_ID
+    LEFT OUTER JOIN
+    USER_INTEREST_VIEW UIV
+    ON U.USER_ID = UIV.USER_ID
+    WHERE U.USER_ID =
+    #{user_id}]]>
+	</select>
+
+	<!-- 除站内信外其他的没有做通知,TODO:单独创建一个表和一个服务程序来做数据更新 -->
+	<select id="QueryAccountCenterInfo" parameterType="String"
+		resultMap="AccountCenter"> 
+		<![CDATA[SELECT 0 RECOVE, (SELECT
+		COUNT(*) AS CNT FROM MESSAGE_RS A WHERE USER_ID_TO = #{user_id} AND OPEN_FLG
+		= '0' AND DEL_FLG = '0') MESSAGE, 0 REWARDRANK, 0 PRIVILEGE, 0
+		BANKCARD,
+		0 ATTESTION, 0 INVITED FROM DUAL]]>
+	</select>
+
+	<select id="QueryAccountLog" parameterType="String" resultMap="AccountLog"> 
+		<![CDATA[SELECT USER_ID, LOG_TYPE, CASE WHEN log_type IN (30) THEN '3' ELSE BP_FLG  END TYPE, MONEY, BALANCE, INCOME, EXPEND,REMARK,TO_CHAR(INS_DATE, 'yyyy-mm-dd hh24:mi:ss') INS_DATE 
+   FROM USERS_ACCOUNT_LOG
+ WHERE USER_ID =#{user_id}
+ORDER BY ins_date DESC]]></select>
+
+
+	<select id="QueryUserMobile" parameterType="String" resultType="String"> 
+		<![CDATA[SELECT PHONE_NUMBER FROM (SELECT PHONE_NUMBER, ROW_NUMBER() OVER(ORDER BY INS_DATE) ROW_NUM FROM APPROVE_MOBILE WHERE USER_ID =#{userId}) WHERE ROWNUM <= 1]]>
+	</select>
+
+	<select id="QueryAccountLogByPage" parameterType="String"
+		resultMap="AccountLog"> 
+		<![CDATA[SELECT USER_ID, LOG_TYPE, BP_FLG TYPE, MONEY, BALANCE, INCOME, EXPEND,REMARK,TO_CHAR(INS_DATE, 'yyyy-mm-dd hh24:mi:ss') INS_DATE 
+   FROM USERS_ACCOUNT_LOG
+ WHERE USER_ID =#{user_id}
+ORDER BY ins_date DESC]]></select>
+
+
+	<!-- 暂不启用这个 -->
+	<select id="QueryRecoveLogItem" parameterType="java.util.Map"
+		resultMap="RecoveLogItem">
+		SELECT NICK_NAME,
+		USER_ID,
+		BORROW_TITLE,
+		BORROW_ID,
+		REPAY_ACCOUNT_TIMES,
+		BORROW_TIMES,
+		SEQ,
+		RECOVER_TIME,
+		OVERDUE_DAY,
+		TENDER_CONTINUE_FLG,
+		RECOVER_ACCOUNT_ALL,
+		RECOVER_ACCOUNT_INTEREST,
+		RECOVER_ACCOUNT_CAPITAL,
+		AWAIT,
+		TYPE,
+		ADD_RATE
+		FROM (SELECT U.NICK_NAME AS NICK_NAME,
+		B.USER_ID AS
+		USER_ID,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.REPAY_ACCOUNT_TIMES,
+		BR.BORROW_TIMES,
+		BR.SEQ,
+		BR.RECOVER_TIME,
+		BR.OVERDUE_DAY,
+		BR.TENDER_CONTINUE_FLG,
+		BR.RECOVER_ACCOUNT_ALL,
+		BR.RECOVER_ACCOUNT_INTEREST + NVL(BR.ADD_ACCOUNT, 0) RECOVER_ACCOUNT_INTEREST,
+		BR.RECOVER_ACCOUNT_CAPITAL,
+		NVL(BR.RECOVER_ACCOUNT_INTEREST, 0) AWAIT,
+		1 TYPE,
+		B.REVERIFY_DATE,
+		TICKET.ADD_RATE
+		FROM BORROW_RECOVER BR
+		INNER JOIN BORROW B
+		ON BR.BORROW_ID = B.BORROW_ID
+		INNER JOIN USERS U
+		ON B.USER_ID = U.USER_ID
+		LEFT OUTER JOIN (SELECT BT.BORROW_ID, BT.USER_ID, MAX(ADD_RATE) ADD_RATE
+		FROM BORROW_TENDER BT
+		WHERE ADD_RATE > 0
+		GROUP BY BORROW_ID, USER_ID) TICKET
+		ON BR.BORROW_ID = TICKET.BORROW_ID AND BR.USER_ID=TICKET.USER_ID
+		WHERE BR.USER_ID =#{user_id}
+		AND RECOVER_ACCOUNT_INTEREST>0
+		<if test="recover_flg != null">
+			AND BR.RECOVER_FLG = #{recover_flg}
+		</if>
+
+		<if test="title != null">
+			AND (B.BORROW_TITLE LIKE '%'||#{title}||'%' OR
+			B.USER_ID
+			LIKE '%'||#{title}||'%')
+		</if>
+
+		<if test="period != null and period_type!=null">
+			AND B.BORROW_PERIOD=#{period} AND
+			B.PERIOD_TYPE=#{period_type}
+		</if>
+
+		<if test="borrow_type != null">
+			AND B.BORROW_TYPE=#{borrow_type}
+		</if>
+
+		<if test="is_day != null">
+			AND B.IS_DAY='1'
+		</if>
+
+		<if test="borrow_id != null">
+			AND BR.BORROW_ID=#{borrow_id}
+		</if>
+		UNION ALL
+		SELECT U.NICK_NAME AS NICK_NAME,
+		B.USER_ID AS USER_ID,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.REPAY_ACCOUNT_TIMES,
+		BR.BORROW_TIMES,
+		BR.SEQ,
+		BR.RECOVER_TIME,
+		BR.OVERDUE_DAY,
+		BR.TENDER_CONTINUE_FLG,
+		BR.RECOVER_ACCOUNT_ALL,
+		BR.RECOVER_ACCOUNT_INTEREST + NVL(BR.ADD_ACCOUNT, 0) RECOVER_ACCOUNT_INTEREST,
+		BR.RECOVER_ACCOUNT_CAPITAL,
+		NVL(BR.RECOVER_ACCOUNT_CAPITAL, 0) AWAIT,
+		0 TYPE,
+		B.REVERIFY_DATE,
+		TICKET.ADD_RATE
+		FROM BORROW_RECOVER BR
+		INNER JOIN BORROW B
+		ON BR.BORROW_ID = B.BORROW_ID
+		INNER JOIN USERS U
+		ON B.USER_ID = U.USER_ID
+		LEFT OUTER JOIN (SELECT BT.BORROW_ID, BT.USER_ID, MAX(ADD_RATE) ADD_RATE
+		FROM BORROW_TENDER BT
+		WHERE ADD_RATE > 0
+		GROUP BY BORROW_ID, USER_ID) TICKET
+		ON BR.BORROW_ID = TICKET.BORROW_ID AND BR.USER_ID=TICKET.USER_ID
+		WHERE BR.USER_ID =#{user_id}
+		AND RECOVER_ACCOUNT_CAPITAL>0
+		<if test="recover_flg != null">
+			AND BR.RECOVER_FLG = #{recover_flg}
+		</if>
+
+		<if test="title != null">
+			AND (B.BORROW_TITLE LIKE '%'||#{title}||'%' OR
+			B.USER_ID
+			LIKE '%'||#{title}||'%')
+		</if>
+
+		<if test="period != null and period_type!=null">
+			AND B.BORROW_PERIOD=#{period} AND
+			B.PERIOD_TYPE=#{period_type}
+		</if>
+
+		<if test="borrow_type != null">
+			AND B.BORROW_TYPE=#{borrow_type}
+		</if>
+
+		<if test="is_day != null">
+			AND B.IS_DAY='1'
+		</if>
+
+		<if test="borrow_id != null">
+			AND BR.BORROW_ID=#{borrow_id}
+		</if>
+		)
+		ORDER BY REVERIFY_DATE DESC,
+		BORROW_ID,
+		BORROW_TIMES,
+		RECOVER_TIME,
+		TYPE DESC
+
+
+	</select>
+
+	<select id="QueryRecoveEntity" parameterType="String" resultMap="RecoveEntity">
+		SELECT ROWNUM,
+		U.NICK_NAME,
+		B.USER_ID,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.BORROW_TYPE,
+		B.BORROW_ACCOUNT,
+		B.BORROW_RATE,
+		T.TYPE_IMG_FILE_ID,
+		F.FILE_URL,
+		B.PERIOD_TYPE,
+		B.BORROW_PERIOD,
+		B.AWARD_STATUS,
+		B.AWARD_ACCOUNT,
+		B.AWARD_SCALE,
+		BR.BORROW_TIMES,
+		BT.VALID_ACCOUNT_TENDER,
+		BT.RECOVER_ACCOUNT_ALL,
+		BT.RECOVER_ACCOUNT_YES,
+		BT.RECOVER_ACCOUNT_CAPITAL_YES,
+		BT.RECOVER_ACCOUNT_CAPITAL_WAIT,
+		BT.RECOVER_ACCOUNT_INTEREST_WAIT,
+		BT.RECOVER_ACCOUNT_INTEREST_YES,
+		BT.RECOVER_ACCOUNT_ALL-
+		BT.RECOVER_ACCOUNT_YES await,
+		BT.RECOVER_ACCOUNT_ALL -
+		BT.RECOVER_ACCOUNT_INTEREST AS RECOVER_CAPITAL,
+		NVL(B.REPAY_LAST_TIME,
+		BR.RECOVER_TIME) AS REPAY_LAST_TIME,
+		B.IS_DAY,
+		B.BORROW_SUCCESS_TIME,
+		B.PART_AMOUNT,
+		B.TRANSFER_FLG
+		FROM BORROW_TENDER BT
+		LEFT JOIN BORROW B
+		ON
+		BT.BORROW_ID =
+		B.BORROW_ID
+		LEFT JOIN (SELECT BORROW_ID,
+		USER_ID,
+		TENDER_SEQ,
+		MAX(RECOVER_TIME) AS RECOVER_TIME,
+		MAX(BORROW_TIMES) AS
+		BORROW_TIMES
+		FROM BORROW_RECOVER
+		WHERE USER_ID = #{user_id}
+		GROUP BY
+		BORROW_ID,
+		USER_ID, TENDER_SEQ) BR
+		ON BT.USER_ID = BR.USER_ID
+		AND
+		BT.BORROW_ID =
+		BR.BORROW_ID
+		AND BR.TENDER_SEQ = BT.SEQ
+		LEFT JOIN USERS U
+		ON U.USER_ID =
+		B.USER_ID
+		LEFT JOIN (SELECT UC.USER_ID,
+		CR.TYPE_IMG_FILE_ID
+		FROM
+		USERS_CREDIT UC, CREDIT_RANK CR
+		WHERE UC.CREDIT
+		BETWEEN CR.POINT_START
+		AND CR.POINT_END) T
+		ON BT.USER_ID = T.USER_ID
+		LEFT JOIN USERS_UPFILES F
+		ON NVL(T.TYPE_IMG_FILE_ID, 0) = F.FILE_ID
+		WHERE BT.USER_ID = #{user_id}
+		AND NVL(BT.RECOVER_ACCOUNT_WAIT, 0) > 0
+		AND NVL(BT.TENDER_STATUS, '0')=
+		'1'
+		AND
+		TO_DATE(BR.RECOVER_TIME,'YYYY-MM-DD HH24:MI:SS')>SYSDATE
+		ORDER
+		BY
+		REPAY_LAST_TIME DESC
+	</select>
+
+
+
+	<!-- 已结束 -->
+	<select id="QueryReadyRecoveEntity" parameterType="String"
+		resultMap="RecoveEntity">
+		SELECT U.NICK_NAME,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.USER_ID,
+		B.BORROW_TYPE,
+		B.BORROW_RATE,
+		B.PERIOD_TYPE,
+		B.BORROW_PERIOD,
+		BT.VALID_ACCOUNT_TENDER,
+		BT.RECOVER_ACCOUNT_YES,
+		0 AWAIT,
+		T.TYPE_IMG_FILE_ID,
+		F.FILE_URL,
+		B.IS_DAY
+		FROM BORROW_TENDER BT
+		LEFT JOIN
+		BORROW B
+		ON B.BORROW_ID = BT.BORROW_ID
+		LEFT JOIN USERS U
+		ON U.USER_ID =
+		B.USER_ID
+		LEFT JOIN (SELECT UC.USER_ID, CR.TYPE_IMG_FILE_ID
+		FROM
+		USERS_CREDIT UC, CREDIT_RANK CR
+		WHERE UC.CREDIT BETWEEN CR.POINT_START
+		AND CR.POINT_END) T
+		ON BT.USER_ID = T.USER_ID
+		LEFT JOIN USERS_UPFILES F
+		ON NVL(T.TYPE_IMG_FILE_ID, 0) = F.FILE_ID
+		WHERE BT.USER_ID = #{user_id}
+		AND B.REPAY_ACCOUNT_TIMES = B.REPAY_TIMES
+		AND NVL(BT.TENDER_STATUS,
+		'0') = '1'
+		ORDER BY B.BORROW_SUCCESS_TIME DESC
+	</select>
+
+	<!-- TODO:需要 修改为投标中的条件 -->
+	<select id="QueryGoingRecoveEntity" parameterType="String"
+		resultMap="RecoveEntity">
+		SELECT U.NICK_NAME,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.USER_ID,
+		B.BORROW_TYPE,
+		B.BORROW_RATE,
+		B.PERIOD_TYPE,
+		B.BORROW_PERIOD,
+		BT.VALID_ACCOUNT_TENDER,
+		BT.RECOVER_ACCOUNT_YES,
+		0 AWAIT,
+		T.TYPE_IMG_FILE_ID,
+		F.FILE_URL,
+		B.IS_DAY
+		FROM BORROW_TENDER BT
+		LEFT JOIN
+		BORROW B
+		ON B.BORROW_ID = BT.BORROW_ID
+		LEFT JOIN USERS U
+		ON U.USER_ID =
+		B.USER_ID
+		LEFT JOIN (SELECT UC.USER_ID, CR.TYPE_IMG_FILE_ID
+		FROM
+		USERS_CREDIT UC, CREDIT_RANK CR
+		WHERE UC.CREDIT BETWEEN CR.POINT_START
+		AND CR.POINT_END) T
+		ON BT.USER_ID = T.USER_ID
+		LEFT JOIN USERS_UPFILES F
+		ON NVL(T.TYPE_IMG_FILE_ID, 0) = F.FILE_ID
+		WHERE BT.USER_ID = #{user_id}
+		AND NVL(BT.TENDER_STATUS,'0') = '0'
+		ORDER BY B.BORROW_SUCCESS_TIME DESC
+	</select>
+
+
+	<!-- type 为0 表示未还 ,1:已还 -->
+	<select id="QueryRecoveEntityDetail" parameterType="java.util.Map"
+		resultMap="RecoveEntityDetail">
+		SELECT A.*,b.BORROW_TITLE
+		FROM (
+		SELECT BORROW_ID, RECOVER_TIME,
+		RECOVER_ACCOUNT_INTEREST
+		AMOUNT, 1
+		TYPE
+		FROM BORROW_RECOVER
+		WHERE USER_ID
+		= #{user_id}
+		<if test="borrow_id != null">
+			AND BORROW_ID = #{borrow_id}
+		</if>
+
+		<if test="type != null and type=='0'">
+			AND RECOVER_TIME > SYSDATE
+		</if>
+		<if test="type != null and type=='1'">
+			AND RECOVER_TIME &lt;= SYSDATE
+		</if>
+		AND RECOVER_ACCOUNT_INTEREST > 0
+		UNION ALL
+		SELECT BORROW_ID,
+		RECOVER_TIME, RECOVER_ACCOUNT_CAPITAL AMOUNT, 0 TYPE
+		FROM
+		BORROW_RECOVER
+		WHERE USER_ID = #{user_id}
+
+		<if test="borrow_id != null">
+			AND BORROW_ID = #{borrow_id}
+		</if>
+
+		<if test="type != null and type=='0'">
+			AND RECOVER_TIME > SYSDATE
+		</if>
+
+		<if test="type != null and type=='1'">
+			AND RECOVER_TIME &lt;= SYSDATE
+		</if>
+		AND RECOVER_ACCOUNT_CAPITAL > 0) A,
+		BORROW
+		WHERE A.BORROW_ID =
+		B.BORROW_ID
+		ORDER BY RECOVER_TIME , AMOUNT
+	</select>
+
+
+	<select id="QueryMessage" parameterType="String" resultMap="Message">
+		SELECT CASE WHEN USER_ID_FROM IN ('admin','wangning') THEN '聚金资本' ELSE
+		USER_ID_FROM END USER_ID_FROM ,
+		USER_ID_TO,
+		D.NICK_NAME,
+		MSG_TITLE,
+		MSG_CONTENT,
+		MSG_DATE
+		FROM USERS_MESSAGE A
+		INNER JOIN MESSAGE_RS B
+		ON A.ID
+		= B.MSG_ID
+		INNER JOIN USERS D
+		ON B.USER_ID_TO = D.USER_ID
+		WHERE
+		USER_ID_TO=#{user_id}
+		ORDER BY MSG_DATE DESC
+	</select>
+
+	<!-- 将站内信 -->
+	<update id="UpdateUserMessage" parameterType="String">
+		UPDATE MESSAGE_RS
+		SET OPEN_FLG='1' WHERE USER_ID_TO=#{USER_ID,jdbcType=VARCHAR}
+	</update>
+
+
+	<select id="QueryUserBank" parameterType="String" resultMap="Message">
+		SELECT U.USER_ID,
+		NVL(ARN.REAL_NAME, U.USER_ID) NICK_NAME,
+		A.BALANCE_CASH,
+		B.CARD_ID,
+		B.BANK_NAME,
+		SB.BANK_NAME AS BANK_REAL_NAME,
+		B.BRANCK,
+		B.PROVINCE,
+		A1.NAME AS PROVINCE_NAME,
+		B.CITY,
+		A2.NAME AS
+		CITY_NAME
+		FROM USERS U
+		LEFT JOIN USERS_ACCOUNT A
+		ON U.USER_ID = A.USER_ID
+		LEFT JOIN USERS_ACCOUNT_BANK B
+		ON U.USER_ID = B.USER_ID
+		AND B.DEL_FLG
+		='1'
+		LEFT JOIN APPROVE_REAL_NAME ARN
+		ON U.USER_ID = ARN.USER_ID
+		LEFT JOIN
+		SITE_BANK SB
+		ON B.BANK_NAME = SB.ID
+		LEFT JOIN AREAS A1
+		ON B.PROVINCE =
+		A1.ID
+		LEFT JOIN AREAS A2
+		ON B.CITY = A2.ID
+		WHERE U.USER_ID =#{user_id}
+		ORDER BY B.UPD_DATE DESC
+	</select>
+
+	<select id="QueryFriendInvestment" parameterType="String"
+		resultMap="FriendInvestment">
+		SELECT NICK_NAME,
+		U.USER_ID,
+		AM.PHONE_NUMBER,
+		NVL(UM.MONEY, 0)
+		REWARD,
+		CASE
+		WHEN UT.TENDER_ACCOUNT >= 50 AND
+		UT.TENDER_ACCOUNT &lt; 1000
+		THEN
+		'
+		50~1000'
+		WHEN UT.TENDER_ACCOUNT >= 1000
+		AND UT.TENDER_ACCOUNT &lt;
+		5000
+		THEN
+		' 1000~5000'
+		WHEN UT.TENDER_ACCOUNT >=
+		5000 AND
+		UT.TENDER_ACCOUNT
+		&lt; 10000 THEN
+		' 5000~10000'
+		WHEN
+		UT.TENDER_ACCOUNT >=
+		10000 AND
+		UT.TENDER_ACCOUNT &lt; 30000 THEN
+		'
+		10000~30000'
+		WHEN
+		UT.TENDER_ACCOUNT
+		>= 30000 AND UT.TENDER_ACCOUNT &lt;
+		50000 THEN
+		'
+		30000~50000'
+		WHEN
+		UT.TENDER_ACCOUNT >= 50000 AND
+		UT.TENDER_ACCOUNT &lt;
+		100000 THEN
+		'
+		50000~100000'
+		WHEN UT.TENDER_ACCOUNT
+		>= 100000 THEN
+		'
+		100000以上'
+		WHEN UT.TENDER_ACCOUNT IS NULL THEN '0'
+		END
+		TENDER_ACCOUNT
+		FROM
+		USERS U
+		LEFT OUTER JOIN
+		USERS_ACCOUNT UA
+		ON U.USER_ID
+		= UA.USER_ID
+		LEFT
+		OUTER JOIN USERS_FRIENDS
+		UF
+		ON (U.USER_ID =
+		UF.USER_ID
+		AND UF.JOIN_TYPE =
+		2 AND AGREE_FLG = 1)
+		LEFT OUTER JOIN
+		APPROVE_MOBILE
+		AM
+		ON U.USER_ID =
+		AM.USER_ID
+		LEFT OUTER
+		JOIN (SELECT
+		USER_ID, SUM(MONEY)
+		MONEY
+		FROM (SELECT
+		REPLACE(REPLACE(REGEXP_SUBSTR(REMARK,
+		'邀请\w+成为本站'),
+		'邀请',
+		''),
+		'成为本站',
+		'')
+		USER_ID,
+		MONEY
+		FROM USERS_ACCOUNT_LOG T
+		WHERE 1 = 1
+		AND T.LOG_TYPE IN
+		('02', '55', '56', '70', '59', '38')
+		AND USER_ID
+		=#{user_id})
+		WHERE
+		USER_ID
+		IS NOT NULL
+		GROUP BY USER_ID) UM
+		ON UM.USER_ID
+		=
+		UF.USER_ID
+		LEFT
+		OUTER
+		JOIN (SELECT USER_ID, SUM(VALID_ACCOUNT_TENDER)
+		TENDER_ACCOUNT
+		FROM
+		BORROW_TENDER
+		WHERE TENDER_STATUS = '1'
+		GROUP BY
+		USER_ID) UT
+		ON
+		U.USER_ID
+		= UT.USER_ID
+		WHERE FRIENDS_USER_ID =#{user_id}
+		ORDER BY
+		UM.MONEY DESC NULLS
+		LAST
+	</select>
+
+	<!-- 当前奖励类型 -->
+	<select id="QueryRewardMemo" parameterType="String" resultType="String">
+		select '' from dual
+	</select>
+
+
+	<!-- 项目回款计划 -->
+
+	<!-- 查询用户当前的银行卡 -->
+
+	<select id="QueryUserBankCard" parameterType="String" resultMap="UserBankCard">
+		SELECT A.USER_ID,
+		U.NICK_NAME,
+		A.BANK_NAME BANK_CODE,
+		SITE_BANK.BANK_NAME,
+		AR.REAL_NAME,
+		A.BRANCK,
+		A.CARD_ID,
+		B.ID PROVINCE,
+		C.ID CITY,
+		B.NAME PROVINCE_NAME,
+		C.NAME CITY_NAME,
+		NVL(B.NAME, '')
+		||NVL(C.NAME, '') ||
+		nvl(SITE_BANK.BANK_NAME, '') || nvl(a.BRANCK, '')
+		bank_full_name
+		FROM USERS U
+		LEFT OUTER JOIN APPROVE_REAL_NAME AR
+		ON
+		(U.USER_ID = AR.USER_ID)
+		INNER JOIN USERS_ACCOUNT_BANK A
+		ON (U.USER_ID =
+		A.USER_ID AND DEL_FLG = 1)
+		LEFT OUTER JOIN AREAS B
+		ON (A.PROVINCE = B.ID
+		AND B.AREA_LEVEL = 1)
+		LEFT OUTER JOIN AREAS C
+		ON (A.CITY = C.ID AND
+		C.AREA_LEVEL = 2)
+		LEFT OUTER JOIN SITE_BANK
+		ON (A.BANK_NAME =
+		SITE_BANK.ID)
+		WHERE U.USER_ID = #{user_id}
+	</select>
+
+
+	<select id="QueryUserRoi" parameterType="String" resultMap="UserRoi">
+		SELECT *
+		FROM (SELECT USER_ID,
+		TO_CHAR(RECOVER_TIME, 'MM-DD')
+		RECOVER_TIME,
+		RECOVER_TIME RE_TIME,
+		RECOVER_INTEREST1,
+		RECOVER_INTEREST2,
+		RECOVER_INTEREST3,
+		BORROW_RATE1,
+		BORROW_RATE2,
+		BORROW_RATE3,
+		RECOVER_ACCOUNT_CAPITAL
+		FROM TPA_USER_ROI
+		WHERE USER_ID =
+		#{userId}
+		AND RECOVER_ACCOUNT_CAPITAL > 0
+		ORDER BY RECOVER_TIME DESC)
+		WHERE ROWNUM &lt;= 10
+		ORDER BY RE_TIME
+	</select>
+
+
+	<!--此处通过USERS_ACCOUNT_BANK_MOBILE 表出数据，此处数据可以一对多 -->
+	<select id="QueryUserBindCard" parameterType="String"
+		resultMap="UserBankCardMobile">
+		SELECT
+		A.RECORD_ID,
+		A.USER_ID,
+		U.NICK_NAME,
+		A.BANK_NAME
+		BANK_CODE,
+		SITE_BANK.BANK_NAME,
+		AR.REAL_NAME,
+		A.BRANCK,
+		A.CARD_ID,
+		B.ID
+		PROVINCE,
+		C.ID CITY,
+		B.NAME
+		PROVINCE_NAME,
+		C.NAME CITY_NAME,
+		NVL(B.NAME,
+		'')
+		||NVL(C.NAME, '') ||
+		nvl(SITE_BANK.BANK_NAME, '') || nvl(a.BRANCK,
+		'')
+		bank_full_name
+		FROM
+		USERS U
+		LEFT OUTER JOIN APPROVE_REAL_NAME AR
+		ON
+		(U.USER_ID = AR.USER_ID)
+		INNER JOIN USERS_ACCOUNT_BANK_MOBILE A
+		ON
+		(U.USER_ID =
+		A.USER_ID AND
+		DEL_FLG = 1)
+		LEFT OUTER JOIN AREAS B
+		ON
+		(A.PROVINCE = B.ID
+		AND
+		B.AREA_LEVEL = 1)
+		LEFT OUTER JOIN AREAS C
+		ON
+		(A.CITY = C.ID AND
+		C.AREA_LEVEL = 2)
+		LEFT OUTER JOIN SITE_BANK
+		ON
+		(A.BANK_NAME =
+		SITE_BANK.ID)
+		WHERE U.USER_ID = #{userId}
+		AND A.DEL_FLG=1
+	</select>
+
+	<select id="QueryApproveRealName" parameterType="String"
+		resultType="int">
+		SELECT COUNT(1) CNT FROM APPROVE_REAL_NAME WHERE
+		user_id=#{userId}
+	</select>
+
+
+	<select id="QueryIsBindMobile" parameterType="java.util.HashMap"
+		resultType="int">
+		SELECT COUNT(1) CNT FROM users_account_bank_mobile WHERE
+		user_id=#{userId}
+		and card_id=#{cardId}
+		AND DEL_FLG=1
+	</select>
+
+
+	<select id="QueryUserIdentityInfo" parameterType="java.util.HashMap"
+		resultMap="UserIdentityCard">
+		SELECT ARN.USER_ID,
+		ARN.REAL_NAME,
+		ARN.CARD_FILE_ID1,
+		ARN.CARD_FILE_ID2,
+		ARN.CARD_ID,
+		ARN.SEX,
+		B.CARD_ID BANK_CARD_ID,
+		TO_CHAR(U.INS_DATE,
+		'yyyymmddhh24miss') USERINFO_DT_REGISTER,
+		B.NO_AGREE
+		FROM
+		APPROVE_REAL_NAME ARN
+		INNER JOIN
+		USERS_ACCOUNT_BANK_MOBILE B
+		ON
+		ARN.USER_ID = B.USER_ID
+		INNER JOIN USERS
+		U
+		ON ARN.USER_ID = U.USER_ID
+		WHERE ARN.USER_ID
+		= #{userId}
+		AND B.DEL_FLG=1
+		<if test="recordId != null">
+			AND B.RECORD_ID=#{recordId}
+		</if>
+		<if test="cardId != null">
+			AND B.CARD_ID=#{cardId}
+		</if>
+	</select>
+
+
+
+	<insert id="InsertUserBankCard" parameterType="UserBankCard">
+		INSERT INTO
+		USERS_ACCOUNT_BANK_MOBILE
+		(USER_ID,
+		CARD_ID,
+		BANK_NAME,
+		BRANCK,
+		PROVINCE,
+		CITY,
+		UPD_USER_ID,
+		UPD_DATE)
+		VALUES(#{realUserId},
+		#{realCardId},
+		#{bankCode},
+		#{branck},
+		#{province},
+		#{city},
+		#{realUserId},
+		sysdate)
+	</insert>
+
+	<insert id="InsertUserBankCardNormal" parameterType="UserBankCard">
+		INSERT INTO
+		USERS_ACCOUNT_BANK
+		(USER_ID,
+		CARD_ID,
+		BANK_NAME,
+		BRANCK,
+		PROVINCE,
+		CITY,
+		UPD_USER_ID,
+		UPD_DATE)
+		VALUES(#{realUserId},
+		#{realCardId},
+		#{bankCode},
+		#{branck},
+		#{province},
+		#{city},
+		#{realUserId},
+		sysdate)
+	</insert>
+
+	<select id="QueryIsBindNormal" parameterType="java.util.HashMap"
+		resultType="int">
+		SELECT COUNT(1) CNT FROM users_account_bank WHERE
+		user_id=#{userId}
+		and card_id=#{cardId}
+		AND DEL_FLG=1
+	</select>
+
+
+
+	<!-- DELETE为1表示未删除，0：表示删除这个和 USERS_ACCOUNT_BANK 表一致。需注意 -->
+	<update id="UpdateCardNoAgree" parameterType="java.util.HashMap">
+		UPDATE
+		USERS_ACCOUNT_BANK_MOBILE SET NO_AGREE=#{noAgree}
+		WHERE
+		USER_ID=#{userId} AND CARD_ID=#{cardId}
+		AND NO_AGREE IS NULL
+		AND
+		DEL_FLG=1
+	</update>
+
+	<update id="FreeRechargeCard" parameterType="java.util.HashMap">
+		UPDATE
+		USERS_ACCOUNT_BANK_MOBILE SET DEL_FLG=0
+		WHERE USER_ID=#{userId} AND
+		CARD_ID=#{cardId}
+		AND DEL_FLG=1
+	</update>
+
+	<update id="FreeWithDrawCard" parameterType="java.util.HashMap">
+		UPDATE
+		USERS_ACCOUNT_BANK SET DEL_FLG=0
+		WHERE USER_ID=#{userId} AND
+		CARD_ID=#{cardId}
+		AND DEL_FLG=1
+	</update>
+
+
+</mapper>
+ 

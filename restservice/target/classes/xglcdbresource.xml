@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.xglc.mapper">
+
+	<resultMap type="BorrowInfoDTO" id="BorrowInfoDTO">
+		<result property="platformName" column="platformName" />
+		<result property="creditSeriesName" column="creditSeriesName" />
+		<result property="creditSeriesId" column="creditSeriesId" />
+		<result property="productName" column="productName" />
+		<result property="productCode" column="productCode" />
+		<result property="totalInvestment" column="totalInvestment" />
+		<result property="annualRevenueRate" column="annualRevenueRate" />
+		<result property="loanLifeType" column="loanLifeType" />
+		<result property="loanLifePeriod" column="loanLifePeriod" />
+		<result property="interestPaymentType" column="interestPaymentType" />
+		<result property="guaranteeType" column="guaranteeType" />
+		<result property="guaranteeInsitutions" column="guaranteeInsitutions" />
+		<result property="onlineState" column="onlineState" />
+		<result property="scale" column="scale" />
+		<result property="publishDate" column="publishDate" />
+		<result property="establishmentDate" column="establishmentDate" />
+		<result property="expireDate" column="expireDate" />
+		<result property="fixedRepaymentDate" column="fixedRepaymentDate" />
+		<result property="isValueDay" column="isValueDay" />
+		<result property="rewardRate" column="rewardRate" />
+		<result property="investTimes" column="investTimes" />
+		<result property="productURL" column="productURL" />
+		<result property="isFirstBuy" column="isFirstBuy" />
+	</resultMap>
+
+	<resultMap type="BorrowUpdateInfoDTO" id="BorrowUpdateInfoDTO">
+		<result property="productCode" column="productCode" />
+		<result property="onlineState" column="onlineState" />
+		<result property="scale" column="scale" />
+		<result property="statusChangeDate" column="statusChangeDate" />
+		<result property="investTimes" column="investTimes" />
+		<result property="productURL" column="productURL" />
+	</resultMap>
+
+	<resultMap type="DebtInfoDTO" id="DebtInfoDTO">
+		<result property="debtId" column="debtId" />
+		<result property="debtCaptial" column="debtCaptial" />
+		<result property="debtInterest" column="debtInterest" />
+		<result property="status" column="status" />
+		<result property="paidCount" column="paidCount" />
+		<result property="lastPaidDate" column="lastPaidDate" />
+		<result property="lastPaidCaptial" column="lastPaidCaptial" />
+		<result property="lastPaidInterest" column="lastPaidInterest" />
+	</resultMap>
+
+
+	<resultMap type="LoginBean" id="LoginBean">
+		<result property="userId" column="userId" />
+		<result property="userPwd" column="userPwd" />
+	</resultMap>
+
+	<resultMap type="OrderInfoDTO" id="OrderInfoDTO">
+		<result property="xgOrderSn" column="xgOrderSn" />
+		<result property="orderId" column="orderId" />
+		<result property="purchaseCaptial" column="purchaseCaptial" />
+		<result property="purchaseTime" column="purchaseTime" />
+		<result property="productCode" column="productCode" />
+		<result property="interestManageFee" column="interestManageFee" />
+	</resultMap>
+
+	<resultMap type="RecoverDTO" id="RecoverDTO">
+		<result property="recoverDate" column="recoverDate" />
+		<result property="recoverCaptial" column="recoverCaptial" />
+		<result property="recoverInterest" column="recoverInterest" />
+	</resultMap>
+
+	<resultMap type="LastRecoverInfo" id="LastRecoverInfo">
+		<result property="lastPaidDate" column="lastPaidDate" />
+		<result property="lastPaidCaptial" column="lastPaidCaptial" />
+		<result property="lastPaidInterest" column="lastPaidInterest" />
+	</resultMap>
+
+
+
+
+
+
+	<!-- 查询当前在售产品列表 -->
+	<select id="getSaleProductList" resultMap="BorrowInfoDTO">
+    <![CDATA[
+    	SELECT 
+      '聚金资本' platformName, 
+      CASE
+    WHEN BORROW_TYPE = 7 THEN '聚金优选'
+    WHEN BORROW_TYPE IN ('2','8')  AND UPLAN_BORROWS_IS_SHOW<>1 THEN '散标'
+    WHEN BORROW_TYPE = 10 THEN '聚金宝'
+    ELSE '散标'
+    END creditSeriesName, 
+    CASE
+    WHEN BORROW_TYPE = 7 THEN '1'
+    WHEN BORROW_TYPE IN ('2','8')  AND UPLAN_BORROWS_IS_SHOW<>1 THEN '2'
+    WHEN BORROW_TYPE = 10 THEN '3'
+    ELSE '2'
+    END creditSeriesId, 
+    BORROW_TITLE productName, 
+    BORROW_ID productCode, 
+    BORROW_ACCOUNT totalInvestment, 
+    BORROW_RATE/100 annualRevenueRate, 
+    DECODE(PERIOD_TYPE, '1', '月', '天') loanLifeType, 
+    BORROW_PERIOD loanLifePeriod, 
+    DECODE(BORROW_STYLE,'1','等额本金','2','等额本息','3','到期还本还息','4','按月还息，到期还本','灵活存取') interestPaymentType, 
+    1 guaranteeType, 
+    '' guaranteeInsitutions, 
+    '在售' onlineState, 
+    BORROW_ACCOUNT_SCALE/100 scale, 
+    VERIFY_DATE publishDate, 
+    '' establishmentDate, 
+    '' expireDate, 
+    0 fixedRepaymentDate, 
+    CASE
+    WHEN BORROW_TYPE = 7 THEN 0
+    WHEN BORROW_TYPE IN ('2','8')  AND UPLAN_BORROWS_IS_SHOW<>1 THEN 0
+    WHEN BORROW_TYPE = 10 THEN 1
+    ELSE 0
+    END isValueDay, 
+    AWARD_SCALE/100 rewardRate, 
+    TENDER_TIMES investTimes, 
+    'http://m.jujinziben.com/m/jujin/#/' ||
+    DECODE(BORROW_TYPE,
+    7,
+    'uplaninfo?id=' || BORROW_ID || CHR(38) ||
+    'plan_kind=' || BORROW_FLAG,
+    'borrowinfo?id=' || BORROW_ID) productURL,
+    case when (period_type = 1 and borrow_period = 1) then 1 else 0 end isFirstBuy
+    FROM BORROW 
+    WHERE 
+		(UPLAN_BORROWS_IS_SHOW IS NULL OR UPLAN_BORROWS_IS_SHOW = '0')
+    AND BORROW_FULL_STATUS != 1 
+    AND BORROW_ACCOUNT_SCALE <= 100 
+    AND VERIFY_FLG = '1' 
+    AND CANCEL_STATUS <> '1' 
+    AND FAILED_FLG = '0'
+    AND BORROW_TYPE != 10
+    ]]>
+	</select>
+
+	<!-- 获取产品的当前更新信息列表 -->
+	<select id="getProductStateInfoList" resultMap="BorrowUpdateInfoDTO"
+		parameterType="java.util.List">
+
+		SELECT
+		b.BORROW_ID productCode, 
+	  	 <![CDATA[
+		case 
+    when (b.borrow_type = 6 and b.borrow_account_scale >= 100 and b.repay_account_wait <= 0 ) then '还款完成'
+    when (b.borrow_type = 6 and b.borrow_account_scale >= 100 and b.repay_account_wait > 0 ) then '还款中'
+    when (b.borrow_type = 6 and b.borrow_account_scale < 100 ) then '在售'
+    when (b.borrow_type != 6 and b.cancel_status = 1 ) then '取消'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg = 1) then '取消'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_status < 1 and b.verify_flg = '') then '取消'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_status < 1 and b.verify_flg = 0) then '取消'        
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_full_status >= 1 and b.reverify_flg is null) then '审核中'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_full_status >= 1 and b.reverify_flg = '') then '取消'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_full_status >= 1 and b.reverify_flg = '0') then '审核中'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_full_status >= 1 and b.reverify_flg = '1' and b.repay_account_wait <= 0) then '还款完成'
+    when (b.borrow_type != 6 and b.cancel_status != 1 and b.failed_flg != 1 and b.borrow_full_status >= 1 and b.reverify_flg = '1' and b.repay_account_wait > 0) then '还款中'
+  else '在售'
+END onlineState,
+ ]]>
+		b.BORROW_ACCOUNT_SCALE/100 scale,
+		b.UPD_DATE statusChangeDate,
+		b.TENDER_TIMES investTimes,
+		'http://m.jujinziben.com/m/jujin/#/' ||
+		DECODE(b.BORROW_TYPE,
+		7,
+		'uplaninfo?id=' || b.BORROW_ID || CHR(38) ||
+		'plan_kind=' ||
+		b.BORROW_FLAG,
+		'borrowinfo?id=' || b.BORROW_ID) productURL
+		FROM BORROW b
+		WHERE
+		b.BORROW_ID in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+
+	</select>
+
+	<!-- 自动登录验证身份接口 -->
+	<select id="getLoginBeanByAccessKey" resultMap="LoginBean"
+		parameterType="String">
+		SELECT U.USER_ID userId,U.USER_PWD userPwd FROM USERS U LEFT JOIN
+		TPA_XGLC_USER_RELEATION T ON U.USER_ID = T.USER_ID WHERE T.ACCOUNT_KEY
+		= #{userAccessKey}
+	</select>
+
+	<select id="getUserIdByAccessKey" resultType="String"
+		parameterType="String">
+		SELECT T.USER_ID FROM TPA_XGLC_USER_RELEATION T WHERE T.ACCOUNT_KEY =
+		#{userAccessKey}
+	</select>
+
+
+
+	<!-- 账户订单详情查询接口 -->
+	<select id="getAccountOrderList" resultMap="OrderInfoDTO"
+		parameterType="java.util.Map">
+
+		SELECT
+		BT.SEQ orderId,
+		XR.XG_ORDER_SN xgOrderSn,
+		BT.VALID_ACCOUNT_TENDER * 100 purchaseCaptial,
+		BT.INS_DATE purchaseTime,
+		BT.BORROW_ID productCode,
+		DECODE (
+		TRIM (U .TYPE_ID),
+		'4',
+		'0',
+		'5',
+		'0',
+		'0.05'
+		) interestManageFee
+		FROM
+		BORROW_TENDER BT
+		LEFT JOIN USERS U ON BT.USER_ID = U .USER_ID
+		LEFT JOIN TPA_XGLC_RECORD XR ON BT.SEQ = XR.USER_BOR_ID
+		LEFT JOIN tpa_xglc_user_releation xur ON BT.user_id = xur.user_id
+		WHERE
+		xur.account_key = #{userAccessKey}
+		AND BT.INS_DATE > TO_DATE (
+		#{lastOrderTime},
+		'yyyy-mm-dd hh24:mi:ss'
+		)
+
+	</select>
+
+	<!-- 账户订单详情查询接口(还款信息) -->
+	<select id="getOrderRecoverList" resultMap="RecoverDTO"
+		parameterType="String">
+		SELECT
+		BR.RECOVER_TIME || ' 23:59:59' recoverDate,
+		BR.RECOVER_ACCOUNT_CAPITAL*100 recoverCaptial,
+		BR.Recover_Account_Interest*100 recoverInterest
+		FROM
+		BORROW_RECOVER BR
+		LEFT JOIN TPA_XGLC_USER_RELEATION TPA ON BR.USER_ID = TPA.USER_ID
+		WHERE
+		BR.TENDER_SEQ = #{orderId}
+
+	</select>
+
+	<!-- 账户债权状态查询接口 -->
+	<select id="getAccountDebtInfoList" resultMap="DebtInfoDTO"
+		parameterType="java.util.List">
+		SELECT
+		OD.*
+		FROM
+		(
+		SELECT
+		ROW_NUMBER () OVER (
+		PARTITION BY D .debtId
+		ORDER BY
+		D .debtId DESC
+		) rn,
+		D .*
+		FROM
+		(
+
+		SELECT BT.SEQ debtId,
+		BT.RECOVER_ACCOUNT_CAPITAL_WAIT * 100 debtCaptial,
+		BT.RECOVER_ACCOUNT_INTEREST_WAIT * 100 debtInterest,
+		CASE
+		WHEN (BT.TRANSFER_STATUS = '2') THEN
+		'债权转让退出'
+		WHEN (BT.TENDER_STATUS = '0') THEN
+		'募资中'
+		WHEN (BT.TENDER_STATUS = '1' AND BT.TRANSFER_STATUS = '0') THEN
+		'还款中'
+		WHEN (BT.TENDER_STATUS = '1' AND
+		BT.RECOVER_ACCOUNT_CAPITAL_WAIT = '0') THEN
+		'自动退出'
+		ELSE
+		'还款中'
+		END status,
+		BT.RECOVER_TIMES paidCount
+		FROM BORROW_TENDER BT
+		LEFT JOIN BORROW B
+		ON BT.BORROW_ID = B.BORROW_ID
+		LEFT JOIN USERS U
+		ON BT.USER_ID = U.USER_ID
+		WHERE BT.SEQ IN
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		) D
+		) OD
+		WHERE
+		OD.RN = 1
+
+	</select>
+
+	<!-- 最近一次还款记录查询 -->
+	<select id="getLastRecover" resultMap="LastRecoverInfo"
+		parameterType="String">
+		SELECT d.* FROM (
+		SELECT
+		RECOVER_ACCOUNT_CAPITAL_YES*100 lastPaidCaptial,
+		RECOVER_ACCOUNT_INTEREST_YES*100 lastPaidInterest,
+		RECOVER_TIME_YES || ' 23:59:59' lastPaidDate
+		FROM BORROW_RECOVER BR
+		WHERE BR.TENDER_SEQ = #{orderId}
+		AND BR.RECOVER_FLG = '1'
+		ORDER BY
+		BR.RECOVER_TIME_YES DESC )
+		D WHERE ROWNUM = 1
+	</select>
+
+
+	<!-- 根据标ID获取标的移动端URL -->
+	<select id="getAppUrl" resultType="String" parameterType="String">
+		SELECT
+		'http://m.jujinziben.com/m/jujin/#/' ||
+		DECODE(BORROW_TYPE,
+		7,
+		'uplaninfo?id=' || BORROW_ID || CHR(38) ||
+		'plan_kind=' || BORROW_FLAG,
+		'borrowinfo?id=' || BORROW_ID) productURL
+		FROM BORROW
+		WHERE
+		BORROW_ID=#{borrowId}
+	</select>
+
+	<!-- 根据用户名获取西瓜理财TOKEN -->
+	<select id="getUserAccessKeyByUserId" resultType="String"
+		parameterType="String">
+		select t.account_key from tpa_xglc_user_releation t
+		WHERE t.user_id = #{userId}
+	</select>
+
+	<!-- 获取订单ID SEQ -->
+	<select id="getTenderSeq" resultType="String" parameterType="java.util.Map">
+		SELECT A.*, ROWNUM RN from (
+		select b.seq from borrow_tender b where
+		b.user_id = #{userId} and b.borrow_id = #{borrowId} order by ins_date
+		desc
+		) A
+		WHERE ROWNUM = 1
+	</select>
+
+</mapper>

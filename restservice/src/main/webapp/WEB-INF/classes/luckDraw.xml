@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.luckDraw.mapper">
+
+	<resultMap type="AwardSet" id="AwardSet">
+		<result property="id" column="id" />
+		<result property="awardCode" column="awardCode" />
+		<result property="awardMsg" column="awardMsg" />
+		<result property="totalCount" column="totalCount" />
+		<result property="maxTimes" column="maxTimes" />
+		<result property="chance" column="chance" />
+		<result property="quantity" column="quantity" />
+	</resultMap>
+
+	<resultMap type="BorrowRecord" id="BorrowRecord">
+		<result property="userId" column="userId" />
+		<result property="borrowId" column="borrowId" />
+		<result property="borrowTitle" column="borrowTitle" />
+		<result property="amount" column="amount" />
+		<result property="tdate" column="tdate" />
+	</resultMap>
+
+	<resultMap type="AwardRecord" id="AwardRecord">
+		<result property="id" column="id" />
+		<result property="userId" column="userId" />
+		<result property="awardCode" column="awardCode" />
+		<result property="awardMsg" column="awardMsg" />
+		<result property="isBigAward" column="isBigAward" />
+		<result property="winDate" column="winDate" />
+		<result property="quantity" column="quantity" />
+	</resultMap>
+
+	<resultMap type="ScrollAwardRecord" id="ScrollAwardRecord">
+		<result property="userId" column="userId" />
+		<result property="nickName" column="nickName" />
+		<result property="phoneNumber" column="phoneNumber" />
+		<result property="awardName" column="awardName" />
+		<result property="winDate" column="winDate" />
+	</resultMap>
+
+	<resultMap type="UserOddTimes" id="UserOddTimes">
+		<result property="userId" column="userId" />
+		<result property="nickName" column="nickName" />
+		<result property="phoneNumber" column="phoneNumber" />
+		<result property="oddTimes" column="oddTimes" />
+	</resultMap>
+
+	<!-- 获取配置 -->
+	<select id="getConf" resultMap="AwardSet">
+    <![CDATA[
+    	select t.id id,t.award_code awardCode,t.award_msg awardMsg,t.total_count totalCount,t.max_times maxTimes,t.chance chance,t.quantity quantity from AWARD_SET t
+    ]]>
+	</select>
+
+
+	<!-- 获取用户抽奖次数 -->
+	<select id="getUserOddTimes" resultMap="UserOddTimes">
+    <![CDATA[
+    
+SELECT U.USER_ID userId,
+       CASE
+         WHEN NVL(A.ODD_TIMES, 0) - NVL(B.USE_COUNT, 0) < 0 THEN
+          0
+         ELSE
+          NVL(A.ODD_TIMES, 0) - NVL(B.USE_COUNT, 0)
+       END oddTimes,
+       A.phone_number phoneNumber,
+       A.nick_name nickName
+  FROM USERS U
+ INNER JOIN (SELECT U.USER_ID,
+                    U.DRAW_COUNT ODD_TIMES,
+                    AM.PHONE_NUMBER,
+                    NVL(UR.NICK_NAME, UR.USER_ID) NICK_NAME
+               FROM (SELECT USER_ID, COUNT(*) DRAW_COUNT
+                       FROM (SELECT BT.USER_ID,
+                                    BT.BORROW_ID,
+                                    SUM(bt.valid_account_tender) over(PARTITION BY bT.USER_ID, bT.BORROW_ID ORDER BY bT.INS_DATE desc) amount,
+                                    ROW_NUMBER() OVER(PARTITION BY BT.USER_ID, BT.BORROW_ID ORDER BY BT.INS_DATE) ORD_IDX
+                               FROM BORROW_TENDER BT
+                              INNER JOIN BORROW B
+                                 ON BT.BORROW_ID = B.BORROW_ID
+                              WHERE BT.INS_DATE BETWEEN
+                                    TO_DATE('2015-12-21', 'YYYY-MM-DD') AND
+                                   	to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd')
+                                AND BT.USER_ID NOT IN
+                                    (SELECT USER_ID FROM BORROW)
+                                AND B.BORROW_TYPE <> '10'
+                                AND B.UPLAN_BORROWS_IS_SHOW <> '1')
+                      WHERE amount >= 2000
+                        and ORD_IDX = 1
+                      GROUP BY USER_ID) U
+               LEFT OUTER JOIN APPROVE_MOBILE AM
+                 ON U.USER_ID = AM.USER_ID
+              INNER JOIN USERS UR
+                 ON U.USER_ID = UR.USER_ID) A
+    ON U.USER_ID = A.USER_ID
+  LEFT OUTER JOIN (SELECT USER_ID, COUNT(*) USE_COUNT
+                     FROM AWARD_RECORD
+                    GROUP BY USER_ID) B
+    ON U.USER_ID = B.USER_ID
+         
+    ]]>
+	</select>
+
+	<!-- 获取用户中奖记录 -->
+	<select id="getUserAwardRecord" resultMap="AwardRecord"
+		parameterType="String">
+    <![CDATA[
+    	select t.id id,t.user_id userId,t.award_code awardCode,t.award_msg awardMsg,t.is_big_award isBigAward,t.win_date winDate,t.quantity quantity from AWARD_RECORD t where t.user_id = #{userId} ORDER BY T.WIN_DATE DESC
+    ]]>
+	</select>
+
+	<!-- 获取滚动中奖记录 -->
+	<select id="getScrollAwardRecord" resultMap="ScrollAwardRecord">
+    <![CDATA[
+    	select  userId, nickName, phoneNumber, awardName, winDate from(
+    	select t.user_id userId,u.nick_name nickName,a.phone_number phoneNumber,t.award_msg awardName,substr(t.win_date, 12, 8) winDate
+		from AWARD_RECORD t 
+		left join USERS u on t.user_id = u.user_id 
+		left join approve_mobile a on t.user_id = a.user_id 
+		ORDER BY T.WIN_DATE DESC) WHERE ROWNUM < 21
+    ]]>
+	</select>
+
+	<!-- 保存中奖记录 -->
+	<insert id="saveUserAwardRecord" parameterType="java.util.List">
+		INSERT INTO AWARD_RECORD
+		(user_id,award_code,award_msg,is_big_award,win_date,quantity)
+		<foreach item="item" index="index" collection="list"
+			separator="union all">
+			select
+			#{item.userId,jdbcType=VARCHAR},#{item.awardCode,jdbcType=VARCHAR},#{item.awardMsg,jdbcType=VARCHAR},#{item.isBigAward,jdbcType=VARCHAR},#{item.winDate,jdbcType=VARCHAR},#{item.quantity,jdbcType=VARCHAR}
+			from dual
+		</foreach>
+	</insert>
+
+	<!-- 发放聚金币流水 -->
+	<insert id="insertTpaUserCoinDetail" parameterType="TpaUserCoinDetailBean">
+		INSERT INTO
+		TPA_USER_COIN_DETAIL(PHONE_NUMBER,BP_FLG,USER_ID, AMOUNT,
+		MEMO,INS_DATE,ACTIVITY_ID)
+		SELECT
+		#{phoneNumber,jdbcType=VARCHAR},
+		0,
+		#{userId,jdbcType=VARCHAR},
+		#{amount,jdbcType=FLOAT},
+		#{memo,jdbcType=VARCHAR},
+		SYSDATE,
+		2050
+		FROM DUAL
+	</insert>
+
+	<!-- 查询用户是否拥有该聚金券 -->
+	<select id="queryTicketByUserId" resultType="String"
+		parameterType="java.util.Map">
+		select t.ticket_count from TICKET_USER_RELATION t where
+		t.user_id = #{userId} and t.ticket_id = #{ticketId}
+	</select>
+
+	<!-- 查询用户是否拥有该聚金券 -->
+	<update id="updateTicket" parameterType="java.util.Map">
+		update
+		TICKET_USER_RELATION set ticket_count =
+		#{ticketCount,jdbcType=INTEGER} where user_id =
+		#{userId,jdbcType=VARCHAR} and ticket_id =
+		#{ticketId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 发放聚金券 -->
+	<insert id="insertTicket" parameterType="java.util.Map">
+		INSERT INTO TICKET_USER_RELATION
+		(user_id,ticket_id,ticket_count,use_flag,start_date,ins_user_id,upd_date,ticket_describe)
+		select
+		#{userId,jdbcType=VARCHAR},#{ticketId,jdbcType=VARCHAR},1,0,to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd'),'聚金资本',sysdate,'2016跨年暖冬抽奖抽奖活动'
+		from dual
+	</insert>
+
+
+
+	<!-- 以下为ldm sql -->
+
+
+	<!-- 获取活动期间用户投标记录 -->
+	<select id="getUserBorrowRecord" resultMap="BorrowRecord"
+		parameterType="String">
+    <![CDATA[
+SELECT OD.*
+  FROM (SELECT ROW_NUMBER() OVER(PARTITION BY D .borrowId ORDER BY D .tdate DESC) rn,
+               D.*
+          FROM (select t.user_id userId,
+                       t.borrow_id borrowId,
+                       b.borrow_title borrowTitle,
+                       SUM(t.valid_account_tender) over(PARTITION BY T.USER_ID, T.BORROW_ID ORDER BY T.INS_DATE) amount,
+                       to_char(t.ins_date, 'yyyy-mm-dd') tdate
+                  from BORROW_TENDER t
+                  left join borrow b
+                    on t.borrow_id = b.borrow_id
+                 where t.DEL_FLG = '0'
+                   and t.cancel_flg = '0'
+                   and t.INS_DATE between
+                       to_date('2015-12-21 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and
+                       to_date('2016-01-14 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+                   and b.borrow_type <> '10'
+                   AND B.UPLAN_BORROWS_IS_SHOW <> '1'
+                   and t.user_id = #{userId,jdbcType=VARCHAR}
+                 order by t.ins_date desc) D where D.amount >= 2000) OD
+ WHERE OD.RN = 1 order by tdate desc
+
+
+    ]]>
+	</select>
+</mapper>

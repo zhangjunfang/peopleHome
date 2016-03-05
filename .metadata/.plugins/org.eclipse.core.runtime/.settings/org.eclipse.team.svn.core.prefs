@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
 externalMigrateFromAuthorizationDatabase/isMigrated=true
 migrateFromAuthorizationDatabase/isMigrated=true
+repositories/50b237675ae00015145de61e632d3675=50b237675ae00015145de61e632d3675;https\://192.168.0.18/svn/restservice;https\://192.168.0.18/svn/restservice;branches;tags;trunk;true;;;;false;;;0

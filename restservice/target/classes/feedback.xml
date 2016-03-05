@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="UserFeedBack" id="UserFeedBack">
+		<result column="RECORD_ID" property="recordid" />
+		<result column="USER_ID" property="userid" />
+		<result column="TO_USER_ID" property="touserid" />
+		<result column="MSG_TYPE" property="msgtype" />
+		<result column="FEED_TYPE" property="feedtype" />
+		<result column="FEED_MEMO" property="feedmemo" />
+		<result column="CONTENT" property="content" />
+		<result column="FILE1" property="filet1" />
+		<result column="FILE2" property="filet2" />
+		<result column="FILE3" property="filet3" />
+		<result column="FILE4" property="filet4" />
+		<result column="FILE5" property="filet5" />
+		<result column="INSERT_TIME" property="inserttime" />
+	</resultMap>
+
+	<resultMap type="UserFeedType" id="UserFeedType">
+		<result column="TYPE_ID" property="typeid" />
+		<result column="NAME" property="name" />
+		<result column="MEMO" property="memo" />
+		<result column="INSERT_TIME" property="inserttime" />
+	</resultMap>
+
+	<select id="QueryUserFeedType" parameterType="String" resultMap="UserFeedType">
+		select * from TPD_USER_FEEDTYPE
+	</select>
+
+	<insert id="InsertUserfeedback" parameterType="UserFeedBack">
+		INSERT INTO
+		TPD_USER_FEEDBACK
+		(FROM_USER_ID,
+		TO_USER_ID,
+		MSG_TYPE,
+		FEED_TYPE,
+		FEED_MEMO,
+		CONTENT,
+		FILE1,
+		FILE2,
+		FILE3,
+		FILE4,
+		FILE5)
+		VALUES(#{userid,jdbcType = VARCHAR},
+		#{touserid,jdbcType = VARCHAR},
+		#{msgtype},
+		#{feedtype},
+		#{feedmemo,jdbcType = VARCHAR},
+		#{content,jdbcType = VARCHAR},
+		#{file1,jdbcType = VARCHAR},
+		#{file2,jdbcType = VARCHAR},
+		#{file3,jdbcType = VARCHAR},
+		#{file4,jdbcType = VARCHAR},
+		#{file5,jdbcType = VARCHAR})
+	</insert>
+
+	<select id="QuerygetFeedByUser" parameterType="String"
+		resultMap="UserFeedBack">
+		select FROM_USER_ID,
+		TO_USER_ID,
+		B.NICK_NAME,
+		MSG_TYPE,
+		CONTENT,
+		INSERT_TIME
+		FROM TPD_USER_FEEDBACK A
+		INNER JOIN USERS B
+		ON (A.TO_USER_ID = B.USER_ID OR A.FROM_USER_ID = B.USER_ID)
+		WHERE (TO_USER_ID = #{user_id} OR FROM_USER_ID = #{user_id})
+		ORDER BY INSERT_TIME DESC
+
+	</select>
+
+</mapper>

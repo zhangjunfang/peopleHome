@@ -1,4 +1,4 @@
 browser-choice=0
 browsers=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<web-browsers current\="0">\r\n<system/>\r\n<external location\="C\:\\Program Files\\Internet Explorer\\iexplore.exe" name\="Internet Explorer"/>\r\n</web-browsers>
 eclipse.preferences.version=1
-internalWebBrowserHistory=http\://java.sun.com/jsp/jstl/core|*|
+internalWebBrowserHistory=http\://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd|*|http\://blog.csdn.net/cutesource/schema/people|*|http\://mybatis.org/dtd/mybatis-3-mapper.dtd|*|http\://www.springframework.org/schema/context/spring-context-4.0.xsd"|*|http\://www.springframework.org/schema/beans/spring-beans-4.0.xsd|*|http\://www.springframework.org/schema/context/spring-context.xsd"|*|http\://www.springframework.org/schema/aop/spring-aop.xsd|*|http\://java.sun.com/jsp/jstl/core|*|

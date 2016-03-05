@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+
+	<resultMap type="Ticket" id="Ticket">
+		<result column="USER_ID" property="userId" />
+		<result column="TICKET_ID" property="ticketId" />
+		<result column="TOTAL_COUNT" property="totalCount" />
+		<result column="USE_COUNT" property="useCount" />
+		<result column="START_TIME" property="startTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="TICKET_NAME" property="name" />
+		<result column="TICKET_VALUE" property="ticketValue" />
+		<result column="ALLOW_USE_COUNT" property="allowUseCount" />
+		<result column="USE_CODDTIONS" property="useCoddtions" />
+		<result column="SOURCE" property="source" />
+	</resultMap>
+
+
+
+
+	<select id="QueryTicketInfo" parameterType="java.util.Map"
+		resultMap="Ticket">
+		SELECT B.USER_ID,
+		B.TICKET_ID,
+		B.TICKET_COUNT TOTAL_COUNT,
+		B.USE_FLAG
+		USE_COUNT,
+		B.START_DATE START_TIME,
+		A.END_DATE
+		END_TIME,
+		A.TICKET_NAME,
+		A.TICKET_VALUE,
+		A.ALLOW_USE_COUNT,
+		A.USE_CODDTIONS,
+		'' SOURCE
+		FROM
+		TICKET_USER_RELATION B,
+		TICKET_ADDITION_INVEST A
+		WHERE A.TICKET_ID =
+		B.TICKET_ID
+		AND B.USER_ID
+		=#{userId}
+		<if test="type=='3'.toString()">
+			AND ((A.END_DATE &lt; SYSDATE AND USE_FLAG
+			&lt;=B.TICKET_COUNT) OR
+			A.STATUS!=1)
+		</if>
+		<if test="type=='2'.toString()">
+			AND USE_FLAG&lt;=B.TICKET_COUNT
+		</if>
+		<if test="type=='1'.toString()">
+			AND A.STATUS=1
+			AND USE_FLAG&lt;=B.TICKET_COUNT
+			AND
+			A.END_DATE>=SYSDATE
+		</if>
+		<if test="ticketId!= null">
+			AND A.TICKET_ID=#{ticketId}
+		</if>
+		ORDER BY A.TICKET_VALUE
+	</select>
+
+
+</mapper>

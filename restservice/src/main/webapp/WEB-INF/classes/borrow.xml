@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+
+	<resultMap type="Borrow" id="Borrow">
+		<result column="BORROW_TITLE" property="title" />
+		<result column="BORROW_TYPE" property="type" />
+
+		<result column="IS_NEW" property="isNew" />
+		<result column="AWARD_STATUS" property="awardStatus" />
+		<result column="LIMIT_NAME" property="creditLevel" />
+		<result column="AWARD_SCALE" property="awardScale" />
+
+		<result column="AWARD_ACCOUNT" property="awardAccount" />
+		<result column="IS_DAY" property="isDay" />
+		<result column="BORROW_PERIOD" property="period" />
+		<result column="BORROW_ACCOUNT_SCALE" property="accountScale" />
+
+		<result column="BORROW_FLAG" property="borrowFlag" />
+		<result column="UPLAN_BORROWS_IS_SHOW" property="uplanBorrowsIsShow" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="USER_ID" property="borrowUserId" />
+		<result column="BORROW_RATE" property="borrowRate" />
+		<result column="BORROW_ACCOUNT" property="borrowAccount" />
+		<result column="BORROW_FULL_STATUS" property="borrowStatus" />
+
+
+		<!-- 还款类型 1:等额本金;2:等额本息;3:到期还本付息;4:按月还息，到期还本 -->
+		<result column="BORROW_STYLE" property="repayType" />
+		<result column="VERIFY_DATE" property="beginTime" />
+		<result column="REPAY_ACCOUNT_WAIT" property="repayAccountWait" />
+		<!-- 尚需借款 -->
+		<result column="BORROW_ACCOUNT_WAIT" property="borrowAccountWait" />
+		<result column="CANCEL_STATUS" property="cancelStatus" />
+		<result column="FAILED_FLG" property="failedFlg" />
+		<result column="VERIFY_FLG" property="verifyFlg" />
+		<result column="REVERIFY_FLG" property="reverifyFlg" />
+		<result column="END_TIME" property="endTime" />
+		<!-- 定向标 -->
+		<result column="DIRECTIONAL_PWD" property="directionalPwd" />
+
+		<!-- 是否为债权转让 -->
+		<result column="TRANSFER_FLG" property="transferFlg" />
+
+	</resultMap>
+
+
+	<!--首页标信息 -->
+	<resultMap type="Borrow" id="HomeBorrow" extends="Borrow">
+		<!-- 红包抵用额度 -->
+		<result column="VOUCHERS_RATE" property="vouchersRate" />
+	</resultMap>
+
+	<resultMap type="BorrowInfo" id="BorrowInfo" extends="Borrow">
+		<result column="TENDER_TIMES" property="tenderCount" />
+		<result column="HITS" property="browseCount" />
+		<result column="TENDER_ACCOUNT_MIN" property="minTenderAccount" />
+		<result column="TENDER_ACCOUNT_MAX" property="maxTenderAccount" />
+		<!-- 借款人 <result column="BORROWUSER" property="borrowUser" /> -->
+		<result column="LOCATION" property="location" />
+		<result column="BORROW_CONTENTS" property="purpose" />
+		<!-- 授信额度 <result column="CERDITLIMIT" property="cerditLimit" /> -->
+		<!-- 计划还款时间 <result column="PAYTIME" property="payTime" /> -->
+		<!-- 详细的描述信息 -->
+		<result column="BORROW_CONTENTS" property="description" />
+		<!-- 缩略图 -->
+		<result column="IMAGESHOW" property="imageShow" />
+		<!-- 红包抵用额度 -->
+		<result column="VOUCHERS_RATE" property="vouchersRate" />
+	</resultMap>
+
+
+	<!-- 还款信用 -->
+	<resultMap type="RepayCredit" id="RepayCredit">
+		<result column="BORROW_ACC_TIMES" property="successBorrowCount" />
+		<result column="BORROW_FAILED_TIMES" property="liuBiaoCount" />
+		<result column="REPAY_WAIT_TIMES" property="awaitCount" />
+		<result column="REPAY_ADVANCE_TIMES" property="aheadRepayCount" />
+		<result column="REPAY_ONTIME_TIMES" property="intimeRepayCount" />
+		<result column="REPAY_LATE_TIMES" property="laterRepayCount" />
+		<result column="REPAY_OVERDUE_DAY" property="inThreeDayCount" />
+		<result column="REPAY_OVERDUE_DAY30" property="outThreeDayCount" />
+		<result column="REPAY_OVERDUE" property="dueRepayCount" />
+	</resultMap>
+
+	<resultMap type="TenderLog" id="TenderLog">
+		<result column="NICK_NAME" property="nickName" />
+		<result column="TYPE" property="type" />
+		<result column="ACCOUNT" property="account" />
+		<result column="VALIDATE_ACCOUNT" property="validateAccount" />
+		<result column="MEMO" property="memo" />
+		<result column="TIME" property="time" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="BORROW_ID" property="borrowId" />
+	</resultMap>
+
+
+	<resultMap type="BorrowInfoItem" id="BorrowInfoItem">
+		<result column="TYPE" property="type" />
+		<result column="INS_DATE" property="uploadTime" />
+		<result column="VERIFY_DATE" property="verifyTime" />
+		<result column="REMARK" property="verifyMemo" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="IMAGE" property="image" />
+		<result column="ATTESTATION_NAME" property="attestationName" />
+	</resultMap>
+
+	<resultMap type="UserIncomeInfo" id="UserIncomeInfo">
+		<result column="REAL_NAME" property="name" />
+		<result column="CARD_ID" property="cardId" />
+		<result column="SEX" property="gender" />
+		<result column="EDUCATION" property="education" />
+		<result column="MONTH_INCOME" property="income" />
+		<result column="MARRY" property="marry" />
+		<result column="SOCIAL_SECURITY" property="socialSecurity" />
+		<result column="HOUSE" property="house" />
+		<result column="IS_CAR" property="car" />
+	</resultMap>
+
+	<resultMap type="BorrowInvestIndicate" id="BorrowInvestIndicate">
+		<result column="BORROW_TYPE" property="borrowType" />
+		<result column="STATUS" property="status" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+	</resultMap>
+
+	<resultMap type="BorrowAttestationItem" id="BorrowAttestationItem">
+		<result column="ATTESTATION_CD" property="attestationCd" />
+		<result column="ATTESTATION_NAME" property="attestationName" />
+		<result column="FILE_URL" property="fileUrl" />
+		<result column="ATTESTATION_IMAGE" property="imageUrl" />
+	</resultMap>
+
+	<resultMap type="BorrowRepay" id="BorrowRepay">
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="BORROW_TIMES" property="currentPeriod" />
+		<result column="REPAY_ACCOUNT_TIMES" property="totalPeriod" />
+		<result column="REPAY_ACCOUNT_ALL" property="capitalTotal" />
+		<result column="REPAY_TIME" property="repayTime" />
+	</resultMap>
+
+
+	<resultMap type="BorrowTransfer" id="BorrowTransfer">
+		<result column="TRANSFER_ID" property="transferId" />
+		<result column="USER_ID" property="userId" />
+		<result column="TENDER_SEQ" property="tenderSeq" />
+		<result column="TRANSFER_AMOUNT" property="transferAmount" />
+		<result column="TRANSFER_CAPITAL" property="transferCapital" />
+		<result column="TRANSFER_PRICE" property="transferPrice" />
+		<result column="DISCOUNT_AMOUNT" property="discountAmount" />
+		<result column="DISCOUNT_RATE" property="discountRate" />
+		<result column="REST_OF_PERIOD" property="restOfPeriod" />
+		<result column="BORROW_ID_ANCESTORS" property="borrowIdAncestors" />
+		<result column="OLD_OF_PERIOD" property="oldOfPeriod" />
+		<result column="PERIOD_TYPE" property="periodType" />
+		<result column="NEXT_RECOVER_TIME" property="nextRecoverTime" />
+		<result column="STATUS" property="status" />
+		<result column="ANCESTORS_BORROW_TITLE" property="ancestorsBorrowTitle" />
+	</resultMap>
+
+
+
+
+
+
+	<!-- 可用标列表 -->
+	<select id="QueryExpressBorrow" parameterType="String"
+		resultMap="Borrow">
+			<![CDATA[SELECT * FROM borrows WHERE ROWNUM<=1 AND BORROW_TYPE=7 AND UPLAN_BORROWS_IS_SHOW<>1
+UNION ALL
+SELECT * FROM borrows WHERE ROWNUM<=1 AND BORROW_TYPE<>7 AND UPLAN_BORROWS_IS_SHOW<>1
+UNION ALL
+SELECT * FROM borrow_new WHERE ROWNUM<=1]]>
+	</select>
+
+	<!-- 首页可用标列表 -->
+	<select id="QueryHomeBorrow" parameterType="String" resultMap="HomeBorrow">
+			<![CDATA[SELECT A.*, B.VALUE VOUCHERS_RATE
+  FROM (SELECT RANK() OVER(PARTITION BY BORROW_PERIOD ORDER BY BORROW_TYPE, VERIFY_DATE DESC) TYPE_ID,
+               A.*
+          FROM (SELECT ROW_NUMBER() OVER(PARTITION BY A.BORROW_PERIOD ORDER BY BORROW_FULL_STATUS ASC, VERIFY_DATE DESC) SORT_ID,
+                       A.*
+                  FROM ALL_BORROW A
+                 WHERE UPLAN_BORROWS_IS_SHOW <> 1
+                   AND A.BORROW_PERIOD IN (1, 2, 3, 6, 12)) A
+         WHERE SORT_ID <= 2) A
+ INNER JOIN TCC_COIN_CONFIG B
+    ON TO_CHAR(A.BORROW_PERIOD) = B.KEY
+ WHERE B.TYPE = 3
+   AND TYPE_ID = 1
+   AND (BORROW_PERIOD <> 2 OR
+       (BORROW_PERIOD = 2 AND BORROW_FULL_STATUS <> 1))]]>
+	</select>
+
+	<!--债权转让列表标详情查询 -->
+	<select id="QueryZhuanRangBorrow" parameterType="String"
+		resultMap="Borrow">
+			<![CDATA[SELECT * FROM VIEW_BORROW_TRANSFER WHERE UPLAN_BORROWS_IS_SHOW<>'1']]>
+	</select>
+
+	<select id="QueryBorrowStatus" parameterType="String"
+		resultMap="BorrowInvestIndicate">
+			<![CDATA[SELECT BORROW_TYPE, STATUS, SORT_NUM, BORROW_ID, BORROW_TITLE
+  FROM (SELECT BORROW_TYPE,
+               CASE
+                 WHEN REVERIFY_FLG = '1' THEN
+                  0
+                 WHEN BORROW_ACCOUNT_SCALE < 100 THEN
+                  1
+                 ELSE
+                  0
+               END STATUS,
+               RANK() OVER(PARTITION BY BORROW_TYPE ORDER BY BORROW_ACCOUNT_SCALE, INS_DATE DESC) SORT_NUM,
+               BORROW_ID,
+               BORROW_TITLE
+          FROM (SELECT CASE
+                         WHEN TRANSFER_FLG = '1' AND
+                              UPLAN_BORROWS_IS_SHOW <> '1' THEN
+                          'D'
+                         WHEN (BORROW_TYPE IN ('2', '8') AND
+                              UPLAN_BORROWS_IS_SHOW <> '1') THEN
+                          'A'
+                         WHEN BORROW_TYPE = '7' AND
+                              UPLAN_BORROWS_IS_SHOW <> '1' THEN
+                          'B'
+                         WHEN BORROW_TYPE = '10' THEN
+                          'C'
+                       END BORROW_TYPE,
+                       BORROW_ACCOUNT_SCALE,
+                       BORROW_ID,
+                       BORROW_TITLE,
+                       INS_DATE,
+                       REVERIFY_FLG
+                  FROM BORROW B
+                 WHERE B.VERIFY_FLG = '1'
+                   AND B.CANCEL_STATUS <> '1'
+                   AND B.FAILED_FLG = '0'
+                   AND ((B.BORROW_TYPE = '10' AND
+                       B.VERIFY_DATE >= TRUNC(SYSDATE) - 1) OR
+                       B.BORROW_TYPE <> '10')
+                   AND (B.BORROW_FLAG IN ('', ' ', '0', 'A', 'B', 'C', 'D') OR
+                       B.BORROW_FLAG IS NULL))
+         WHERE BORROW_TYPE IS NOT NULL)
+ WHERE SORT_NUM = '1']]>
+	</select>
+
+
+	<!--散标列表 标详情查询 -->
+	<select id="QueryBorrow" parameterType="String" resultMap="Borrow">
+			<![CDATA[SELECT * FROM borrows WHERE  UPLAN_BORROWS_IS_SHOW<>1 AND (BORROW_TYPE IN (2,7,8) OR (BORROW_TYPE=10 AND BORROW_FULL_STATUS<>'1'))]]>
+	</select>
+
+	<!--聚金U选 标详情查询 -->
+	<select id="QueryUBorrow" parameterType="String" resultMap="Borrow">
+			<![CDATA[SELECT * FROM borrows WHERE  UPLAN_BORROWS_IS_SHOW<>1 AND (BORROW_TYPE IN (2,7,8) OR (BORROW_TYPE=10 AND BORROW_FULL_STATUS<>'1'))]]>
+	</select>
+
+
+	<select id="QueryBorrowInfo" parameterType="String" resultMap="BorrowInfo">
+		SELECT A.*, NVL(B.VALUE,0) VOUCHERS_RATE FROM ALL_BORROW A LEFT OUTER
+		JOIN
+		TCC_COIN_CONFIG B ON TO_CHAR(A.BORROW_PERIOD)=B.KEY AND B.TYPE = 3
+		WHERE A.BORROW_ID = #{BORROW_ID}
+	</select>
+
+
+	<select id="QueryBorrowInfoItem" parameterType="java.util.Map"
+		resultMap="BorrowInfoItem">
+		SELECT UAT.ATTESTATION_NAME,
+		TO_CHAR(UFA.INS_DATE, 'yyyy-mm-dd
+		hh24:mi:ss') AS INS_DATE,
+		TO_CHAR(UFA.VERIFY_DATE, 'yyyy-mm-dd
+		hh24:mi:ss') AS VERIFY_DATE,
+		UFA.VERIFY_FLG,
+		UFA.FILE_ID,
+		UU.FILE_URL
+		FROM USERS_FILE_ATTESTATIONS UFA
+		LEFT JOIN BORROW B
+		ON UFA.USER_ID =
+		B.USER_ID
+		LEFT JOIN USERS_ATTESTATIONS_TYPE UAT
+		ON UAT.ATTESTATION_CD =
+		UFA.ATTESTATION_CD
+		LEFT OUTER JOIN USERS_UPFILES UU
+		ON
+		UU.FILE_ID=UFA.FILE_ID
+		WHERE B.BORROW_ID =#{borrow_id}
+		AND
+		UFA.VERIFY_FLG='1' AND ufa.DEL_FLG='0'
+
+		<if test="customize_flg != null">
+			AND UAT.ATTESTATION_CD IN (SELECT DISTINCT
+			BC.ATTESTATION_CD FROM
+			BORROW_CUSTOMIZE BC WHERE BC.BORROW_TYPE_ID
+			=#{borrow_type})
+		</if>
+
+		<if test="customize_flg == null">
+			AND UAT.ATTESTATION_TYPE='02'
+		</if>
+	</select>
+
+	<select id="QueryRepayCredit" parameterType="String" resultMap="RepayCredit">
+		SELECT *
+		FROM (SELECT COUNT(*) AS BORROW_PUBLISH_TIMES,
+		SUM(CASE
+		WHEN
+		B.BORROW_TYPE = '6' THEN
+		CASE
+		WHEN B.REVERIFY_FLG = '1' AND
+		B.BORROW_ACCOUNT_SCALE > 0 THEN
+		'1'
+		ELSE
+		'0'
+		END
+		ELSE
+		B.REVERIFY_FLG
+		END) AS
+		BORROW_ACC_TIMES,
+		SUM(B.FAILED_FLG) AS BORROW_FAILED_TIMES,
+		SUM(B.CANCEL_STATUS) AS BORROW_CANCEL_TIMES
+		FROM BORROW B
+		WHERE
+		B.USER_ID = #{user_id}) A,
+		(SELECT
+
+		SUM(CASE
+		WHEN BR.REPAY_FLG = '0' THEN
+		1
+		ELSE
+		0
+		END) AS REPAY_WAIT_TIMES,
+
+		SUM(CASE
+		WHEN BR.REPAY_FLG = '1' AND
+		BR.REPAY_TIME_YES &lt; BR.REPAY_TIME THEN
+		1
+		ELSE
+		0
+		END) AS
+		REPAY_ADVANCE_TIMES,
+
+		SUM(CASE
+		WHEN BR.REPAY_FLG = '1' AND
+		BR.REPAY_TIME_YES = BR.REPAY_TIME THEN
+		1
+		ELSE
+		0
+		END) AS
+		REPAY_ONTIME_TIMES,
+
+		SUM(CASE
+		WHEN BR.REPAY_FLG = '1' AND BR.OVERDUE_FLG
+		= '1' THEN
+		1
+		ELSE
+		0
+		END) AS REPAY_LATE_TIMES,
+
+		SUM(CASE
+		WHEN BR.OVERDUE_FLG =
+		'1' AND BR.OVERDUE_DAY &lt;= 30 THEN
+		1
+		ELSE
+		0
+		END) AS
+		REPAY_OVERDUE_WITHIN_TIMES,
+
+		SUM(CASE
+		WHEN BR.OVERDUE_FLG = '1' AND
+		BR.OVERDUE_DAY > 30 THEN
+		1
+		ELSE
+		0
+		END) AS REPAY_OVERDUE_OUTSIDE_TIMES,
+
+		SUM(CASE
+		WHEN BR.OVERDUE_FLG = '1' AND BR.REPAY_FLG = '0' THEN
+		1
+		ELSE
+		0
+		END) AS REPAY_OVERDUE_TIMES
+		FROM (SELECT T.USER_ID,
+		T.REPAY_FLG,
+		T.REPAY_TIME,
+		T.REPAY_TIME_YES,
+		T.REPAY_ACCOUNT_ALL,
+		T.REPAY_ACCOUNT_ALL_YES,
+		T.REPAY_ACCOUNT_INTEREST,
+		T.REPAY_ACCOUNT_INTEREST_YES,
+		T.REPAY_ACCOUNT_CAPITAL,
+		T.REPAY_ACCOUNT_CAPITAL_YES,
+		T.REPAY_MANAGEMENT_AMOUNT,
+		T.OVERDUE_FLG,
+		T.OVERDUE_DAY,
+		T.OVERDUE_INTEREST,
+		T.OVERDUE_FORFEIT,
+		T.OVERDUE_REMINDER,
+		T.MAT_FLG
+		FROM BORROW_REPAY T
+		WHERE T.USER_ID =
+		#{user_id}
+		UNION ALL
+		SELECT T.USER_ID,
+		T.REPAY_FLG,
+		T.REPAY_TIME,
+		T.REPAY_TIME_YES,
+		T.REPAY_ACCOUNT_ALL,
+		T.REPAY_ACCOUNT_ALL_YES,
+		T.REPAY_ACCOUNT_INTEREST,
+		T.REPAY_ACCOUNT_INTEREST_YES,
+		T.REPAY_ACCOUNT_CAPITAL,
+		T.REPAY_ACCOUNT_CAPITAL_YES,
+		T.REPAY_MANAGEMENT_AMOUNT,
+		T.OVERDUE_FLG,
+		T.OVERDUE_DAY,
+		T.OVERDUE_INTEREST,
+		T.OVERDUE_FORFEIT,
+		T.OVERDUE_REMINDER,
+		T.MAT_FLG
+		FROM
+		BORROW_WENDER_REPAY T
+		WHERE T.USER_ID = #{user_id}) BR) B
+	</select>
+
+	<!-- 借款人收入信息 -->
+	<select id="QueryUserIncomeInfo" parameterType="String"
+		resultMap="UserIncomeInfo">
+
+		SELECT NVL(T.BORROW_REAL_NAME,'') AS REAL_NAME,
+		NVL(T.BORROW_CARD_ID,0) AS
+		CARD_ID,
+		TO_CHAR(sysdate,'yyyy') AS NOW_YEAR,
+		T.BORROW_SEX AS SEX,
+		T.BORROW_EDUCATION AS EDUCATION,
+		T.BORROW_MARRY AS
+		MARRY,
+		T.BORROW_MONTH_INCOME AS MONTH_INCOME,
+		T.BORROW_IS_CAR AS IS_CAR,
+		T.BORROW_HOUSE AS HOUSE,
+		T.BORROW_SOCIAL_SECURITY AS SOCIAL_SECURITY
+		FROM BORROW_CHECK T
+		WHERE T.BORROW_ID =#{borrow_id}
+	</select>
+
+
+	<select id="QueryTenderLogByBorrowId" parameterType="String"
+		resultMap="TenderLog">
+		SELECT NVL(U.NICK_NAME,BR.USER_ID) NICK_NAME, 0 TYPE,
+		VALID_ACCOUNT_TENDER
+		ACCOUNT, BR.INS_DATE TIME
+		FROM BORROW_TENDER BR
+		INNER JOIN USERS U
+		ON (BR.USER_ID=U.USER_ID)
+		WHERE BORROW_ID
+		=#{borrow_id}
+		ORDER BY BR.INS_DATE DESC
+	</select>
+
+
+	<!-- AS END_TIME, 为有效投资额 -->
+	<select id="QueryZhaiQuanList" parameterType="String" resultMap="TenderLog">
+	<![CDATA[SELECT NVL(U.NICK_NAME,U.USER_ID) NICK_NAME,
+		B.USER_ID,
+		B.BORROW_TITLE,
+		B.BORROW_ID,
+		B.BORROW_ACCOUNT,
+		B.BORROW_ACCOUNT AS ACCOUNT,
+		'--' AS VALID_ACCOUNT_TENDER,
+		'--' AS TIME,
+		'未投资' MEMO
+		FROM BORROW B
+		LEFT JOIN USERS U
+		ON U.USER_ID = B.USER_ID
+		WHERE B.BORROW_TYPE <> '7'
+		AND B.VERIFY_FLG = '1'
+		AND ((B.BORROW_TYPE <> '6' AND B.BORROW_FULL_STATUS <> '1') OR
+		(B.BORROW_TYPE = '6' AND BORROW_ACCOUNT_SCALE < 100))
+		AND B.CANCEL_STATUS <> '1'
+		AND B.FAILED_FLG = '0'
+		ORDER BY B.INS_DATE ASC]]>
+	</select>
+
+	<!-- U计划债权列表 -->
+	<select id="QueryUPlanList" parameterType="String" resultMap="TenderLog">
+	<![CDATA[SELECT U.NICK_NAME,
+       B.USER_ID,
+       B.BORROW_TITLE,
+       B.BORROW_ID,
+       B.BORROW_ACCOUNT,
+       BT.ACCOUNT_TENDER ACCOUNT,
+       BT.VALID_ACCOUNT_TENDER VALIDATE_ACCOUNT,
+       TO_CHAR(NVL(BT.INS_DATE, SYSDATE), 'yyyy-mm-dd hh24:mi:ss') AS TIME,
+       '已投资' MEMO
+  FROM BORROW_TENDER BT
+ INNER JOIN BORROW B
+    ON B.BORROW_ID = BT.BORROW_ID
+  LEFT JOIN USERS U
+    ON U.USER_ID = B.USER_ID
+ WHERE BT.USER_ID = (SELECT BORROW.USER_ID
+                       FROM BORROW BORROW
+                      WHERE BORROW.BORROW_ID =#{borrowId})
+   AND BT.TENDER_STATUS = '1'
+ ORDER BY B.INS_DATE ASC]]>
+	</select>
+
+	<select id="QueryUplanUserTenderStatus" parameterType="String"
+		resultType="int">
+	<![CDATA[SELECT COUNT(1) CNT
+  FROM BORROW_TENDER
+ WHERE USER_ID IN
+       (SELECT USER_ID
+          FROM BORROW
+         WHERE BORROW_ID =#{borrowId})
+   AND TENDER_STATUS = 1
+   ]]>
+	</select>
+
+
+	<!--标的物的风控信息 -->
+	<select id="QueryBorrowAttestation" parameterType="String"
+		resultMap="BorrowAttestationItem">
+
+		SELECT UFA.FILE_ID,
+		'http://www.jujinziben.com'||UU.FILE_URL
+		FILE_URL,
+		UFA.ATTESTATION_CD,
+		UAT.ATTESTATION_NAME,
+		UAT.ATTESTATION_IMAGE
+		FROM USERS_FILE_ATTESTATIONS UFA
+		INNER JOIN
+		USERS_UPFILES UU
+		ON UFA.FILE_ID = UU.FILE_ID
+		INNER JOIN
+		USERS_ATTESTATIONS_TYPE UAT
+		ON UAT.ATTESTATION_CD = UFA.ATTESTATION_CD
+		WHERE UFA.USER_ID =
+		(SELECT USER_ID
+		FROM BORROW
+		WHERE BORROW_ID =
+		#{BORROW_ID,jdbcType=VARCHAR})
+		AND UFA.ATTESTATION_CD IN
+		(SELECT
+		ATTESTATION_CD
+		FROM (SELECT DISTINCT UAT.ATTESTATION_CD,
+		UAT.ATTESTATION_ORDER,
+		UAT.ATTESTATION_NAME
+		FROM USERS_FILE_ATTESTATIONS
+		UFA
+		LEFT JOIN BORROW B
+		ON UFA.USER_ID = B.USER_ID
+		INNER JOIN
+		USERS_ATTESTATIONS_TYPE UAT
+		ON UAT.ATTESTATION_CD = UFA.ATTESTATION_CD
+
+		AND UAT.ATTESTATION_CD IN
+		(SELECT DISTINCT BC.ATTESTATION_CD
+		FROM
+		BORROW_CUSTOMIZE BC
+		WHERE BC.BORROW_TYPE_ID =
+		(SELECT
+		TO_NUMBER(BORROW_TYPE)
+		FROM BORROW
+		WHERE BORROW_ID
+		=#{BORROW_ID,jdbcType=VARCHAR}))
+		WHERE B.BORROW_ID =
+		#{BORROW_ID,jdbcType=VARCHAR}
+		AND UFA.VERIFY_FLG = '1'
+		AND UFA.DEL_FLG =
+		'0'
+		GROUP BY UAT.ATTESTATION_CD,
+		UAT.ATTESTATION_NAME,
+		UAT.ATTESTATION_ORDER,
+		UFA.VERIFY_FLG,
+		FILE_ID) A)
+		AND UFA.VERIFY_FLG =
+		'1'
+		AND UFA.DEL_FLG = '0'
+		ORDER BY UFA.INS_DATE DESC
+	</select>
+
+
+
+	<select id="QueryBorrowTransferFlg" parameterType="String"
+		resultType="String">
+		SELECT TRANSFER_FLG FROM BORROW WHERE
+		BORROW_ID=#{BORROW_ID,jdbcType=VARCHAR}
+	</select>
+
+	<select id="QueryBorrowRepay" parameterType="String" resultMap="BorrowRepay">
+		SELECT BR.BORROW_ID,
+		B.BORROW_TITLE,
+		B.REPAY_ACCOUNT_TIMES,
+		BR.BORROW_TIMES,
+		BR.REPAY_ACCOUNT_ALL,
+		BR.REPAY_TIME
+		FROM (SELECT
+		BR.BORROW_ID,
+		BR.USER_ID,
+		BR.BORROW_TIMES,
+		BR.REPAY_ACCOUNT_ALL,
+		BR.REPAY_TIME
+		FROM BORROW_REPAY BR
+		WHERE BR.BORROW_ID =
+		#{BORROW_ID,jdbcType=VARCHAR}
+		AND BR.REPAY_FLG = '0'
+		UNION ALL
+		SELECT
+		BR.BORROW_ID,
+		BR.USER_ID,
+		BR.BORROW_TIMES,
+		BR.REPAY_ACCOUNT_ALL,
+		BR.REPAY_TIME
+		FROM BORROW_WENDER_REPAY BR
+		WHERE BR.BORROW_ID =
+		#{BORROW_ID,jdbcType=VARCHAR}
+		AND BR.REPAY_FLG = '0') BR
+		LEFT JOIN
+		BORROW B
+		ON B.BORROW_ID = BR.BORROW_ID
+		ORDER BY
+		BR.BORROW_ID,BR.REPAY_TIME
+	</select>
+
+	<select id="QueryBorrowTransfer" parameterType="String"
+		resultMap="BorrowTransfer">
+		SELECT
+		BT.TRANSFER_ID,BT.USER_ID,BT.TENDER_SEQ,BT.TRANSFER_AMOUNT,BT.TRANSFER_CAPITAL,
+		BT.TRANSFER_PRICE,BT.DISCOUNT_AMOUNT,BT.DISCOUNT_RATE,
+		BT.SERVICE_FEE_RATE,BT.REST_OF_PERIOD,
+		BT.BORROW_ID_OLD,BT.BORROW_ID_ANCESTORS,BT.OLD_OF_PERIOD,BT.PERIOD_TYPE,
+		BT.NEXT_RECOVER_TIME,BT.STATUS,BT.FREE_TRANSFER,
+		B.BORROW_TITLE
+		ANCESTORS_BORROW_TITLE
+		FROM BORROW_TRANSFER BT
+		LEFT OUTER JOIN BORROW B
+		ON BT.BORROW_ID_ANCESTORS=B.BORROW_ID
+		WHERE
+		BT.TRANSFER_ID=#{TRANSFER_ID,jdbcType=VARCHAR}
+	</select>
+
+
+
+
+
+
+</mapper>

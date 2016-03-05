@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="CurrentActivityBean" id="CurrentActivityBean">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="USER_ID" property="userId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="VALID_ACCOUNT_TENDER" property="validAccountTender" />
+		<result column="MAIL_ADDRESS" property="mailAddress" />
+	</resultMap>
+
+
+	<insert id="clearTmpUserCoin" parameterType="String">
+		INSERT INTO
+		TMP_USER_COIN(BORROW_ID,USER_ID,PHONE_NUMBER,VALID_ACCOUNT_TENDER,MAIL_ADDRESS)
+		SELECT NULL BORROW_ID,'wangzhongwu' USER_ID,'13598278892'
+		PHONE_NUMBER,0 VALID_ACCOUNT_TENDER,'271521874@qq.com' MAIL_ADDRESS
+		FROM DUAL
+		WHERE 1=2
+	</insert>
+
+	<select id="queryUserCoin" parameterType="String" resultMap="CurrentActivityBean">
+		SELECT * FROM TMP_USER_COIN
+	</select>
+
+
+	<insert id="insertTmpUserCoin" parameterType="String">
+		INSERT INTO
+		TMP_USER_COIN(BORROW_ID,USER_ID,PHONE_NUMBER,VALID_ACCOUNT_TENDER,MAIL_ADDRESS)
+		SELECT NULL BORROW_ID,'wangzhongwu' USER_ID,'13598278892'
+		PHONE_NUMBER,0 VALID_ACCOUNT_TENDER,'271521874@qq.com' MAIL_ADDRESS
+		FROM DUAL
+		WHERE 1=2
+	</insert>
+
+
+
+	<!-- 顺序不能颠倒 -->
+	<update id="grantUserCoin" parameterType="String">
+		UPDATE tpa_user_coin A
+		SET AMOUNT=AMOUNT+88
+		WHERE EXISTS (SELECT 1 FROM TMP_USER_COIN B WHERE
+		(A.USER_ID=B.USER_ID OR A.PHONE_NUMBER=B.PHONE_NUMBER))
+	</update>
+
+
+	<insert id="grantNewUser" parameterType="String">
+		INSERT INTO
+		tpa_user_coin(PHONE_NUMBER,USER_ID,AMOUNT,FROST)
+		SELECT PHONE_NUMBER,USER_ID,88 AMOUNT,0 FROST FROM TMP_USER_COIN A
+		WHERE NOT EXISTS (SELECT 1 FROM TPA_USER_COIN B WHERE (A.USER_ID=B.USER_ID
+		OR A.PHONE_NUMBER=B.PHONE_NUMBER))
+	</insert>
+
+
+	<insert id="insertDetail" parameterType="String">
+		INSERT INTO
+		tpa_user_coin_detail(phone_number,bp_flg,user_id,amount,memo,borrow_id,activity_id)
+		SELECT phone_number,0,user_id,88,'聚金中秋月·共享天伦乐,赠送88元聚金币',borrow_id,7
+		FROM TMP_USER_COIN
+	</insert>
+
+
+	<insert id="clearTmpUserVip" parameterType="String">
+		truncate table
+		TMP_USER_VIP
+	</insert>
+
+
+	<select id="queryUserVIP" parameterType="String" resultMap="CurrentActivityBean">
+		SELECT NULL BORROW_ID, USER_ID,PHONE_NUMBER,VALID_ACCOUNT_TENDER,NULL
+		MAIL_ADDRESS FROM TMP_USER_VIP
+	</select>
+
+
+	<insert id="insertTmpUserVip" parameterType="String">
+		INSERT INTO
+		TMP_USER_VIP(USER_ID,PHONE_NUMBER,VALID_ACCOUNT_TENDER)
+		SELECT
+		BT.USER_ID,
+		B.PHONE_NUMBER,
+		BT.VALID_ACCOUNT_TENDER
+		FROM (SELECT BT.USER_ID, SUM(VALID_ACCOUNT_TENDER) VALID_ACCOUNT_TENDER
+		FROM BORROW_TENDER BT
+		WHERE BT.INS_DATE >= TO_DATE('2015-08-06', 'yyyy-mm-dd')
+		GROUP BY BT.USER_ID) BT
+		INNER JOIN APPROVE_MOBILE B
+		ON BT.USER_ID = B.USER_ID
+		INNER JOIN APPROVE_REAL_NAME arn
+		ON BT.USER_ID=ARN.USER_ID
+		WHERE VALID_ACCOUNT_TENDER>=10000
+		AND NOT EXISTS (SELECT 1
+		FROM TPA_USER_COIN_DETAIL T
+		WHERE (T.USER_ID = BT.USER_ID OR B.PHONE_NUMBER=T.PHONE_NUMBER)
+		AND T.ACTIVITY_ID = 8)
+		AND NOT EXISTS (SELECT 1 FROM (SELECT CARD_ID FROM TPA_USER_COIN_DETAIL T
+		INNER JOIN APPROVE_REAL_NAME AR ON (T.USER_ID=AR.USER_ID AND
+		T.INS_DATE>TO_DATE('2015-08-06', 'yyyy-mm-dd') AND T.ACTIVITY_ID=8)) B
+		WHERE B.CARD_ID=ARN.CARD_ID)
+	</insert>
+
+	<!-- 顺序不能颠倒 -->
+	<update id="grantUserVip1" parameterType="String">
+		UPDATE USERS_VIP A SET
+		VIP_TYPE='04',
+		END_DATE=CASE WHEN TO_date(END_DATE,'yyyy-mm-dd')>SYSDATE THEN
+		TO_CHAR(ADD_MONTHS(TO_date(END_DATE,'yyyy-mm-dd'),6),'YYYY-MM-DD')
+		ELSE TO_CHAR(ADD_MONTHS(SYSDATE,6),'YYYY-MM-DD') END
+		WHERE EXISTS (SELECT 1 FROM TMP_USER_VIP B WHERE A.USER_ID=B.USER_ID AND
+		VERIFY_FLG='1')
+		AND VERIFY_FLG='1'
+	</update>
+
+	<update id="grantUserVip2" parameterType="String">
+		UPDATE USERS_VIP A SET
+		VIP_TYPE='04',
+		END_DATE=TO_CHAR(ADD_MONTHS(SYSDATE,6),'YYYY-MM-DD'),
+		VERIFY_FLG='1',
+		start_DATE=CASE WHEN start_DATE IS NULL OR LENGTH(start_DATE)&lt;8 THEN
+		TO_CHAR(SYSDATE,'YYYY-MM-DD') END
+		WHERE EXISTS (SELECT 1 FROM TMP_USER_VIP B WHERE A.USER_ID=B.USER_ID AND
+		VERIFY_FLG='0')
+		AND VERIFY_FLG='0'
+	</update>
+
+
+	<insert id="grantNewVip" parameterType="String">
+		INSERT INTO
+		USERS_VIP(USER_ID,VIP_TYPE,VALIDITY_TERM,CUSTOM_SERVICE_ID,REMARK,START_DATE,END_DATE,VERIFY_FLG,VERIFY_DATE)
+		SELECT A.USER_ID,'04' VIP_TYPE, '6.0' VALIDITY_TERM,'聚金妍妍'
+		CUSTOM_SERVICE_ID,'在线破亿活动',TO_CHAR(SYSDATE,'YYYY-MM-DD'),TO_CHAR(ADD_MONTHS(SYSDATE,6),'YYYY-MM-DD'),'1'
+		VERIFY_FLG,SYSDATE VERIFY_DATE FROM TMP_USER_VIP A
+		WHERE NOT EXISTS (SELECT 1 FROM USERS_VIP B WHERE a.user_id=b.user_id)
+	</insert>
+
+
+	<insert id="insertVipDetail" parameterType="String">
+		INSERT INTO
+		tpa_user_coin_detail(phone_number,bp_flg,user_id,amount,memo,borrow_id,activity_id)
+		SELECT phone_number,0,user_id,6,'参加聚金资本在线破亿活动，满足VIP赠送资格，获得6个月VIP',NULL
+		borrow_id,8 FROM TMP_USER_VIP
+	</insert>
+
+
+	<select id="queryUserTmpVIP" parameterType="String" resultMap="CurrentActivityBean">
+		SELECT NULL BORROW_ID, USER_ID,PHONE_NUMBER,VALID_ACCOUNT_TENDER,NULL
+		MAIL_ADDRESS FROM TMP_USER_VIP_BAK
+	</select>
+
+
+
+
+</mapper>
+ 

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+
+	<resultMap type="UserAccountInfo" id="UserAccountInfo">
+		<result column="USER_ID" property="userId" />
+		<result column="CAPITAL_TOTAL" property="capitalTotal" />
+		<result column="RECHARGE_TOTAL" property="rechargeTotal" />
+		<result column="CASH_TOTAL" property="cashTotal" />
+		<result column="BALANCE" property="balance" />
+		<result column="BALANCE_CASH" property="balanceCash" />
+		<result column="BALANCE_FROST" property="balanceFrost" />
+		<result column="FROST" property="frost" />
+		<result column="AWAIT" property="await" />
+		<result column="CONTINUE_TOTAL" property="continueTotal" />
+		<result column="COIN" property="coin" />
+	</resultMap>
+
+
+	<resultMap type="WxBindBean" id="WxBindBean">
+		<result column="WEIXIN_ID" property="weiXinId" />
+		<result column="USER_ID" property="userId" />
+		<result column="BIND_FLAG" property="bindFlg" />
+	</resultMap>
+
+	<resultMap type="RegisterEntity" id="RegisterEntity">
+		<result column="USER_ID" property="userName" />
+		<result column="USER_PWD" property="pwd" />
+	</resultMap>
+
+
+
+	<resultMap type="UserFriendInterestRank" id="UserFriendInterestRank">
+		<result column="NICK_NAME" property="nickName" />
+		<result column="INTEREST_RANK" property="interestRank" />
+		<result column="FILE_URL" property="headImgeUrl" />
+	</resultMap>
+
+
+	<resultMap type="UserAttestation" id="UserAttestation">
+		<result column="USER_ID" property="userId" />
+		<result column="MOBILE_FLG" property="mobileFlg" />
+		<result column="MAIL_FLG" property="emailFlg" />
+		<result column="IDENTITY_FLG" property="idFlg" />
+		<result column="MOBILE" property="mobile" />
+		<result column="EMAIL" property="email" />
+		<result column="CARD_ID" property="idCard" />
+		<result column="REAL_NAME" property="realName" />
+		<result column="NICK_NAME" property="nickName" />
+	</resultMap>
+
+	<resultMap type="Coupon" id="Coupon">
+		<result column="TICKET_COUNT" property="ticketCount" />
+		<result column="COIN" property="coin" />
+
+	</resultMap>
+
+
+
+
+	<select id="QueryUserPwd" parameterType="String" resultMap="RegisterEntity">
+		SELECT USER_ID,USER_PWD FROM USERS WHERE USER_ID=#{userId}
+	</select>
+
+	<select id="QueryUserLikeId" parameterType="String" resultType="String">
+		SELECT USER_ID FROM USERS WHERE USER_ID LIKE #{userId}||'%'
+	</select>
+
+	<select id="QueryUserAccountInfo" parameterType="String"
+		resultMap="UserAccountInfo">
+		SELECT T.USER_ID,
+		T.CAPITAL_TOTAL,
+		T.RECHARGE_TOTAL,
+		T.CASH_TOTAL,
+		T.BALANCE,
+		T.BALANCE_CASH,
+		T.BALANCE_FROST,
+		T.FROST,
+		T.AWAIT,
+		T.CONTINUE_TOTAL,
+		NVL(B.AMOUNT,0) COIN
+		FROM USERS_ACCOUNT T
+		LEFT
+		OUTER JOIN APPROVE_MOBILE C
+		ON (T.USER_ID = C.USER_ID)
+		LEFT OUTER JOIN
+		TPA_USER_COIN B
+		ON (C.PHONE_NUMBER = B.PHONE_NUMBER)
+		WHERE
+		T.USER_ID=#{user_id}
+	</select>
+
+	<!--用户是否有效绑定 -->
+	<select id="QueryUserWeiXinBindInfo" parameterType="String"
+		resultMap="WxBindBean">
+		SELECT * FROM WEIXIN_BIND_USERS WBU WHERE WBU.WEIXIN_ID
+		=#{weiXinId}
+	</select>
+
+	<!-- 取排名的时候 不并列式因为有很多未实名的朋友，其排名都是一样的 -->
+	<select id="QueryUserFriendRank" parameterType="String"
+		resultMap="UserFriendInterestRank">
+
+		SELECT U.USER_ID,
+		NVL(UU.FILE_URL, '/web/cn/images/tx.gif')
+		AS FILE_URL,
+		NVL(U.NICK_NAME, U.USER_ID) NICK_NAME,
+		NVL(UIV.INTEREST_RANK, (SELECT COUNT(*) FROM USERS)) INTEREST_RANK
+		FROM USERS U
+		LEFT OUTER JOIN USER_INTEREST_VIEW UIV
+		ON (U.USER_ID =
+		UIV.USER_ID)
+		LEFT OUTER JOIN USERS_UPFILES UU
+		ON UU.FILE_ID =
+		U.USER_HEAD_FILE_ID
+		WHERE U.USER_ID = #{userId}
+		UNION ALL
+		SELECT USER_ID,
+		FILE_URL, NICK_NAME, INTEREST_RANK
+		FROM (SELECT U.USER_ID,
+		NVL(UU.FILE_URL, '/web/cn/images/tx.gif') AS FILE_URL,
+		NVL(U.NICK_NAME, U.USER_ID) NICK_NAME,
+		NVL(UIV.INTEREST_RANK, (SELECT
+		COUNT(*) FROM USERS)) INTEREST_RANK,
+		ROW_NUMBER() OVER(ORDER BY
+		UIV.INTEREST_RANK) RANK_NO
+		FROM USERS U
+		LEFT OUTER JOIN USERS_FRIENDS UF
+		ON ((U.USER_ID = UF.USER_ID AND JOIN_TYPE = '2' AND
+		AGREE_FLG = '1') OR
+		(U.USER_ID = UF.USER_ID AND
+		JOIN_TYPE = '1' AND AGREE_FLG = '1'))
+		LEFT
+		OUTER JOIN USER_INTEREST_VIEW UIV
+		ON (U.USER_ID = UIV.USER_ID)
+		LEFT
+		OUTER JOIN USERS_UPFILES UU
+		ON UU.FILE_ID = U.USER_HEAD_FILE_ID
+		WHERE
+		(UF.FRIENDS_USER_ID =#{userId})
+		ORDER BY UIV.INTEREST_RANK)
+		WHERE
+		RANK_NO &lt;= 5
+
+	</select>
+
+
+	<insert id="InsertWxBindBean" parameterType="WxBindBean">
+		INSERT INTO
+		WEIXIN_BIND_USERS(WEIXIN_ID, USER_ID, BIND_FLAG)
+		VALUES(#{weiXinId},#{userId},0)
+	</insert>
+
+	<update id="UpdateWxBindBean" parameterType="WxBindBean">
+		UPDATE
+		WEIXIN_BIND_USERS SET
+		BIND_FLAG=#{bindFlg}
+		WHERE WEIXIN_ID=#{weiXinId}
+	</update>
+
+
+	<!-- 根据推荐人手机号获取用户名 -->
+	<select id="QueryUserIdByInviteId" parameterType="String"
+		resultType="String">
+		SELECT USER_ID
+		FROM USERS
+		WHERE USER_ID =#{inviteId}
+		UNION ALL
+		SELECT USER_ID
+		FROM (SELECT USER_ID
+		FROM APPROVE_MOBILE
+		WHERE
+		PHONE_NUMBER = #{inviteId}
+		ORDER BY INS_DATE)
+	</select>
+
+	<!-- 邮箱->手机->实名 -->
+	<select id="QueryUserAttestation" parameterType="String"
+		resultMap="UserAttestation">
+		SELECT UA.USER_ID,
+		MOBILE_FLG,
+		U.NICK_NAME,
+		NVL(CASE
+		WHEN
+		IDENTITY_FLG = 1 THEN
+		1
+		ELSE
+		(SELECT CASE
+		WHEN VERIFY_FLG IS NULL THEN
+		2
+		WHEN VERIFY_FLG = 0 THEN
+		3
+		ELSE
+		1
+		END
+		FROM APPROVE_REAL_NAME
+		WHERE USER_ID =
+		#{userId})
+		END,
+		0) IDENTITY_FLG,
+		NVL(AM.PHONE_NUMBER, '') MOBILE,
+		UM.MAIL_ADDRESS EMAIL,
+		NVL(CASE
+		WHEN (SELECT VERIFY_FLG
+		FROM USERS_MAIL
+		WHERE USER_ID = #{userId}) = 1 THEN
+		1
+		ELSE
+		2
+		END,
+		0) MAIL_FLG,
+		ARN.REAL_NAME,
+		ARN.CARD_ID
+		FROM USERS_ATTESTATION UA
+		LEFT OUTER JOIN
+		APPROVE_MOBILE AM
+		ON (UA.USER_ID = AM.USER_ID)
+		LEFT OUTER JOIN
+		USERS_MAIL UM
+		ON (UA.USER_ID = UM.USER_ID)
+		LEFT OUTER JOIN
+		APPROVE_REAL_NAME ARN
+		ON (UA.USER_ID = ARN.USER_ID)
+		INNER JOIN USERS U
+		ON (UA.USER_ID = U.USER_ID)
+		WHERE UA.USER_ID = #{userId}
+	</select>
+
+	<!-- 邮箱->手机->实名 -->
+	<select id="QueryUserIdByMobile" parameterType="String"
+		resultType="String">
+		SELECT USER_ID FROM approve_mobile WHERE
+		phone_number=#{phoneNumber}
+	</select>
+
+	<select id="QueryCodeByTel" parameterType="String" resultType="String">
+
+		SELECT CONTENT
+		FROM TPA_SMS_RECORD
+		WHERE INS_DATE >= TRUNC(SYSDATE) - 2
+		AND PHONE_NUMBER = #{phoneNumber}
+		AND ROWNUM &lt;= 10
+		ORDER BY INS_DATE
+		DESC
+
+	</select>
+
+	<select id="QueryCanSendSms" parameterType="String" resultType="String">
+		SELECT CASE
+		WHEN B.IS_EXISTS = 0 AND C.SMS_COUNT &lt; 15 THEN
+		1
+		ELSE
+		0
+		END
+		SMS_COUNT
+		FROM DUAL A,
+		(SELECT COUNT(*) IS_EXISTS
+		FROM
+		TCC_MOBILE_BLACKLIST
+		WHERE ENABLE = '0'
+		AND PHONE_NUMBER =
+		#{phoneNumber}) B,
+		(SELECT COUNT(*) SMS_COUNT
+		FROM TCC_MOBILE_SMS_VERIFY
+		WHERE PHONE_NUMBER = #{phoneNumber}
+		AND INSERT_TIME >= TRUNC(SYSDATE) -
+		2) C
+	</select>
+
+	<insert id="InsertSmsVerify" parameterType="java.util.HashMap">
+		INSERT INTO
+		TCC_MOBILE_SMS_VERIFY(PHONE_NUMBER,VERIFY_CODE)
+		VALUES(#{PHONE_NUMBER},#{VERIFY_CODE})
+	</insert>
+
+	<!-- 聚金券和聚金币 -->
+	<select id="QueryCoupon" parameterType="String" resultMap="Coupon">
+		SELECT (SELECT SUM(TICKET_COUNT) TICKET_COUNT
+		FROM TICKET_USER_RELATION
+		B,
+		TICKET_ADDITION_INVEST A
+		WHERE A.TICKET_ID = B.TICKET_ID
+		AND B.USER_ID
+		=
+		#{USER_ID}
+		AND A.STATUS = 1
+		AND A.END_DATE >= SYSDATE) TICKET_COUNT,
+		(SELECT NVL(C.AMOUNT, 0) COIN
+		FROM APPROVE_MOBILE M
+		LEFT OUTER JOIN
+		TPA_USER_COIN C
+		ON (M.PHONE_NUMBER = C.PHONE_NUMBER)
+		WHERE M.USER_ID
+		=#{USER_ID}) COIN
+		FROM DUAL
+	</select>
+
+	<select id="QueryCurrentUser" parameterType="String" resultType="int">
+		SELECT COUNT(*) USERS_COUNT FROM USERS WHERE INS_DATE>=TRUNC(SYSDATE)
+	</select>
+
+
+
+
+
+</mapper>

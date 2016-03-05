@@ -8,6 +8,7 @@
 	<item value="356" key="DIALOG_X_ORIGIN"/>
 	<item value="8" key="DIALOG_Y_ORIGIN"/>
 	<list key="RepositorySelectionPage.UsedUris">
+		<item value="https://github.com/bbossgroups/security"/>
 		<item value="http://git.oschina.net/hao0/session"/>
 		<item value="https://github.com/ihaolin/common"/>
 		<item value="https://github.com/3203317/ppp"/>

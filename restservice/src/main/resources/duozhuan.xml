@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.duozhuan.mapper">
+
+
+	<resultMap type="DzBorrowInfo" id="DzBorrowInfo">
+		<result property="projectId" column="projectId" />
+		<result property="title" column="title" />
+		<result property="loanUrl" column="loanUrl" />
+		<result property="userName" column="userName" />
+		<result property="amount" column="amount" />
+		<result property="schedule" column="schedule" />
+		<result property="interestRate" column="interestRate" />
+		<result property="deadline" column="deadline" />
+		<result property="deadlineUnit" column="deadlineUnit" />
+		<result property="reward" column="reward" />
+		<result property="type" column="type" />
+		<result property="repaymentType" column="repaymentType" />
+		<result property="warrantcom" column="warrantcom" />
+	</resultMap>
+
+	<resultMap type="Subscribes" id="Subscribes">
+		<result property="subscribeUserName" column="subscribeUserName" />
+		<result property="amount" column="amount" />
+		<result property="validAmount" column="validAmount" />
+		<result property="addDate" column="addDate" />
+		<result property="status" column="status" />
+		<result property="type" column="type" />
+	</resultMap>
+
+
+
+
+
+	<!-- 查询当前所有标的URL列表（不包含债权转让） -->
+	<select id="queryAllBorrowUrls" resultType="String">
+    <![CDATA[
+    	SELECT 'http://www.jujinziben.com/borrowinfo.page?borrow_id=' || BORROW_ID
+		  FROM BORROW
+		 WHERE VERIFY_FLG = '1'
+		   AND CANCEL_STATUS <> '1'
+		   AND FAILED_FLG = '0'
+		 order by INS_DATE desc
+    ]]>
+	</select>
+
+	<!-- 查询标的详情 -->
+	<select id="queryBorrowInfo" parameterType="String" resultType="DzBorrowInfo">
+    <![CDATA[
+		select 
+		b.borrow_id projectId,
+		b.borrow_title title,
+		'http://www.jujinziben.com/borrowinfo.page?borrow_id=' || b.borrow_id loanUrl,
+		utl_raw.cast_to_raw(sys.dbms_obfuscation_toolkit.md5(input_string => b.user_id)) userName,
+		b.borrow_account_yes amount,
+		b.borrow_account_scale schedule,
+		b.borrow_rate || '%' interestRate,
+		b.borrow_period deadline,
+		DECODE(TRIM(b.period_type),
+		'1','月',
+		'3','天',
+		'天') deadlineunit,
+		b.award_scale reward,
+		DECODE(TRIM(b.borrow_type),
+		'1','信用标',
+		'2','抵押标',
+		'3','净值标',
+		'4','担保标',
+		'5','秒还标',
+		'6','流转标',
+		'7','聚金优选',
+		'8','质押标',
+		'10','聚金宝',
+		'抵押标') type,
+		DECODE(BORROW_STYLE,
+		'1','等额本金',
+		'2','等额本息',
+		'3','到期还本还息',
+		'4','按月还息，到期还本',
+		'灵活存取') repaymentType,
+		'--' warrantcom
+		from borrow b 
+		where b.borrow_id = #{borrowId}
+    ]]>
+	</select>
+
+	<!-- 根据标ID查询标的投资人 -->
+	<select id="queryTenderFromBorrow" parameterType="String"
+		resultType="Subscribes">
+    <![CDATA[
+	 select bt.user_id subscribeUserName,
+	       bt.account_tender amount,
+	       bt.VALID_ACCOUNT_TENDER validAmount,
+	       bt.ins_date addDate,
+	       '1' status,
+	       AUTO_STATUS type
+	  from borrow_tender bt
+	 where bt.borrow_id = #{projectId} order by bt.ins_date desc
+    ]]>
+	</select>
+
+
+</mapper>

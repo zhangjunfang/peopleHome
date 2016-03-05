@@ -1,0 +1,6 @@
+基础业务数据库操作包： com.anyang.xingqingshu.ocean.core.anyang.server.mybatis.mapper【以下统称为：基包】
+项目基础包--多数据库实例---以下两种情况都需注意
+--划分报名：基包+数据库实例名称还是子系统名称【项目经理决定】 为什么这样问问mybatis或者ibatis设计者
+如果是这种情况需要注意mybatis+spring配置文件
+1.各个实例单独事务   
+2.多个实例统一事务

@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.tzj.mapper">
+
+	<resultMap type="TzjBaseBean" id="TzjBaseBean">
+		<result column="TZJFROM" property="from" />
+		<result column="OID" property="oid" />
+	</resultMap>
+
+	<resultMap type="BorrowBean" id="BorrowBean">
+		<result property="userId" column="USER_ID" />
+		<result property="borrowId" column="BORROW_TITLE" />
+		<result property="borrowTitle" column="BORROW_ORDER" />
+		<result property="borrowUse" column="BORROW_USE" />
+		<result property="borrowAccount" column="BORROW_ACCOUNT" />
+		<result property="borrowFlag" column="BORROW_RATE" />
+		<result property="borrowRate" column="BORROW_STYLE" />
+		<result property="borrowStyle" column="BORROW_ACCOUNT_WAIT" />
+		<result property="borrowPeriod" column="BORROW_PERIOD" />
+		<result property="periodType" column="PERIOD_TYPE" />
+		<result property="borrowValidDay" column="BORROW_VALID_DAY" />
+		<result property="tenderAccountMin" column="TENDER_ACCOUNT_MIN" />
+		<result property="tenderAccountMax" column="TENDER_ACCOUNT_MAX" />
+		<result property="directionalPwd" column="DIRECTIONAL_PWD" />
+		<result property="borrowContents" column="BORROW_CONTENTS" />
+		<result property="isDay" column="IS_DAY" />
+		<result property="borrowType" column="BORROW_TYPE" />
+		<result property="borrowPartStatus" column="BORROW_PART_STATUS" />
+		<result property="awardStatus" column="AWARD_STATUS" />
+		<result property="awardFalse" column="AWARD_FALSE" />
+		<result property="awardAccount" column="AWARD_ACCOUNT" />
+		<result property="awardScale" column="AWARD_SCALE" />
+		<result property="openAccount" column="OPEN_ACCOUNT" />
+		<result property="openBorrow" column="OPEN_BORROW" />
+		<result property="openTender" column="OPEN_TENDER" />
+		<result property="openCredit" column="OPEN_CREDIT" />
+		<result property="commentStaus" column="COMMENT_STAUS" />
+		<result property="commentUserType" column="COMMENT_USER_TYPE" />
+		<result property="insIP" column="INS_IP" />
+		<result property="borrowFrostAccount" column="BORROW_FROST_ACCOUNT" />
+		<result property="awardAccountAll" column="AWARD_ACCOUNT_ALL" />
+		<result property="frostAccount" column="FROST_ACCOUNT" />
+		<result property="dueInAmount" column="DUEIN_AMOUNT" />
+		<result property="investTotalAmount" column="INVEST_TOTAL_AMOUNT" />
+		<result property="partAmount" column="PART_AMOUNT" />
+		<result property="partMax" column="PART_MAX" />
+		<result property="investMaxTimes" column="INVEST_MAX_TIMES" />
+		<result property="transfer_flg" column="TRANSFER_FLG" />
+		<result property="borrowCity" column="BORROW_CITY" />
+	</resultMap>
+
+
+
+	<resultMap type="TzjUserLoginBean" id="TzjUserLoginBean">
+		<result column="USER_ID" property="userId" />
+		<result column="TZJ_USER_ID" property="tzjUserId" />
+		<result column="USER_PWD" property="pwd" />
+	</resultMap>
+
+
+	<resultMap type="BorrowResponse" id="BorrowResponse">
+		<result column="PLAT_ID" property="platid" />
+		<result column="BID" property="bid" />
+		<result column="TITLE" property="title" />
+		<result column="AMOUNT" property="amount" />
+		<result column="BORROW_PERIOD" property="period" />
+		<result column="PERIODUNIT" property="periodunit" />
+		<result column="RATE" property="rate" />
+		<result column="RETURNTYPE" property="returntype" />
+		<result column="BIDPROCESS" property="bidprocess" />
+		<result column="BIDTYPE" property="bidtype" />
+		<result column="REWARD" property="reward" />
+		<result column="BIDURL" property="bidurl" />
+	</resultMap>
+
+
+	<resultMap type="BorrowTenderInfo" id="BorrowTenderInfo">
+		<result column="PLAT_ID" property="username" />
+		<result column="BID" property="usernamemep" />
+		<result column="TITLE" property="oid" />
+		<result column="AMOUNT" property="bidamount" />
+		<result column="BORROW_PERIOD" property="amount" />
+		<result column="PERIODUNIT" property="income" />
+		<result column="RATE" property="type" />
+		<result column="RETURNTYPE" property="time" />
+		<result column="BIDPROCESS" property="is_transfer" />
+	</resultMap>
+
+
+	<resultMap type="InvestBorrowBean" id="InvestBorrowBean">
+		<result column="PLAT_ID" property="subject.platid" />
+		<result column="BID" property="subject.bid" />
+		<result column="TITLE" property="subject.title" />
+		<result column="AMOUNT" property="subject.amount" />
+		<result column="BORROW_PERIOD" property="subject.period" />
+		<result column="PERIODUNIT" property="subject.periodunit" />
+		<result column="RATE" property="subject.rate" />
+		<result column="RETURNTYPE" property="subject.returntype" />
+		<result column="BIDPROCESS" property="subject.bidprocess" />
+		<result column="BIDTYPE" property="subject.bidtype" />
+		<result column="REWARD" property="subject.reward" />
+		<result column="BIDURL" property="subject.bidurl" />
+
+		<result column="TZJ_ID" property="bidinfo.username" />
+		<result column="USER_ID" property="bidinfo.usernamemep" />
+		<result column="OID" property="bidinfo.oid" />
+		<result column="BIDAMOUNT" property="bidinfo.bidamount" />
+		<result column="AMOUNT" property="bidinfo.amount" />
+		<result column="INCOME" property="bidinfo.income" />
+		<result column="TYPE" property="bidinfo.type" />
+		<result column="INVEST_TIME" property="bidinfo.time" />
+		<result column="IS_TRANSFER" property="bidinfo.is_transfer" />
+	</resultMap>
+
+	<resultMap type="QueryUserBean" id="QueryUserBean">
+		<result column="TZJ_FROM" property="from" />
+		<result column="SERVICE" property="service" />
+		<result column="USERNAME" property="username" />
+		<result column="USERNAMEP" property="usernamep" />
+		<result column="OID" property="oid" />
+		<result column="TYPE" property="type" />
+		<result column="REGTIME" property="regtime" />
+
+	</resultMap>
+
+
+
+	<select id="GetTzjBaseBean" parameterType="String" resultMap="TzjBaseBean">
+		SELECT 'CHINA' TZJFROM,'OID' OID FROM DUAL
+	</select>
+
+
+	<select id="QueryUserIdByTelephone" parameterType="String"
+		resultMap="String">
+		SELECT USER_ID FROM APPROVE_MOBILE WHERE
+		PHONE_NUMBER=#{telephone} AND
+		DEL_FLG='0'
+	</select>
+
+
+
+
+	<select id="QueryBorrowById" parameterType="String" resultMap="BorrowBean">
+		SELECT USER_ID,
+		BORROW_TITLE,
+		BORROW_ORDER,
+		BORROW_USE,
+		BORROW_ACCOUNT,
+		BORROW_RATE,
+		BORROW_STYLE,
+		BORROW_ACCOUNT_WAIT,
+		BORROW_PERIOD,
+		PERIOD_TYPE,
+		BORROW_VALID_DAY,
+		TENDER_ACCOUNT_MIN,
+		TENDER_ACCOUNT_MAX,
+		REPAY_ACCOUNT_ALL,
+		REPAY_ACCOUNT_INTEREST,
+		REPAY_ACCOUNT_CAPITAL,
+		REPAY_ACCOUNT_WAIT,
+		REPAY_ACCOUNT_INTEREST_WAIT,
+		REPAY_ACCOUNT_CAPITAL_WAIT,
+		DIRECTIONAL_PWD,
+		BORROW_CONTENTS,
+		IS_DAY,
+		BORROW_TYPE,
+		INS_USER_ID,
+		INS_IP,
+		BORROW_CITY,
+		BORROW_PART_STATUS,
+		AWARD_STATUS,
+		AWARD_FALSE,
+		AWARD_ACCOUNT,
+		AWARD_SCALE,
+		OPEN_ACCOUNT,
+		OPEN_BORROW,
+		OPEN_TENDER,
+		OPEN_CREDIT,
+		COMMENT_STAUS,
+		COMMENT_USER_TYPE,
+		BORROW_FROST_ACCOUNT,
+		AWARD_ACCOUNT_ALL,
+		FROST_ACCOUNT,
+		LITPIC,
+		DUEIN_AMOUNT,
+		INVEST_TOTAL_AMOUNT,
+		PART_AMOUNT,
+		REPAY_ACCOUNT_TIMES,
+		PART_MAX,
+		INVEST_MAX_TIMES,
+		TRANSFER_FLG
+		FROM BORROW
+		WHERE
+		BORROW_ID=#{borrowId}
+	</select>
+
+	<select id="QueryTzjUserIsBind" parameterType="String"
+		resultMap="TzjUserLoginBean">
+		SELECT A.TZJ_ID TZJ_USER_ID,USER_ID,
+		B.USER_PWD
+		FROM
+		TPA_TZJ_USER_RELEATION A
+		INNER JOIN USERS B
+		ON A.USER_ID = B.USER_ID
+		WHERE A.TZJ_ID = #{USER_ID}
+		AND BIND_FLAG =0
+	</select>
+
+
+	<insert id="InsertTzjUserReleation" parameterType="java.util.HashMap">
+		INSERT INTO
+		TPA_TZJ_USER_RELEATION(TZJ_ID,USER_ID)
+		VALUES(#{TZJ_USER_ID},#{USER_ID})
+	</insert>
+
+
+	<select id="QueryAvailableBorrow" resultMap="AvailableBorrowResponse">
+    <![CDATA[SELECT '聚金资本'
+		PLAT_ID,
+		BORROW_ID BID,
+		BORROW_TITLE TITLE,
+		BORROW_ACCOUNT AMOUNT,
+		DECODE(PERIOD_TYPE, '1', '月', '月') PERIODUNIT,
+		BORROW_PERIOD,
+		BORROW_RATE RATE,
+		DECODE(BORROW_STYLE,
+		'1',
+		'等额本金',
+		'2',
+		'等额本息',
+		'3',
+		'到期还本还息',
+		'4',
+		'按月还息，到期还本',
+		'到期还本还息') RETURNTYPE,
+		BORROW_ACCOUNT_SCALE BIDPROCESS,
+		DECODE(BORROW_TYPE,
+		'1',
+		'信用标',
+		'2',
+		'抵押标',
+		'3',
+		'净值标',
+		'4',
+		'担保标',
+		'5',
+		'秒还标',
+		'6',
+		'流转标',
+		'7',
+		'聚金优选',
+		'8',
+		'抵押标',
+		'抵押标') BIDTYPE,
+		CASE
+		WHEN AWARD_STATUS = '1' AND AWARD_ACCOUNT > 0 THEN
+		AWARD_ACCOUNT
+		WHEN AWARD_STATUS = '1' AND AWARD_SCALE > 0 THEN
+		AWARD_SCALE
+		ELSE
+		0
+		END REWARD,
+
+		'http://www.jujinziben.com/' ||
+		DECODE(BORROW_TYPE,
+		'7',
+		'uPlanBorrowPage.page?borrow_id=' || BORROW_ID || CHR(38) ||
+		'plan_kind=' || BORROW_FLAG,
+		'borrowinfo.page?borrow_id=' || BORROW_ID) BIDURL
+		FROM BORROW
+
+		WHERE (UPLAN_BORROWS_IS_SHOW IS NULL OR UPLAN_BORROWS_IS_SHOW = '0')
+		AND BORROW_FULL_STATUS != 1
+		AND BORROW_ACCOUNT_SCALE <= 100
+		AND VERIFY_FLG = '1'
+		AND CANCEL_STATUS <> '1'
+		AND FAILED_FLG = '0'
+		AND BORROW_FLAG = '1']]>
+	</select>
+
+
+	<select id="QueryAvailableBorrow" resultMap="AvailableBorrowResponse">
+    <![CDATA[SELECT '聚金资本'
+		PLAT_ID,
+		BORROW_ID BID,
+		BORROW_TITLE TITLE,
+		BORROW_ACCOUNT AMOUNT,
+		DECODE(PERIOD_TYPE, '1', '月', '月') PERIODUNIT,
+		BORROW_PERIOD,
+		BORROW_RATE RATE,
+		DECODE(BORROW_STYLE,
+		'1',
+		'等额本金',
+		'2',
+		'等额本息',
+		'3',
+		'到期还本还息',
+		'4',
+		'按月还息，到期还本',
+		'到期还本还息') RETURNTYPE,
+		BORROW_ACCOUNT_SCALE BIDPROCESS,
+		DECODE(BORROW_TYPE,
+		'1',
+		'信用标',
+		'2',
+		'抵押标',
+		'3',
+		'净值标',
+		'4',
+		'担保标',
+		'5',
+		'秒还标',
+		'6',
+		'流转标',
+		'7',
+		'聚金优选',
+		'8',
+		'抵押标',
+		'抵押标') BIDTYPE,
+		CASE
+		WHEN AWARD_STATUS = '1' AND AWARD_ACCOUNT > 0 THEN
+		AWARD_ACCOUNT
+		WHEN AWARD_STATUS = '1' AND AWARD_SCALE > 0 THEN
+		AWARD_SCALE
+		ELSE
+		0
+		END REWARD,
+
+		'http://www.jujinziben.com/' ||
+		DECODE(BORROW_TYPE,
+		'7',
+		'uPlanBorrowPage.page?borrow_id=' || BORROW_ID || CHR(38) ||
+		'plan_kind=' || BORROW_FLAG,
+		'borrowinfo.page?borrow_id=' || BORROW_ID) BIDURL
+		FROM BORROW
+
+		WHERE (UPLAN_BORROWS_IS_SHOW IS NULL OR UPLAN_BORROWS_IS_SHOW = '0')
+		AND BORROW_FULL_STATUS != 1
+		AND BORROW_ACCOUNT_SCALE <= 100
+		AND VERIFY_FLG = '1'
+		AND CANCEL_STATUS <> '1'
+		AND FAILED_FLG = '0'
+		AND BORROW_FLAG = '1']]>
+	</select>
+
+
+
+	<select id="QueryBorrowTenderInfo" parameterType="java.util.HashMap"
+		resultMap="BorrowTenderInfo">
+    <![CDATA[SELECT
+
+ '聚金资本' PLAT_ID,
+ BORROW.BORROW_ID BID,
+ BORROW_TITLE TITLE,
+ BORROW_ACCOUNT AMOUNT,
+ DECODE(PERIOD_TYPE, '1', '月', '月') PERIODUNIT,
+ BORROW_PERIOD,
+ BORROW_RATE RATE,
+ DECODE(BORROW_STYLE,
+        '1',
+        '等额本金',
+        '2',
+        '等额本息',
+        '3',
+        '到期还本还息',
+        '4',
+        '按月还息，到期还本',
+        '到期还本还息') RETURNTYPE,
+ BORROW_ACCOUNT_SCALE BIDPROCESS,
+ DECODE(BORROW_TYPE,
+        '1',
+        '信用标',
+        '2',
+        '抵押标',
+        '3',
+        '净值标',
+        '4',
+        '担保标',
+        '5',
+        '秒还标',
+        '6',
+        '流转标',
+        '7',
+        '聚金优选',
+        '8',
+        '抵押标',
+        '抵押标') BIDTYPE,
+ CASE
+   WHEN AWARD_STATUS = '1' AND AWARD_ACCOUNT > 0 THEN
+    AWARD_ACCOUNT
+   WHEN AWARD_STATUS = '1' AND AWARD_SCALE > 0 THEN
+    AWARD_SCALE
+   ELSE
+    0
+ END REWARD,
+ 
+ 'http://www.jujinziben.com/' ||
+ DECODE(BORROW_TYPE,
+        '7',
+        'uPlanBorrowPage.page?borrow_id=' || BORROW.BORROW_ID || CHR(38) ||
+        'plan_kind=' || BORROW_FLAG,
+        'borrowinfo.page?borrow_id=' || BORROW.BORROW_ID) BIDURL,
+ 
+ B.TZJ_ID,
+ A.USER_ID,
+ SEQ || '_' || A.BORROW_ID OID,
+ (TO_DATE(TO_CHAR(A.INS_DATE, 'yyyy-mm-dd hh24:mi:ss'),
+          'yyyy-mm-dd hh24:mi:ss') - TO_DATE('1970-01-01', 'yyyy-mm-dd')) * 24 * 60 * 60 * 1000 INVEST_TIME,
+ RECOVER_ACCOUNT_INTEREST INCOME,
+ ACCOUNT_TENDER AMOUNT,
+ VALID_ACCOUNT_TENDER BIDAMOUNT,
+ DECODE(AUTO_STATUS, '0', '手动投标', '1', '自动投标', '手动投标') TYPE,
+ 0 IS_TRANSFER
+  FROM BORROW
+ INNER JOIN BORROW_TENDER A
+    ON (BORROW.BORROW_ID = A.BORROW_ID)
+  INNER JOIN TPA_TZJ_USER_RELEATION B
+    ON (A.USER_ID = B.USER_ID)
+ WHERE A.USER_ID = #{user_id}
+ AND A.BORROW_ID=#{borrow_id}]]>
+	</select>
+
+	<select id="QueryUserBindInfo" parameterType="String" resultMap="QueryUserBean">
+    <![CDATA[SELECT 'JJZB' TZJ_FROM,
+       'bindreport' SERVICE,
+       A.TZJ_ID USERNAME,
+       A.USER_ID USERNAMEP,
+       'TZJJJZB' || TO_CHAR(SYSDATE, 'yyyymmddhh24miss') || SYS_GUID() OID,
+       CASE
+         WHEN ((TO_DATE(TO_CHAR(B.INS_DATE, 'yyyy-mm-dd hh24:mi:ss'),
+                        'yyyy-mm-dd hh24:mi:ss')) -
+              (TO_DATE(TO_CHAR(A.INS_DATE, 'yyyy-mm-dd hh24:mi:ss'),
+                        'yyyy-mm-dd hh24:mi:ss'))) > 1 / 24 THEN
+          1
+         ELSE
+          0
+       END TYPE,
+       (TO_DATE(TO_CHAR(A.INS_DATE, 'yyyy-mm-dd hh24:mi:ss'),
+                'yyyy-mm-dd hh24:mi:ss') -
+       TO_DATE('1970-01-01', 'yyyy-mm-dd')) * 24 * 60 * 60 * 1000 REGTIME
+  FROM USERS B
+  INNER JOIN TPA_TZJ_USER_RELEATION A
+    ON (A.USER_ID = B.USER_ID)
+    WHERE A.TZJ_ID=#{TZJ_ID}
+    ]]>
+	</select>
+
+	<select id="QueryInvestBorrowInfo" parameterType="java.util.HashMap"
+		resultType="String">
+		SELECT A.BORROW_ID
+		FROM BORROW_TENDER A
+		INNER JOIN TPA_TZJ_USER_RELEATION B
+		ON (A.USER_ID = B.USER_ID)
+		WHERE A.USER_ID = B.USER_ID
+		<if test="START_TIME != null and END_TIME!=null">
+			AND A.INS_DATE BETWEEN #{START_TIME} AND #{END_TIME}
+		</if>
+		<if test="TZJ_ID != null">
+			AND B.TZJ_ID = #{TZJ_ID}
+		</if>
+		<if test="START_TIME == null OR END_TIME==null">
+			AND A.INS_DATE>=TRUNC(SYSDATE)-10
+		</if>
+
+
+	</select>
+
+
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="ExamUser" id="ExamUser">
+		<result column="NICK_NAME" property="nickName" />
+		<result column="OPEN_ID" property="openId" />
+		<result column="SCORE" property="score" />
+		<result column="REWARD" property="reward" />
+		<result column="SHARE_REWARD" property="shareReward" />
+		<result column="HEAD_URL" property="headUrl" />
+		<result column="INSERT_TIME" property="time" />
+	</resultMap>
+
+	<resultMap type="ExamBean" id="ExamBean">
+		<result column="ID" property="id" />
+		<result column="SCORE" property="score" />
+	</resultMap>
+
+	<select id="QueryPartCount" resultType="int">
+			<![CDATA[SELECT 2618 + NVL(COUNT(*), 0) COUNT FROM TPA_EXAM_SUM]]>
+	</select>
+
+	<select id="QueryUserScore" parameterType="String" resultMap="ExamUser">
+			<![CDATA[SELECT A.OPEN_ID,
+       A.NICK_NAME,
+       A.SCORE,
+       B.REWARD,
+       B.SHARE_REWARD,
+       A.HEAD_URL,
+       TO_CHAR(A.INSERT_TIME, 'YYYY-MM-DD HH24:MI:SS') INSERT_TIME
+  FROM TPA_EXAM_SUM A, TPA_USER_EXAM_REWARD B
+ WHERE A.OPEN_ID = B.OPEN_ID
+AND A.OPEN_ID=#{openId}]]>
+	</select>
+
+
+	<insert id="InsertExamSum" parameterType="ExamUser">
+			<![CDATA[INSERT INTO TPA_EXAM_SUM(open_id,score,nick_name,head_url)
+VALUES(#{openId},#{score},#{nickName},#{headUrl})]]>
+	</insert>
+
+	<select id="InsertExamReward" parameterType="ExamBean"
+		resultType="int">
+			<![CDATA[INSERT INTO TPA_USER_EXAM_REWARD(OPEN_ID,REWARD)
+			VALUES(#{id},#{score})]]>
+	</select>
+
+	<select id="QueryTopPartUser" parameterType="ExamBean"
+		resultMap="ExamUser">
+			<![CDATA[SELECT *
+  FROM (SELECT A.OPEN_ID,
+               A.NICK_NAME,
+               A.SCORE,
+               B.REWARD,
+               B.SHARE_REWARD,
+               A.HEAD_URL,
+               TO_CHAR(A.INSERT_TIME, 'YYYY-MM-DD HH24:MI:SS') INSERT_TIME
+          FROM TPA_EXAM_SUM A, TPA_USER_EXAM_REWARD B
+         WHERE A.OPEN_ID = B.OPEN_ID
+         ORDER BY A.INSERT_TIME DESC)
+ WHERE ROWNUM <= 10]]>
+	</select>
+
+
+	<update id="UpdateShareReward" parameterType="ExamBean">
+			<![CDATA[UPDATE TPA_USER_EXAM_REWARD SET SHARE_REWARD=#{shareReward} WHERE OPEN_ID=#{openId}]]>
+	</update>
+
+	<insert id="UpdateShareStatus" parameterType="String">
+			<![CDATA[UPDATE TPA_EXAM_SUM SET IS_SHARE=1 WHERE OPEN_ID=#{open_id}  ]]>
+	</insert>
+
+
+</mapper>
+ 

@@ -1,0 +1,73 @@
+package com.ocean.mybatis.core.config.autoloading;
+
+import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+     
+public class MybatsiSqlSessionFactoryBean extends SqlSessionFactoryBean {
+
+	private static final Log LOGGER = LogFactory
+			.getLog(MybatsiSqlSessionFactoryBean.class);
+    // dynamic loading  MyBatis Configuration sign
+	private boolean isAutoLoad;
+	
+	private SqlSessionFactory buildSqlSessionFactory;
+    //initialDelay the time to delay first execution
+	private long  initialDelay=120;
+	//period the period between successive executions
+	private long period=60;
+	public MybatsiSqlSessionFactoryBean() {
+		super();
+	}
+
+	@Override
+	public  SqlSessionFactory buildSqlSessionFactory() throws IOException {
+		buildSqlSessionFactory = super.buildSqlSessionFactory();
+		if (this.isAutoLoad) {
+			autoLoad();
+		} 
+		return buildSqlSessionFactory;
+	}
+
+	private void autoLoad() throws IOException{
+		
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {  
+				try {
+					System.err.println("###############################################################");
+					synchronized (buildSqlSessionFactory) {
+						buildSqlSessionFactory = buildSqlSessionFactory();
+					}
+					System.out.println(buildSqlSessionFactory);
+					System.err.println("###############################################################");
+				} catch (IOException e) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("dynamic loading  MyBatis Configuration  fail");
+					}
+					e.printStackTrace();
+					
+				}
+			}
+		};
+		ScheduledExecutorService service = Executors
+				.newSingleThreadScheduledExecutor();
+		// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+		service.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
+	}
+
+	public boolean getAutoLoad() {
+		return isAutoLoad;
+	}
+
+	public void setAutoLoad(boolean isAutoLoad) {
+		this.isAutoLoad = isAutoLoad;
+	}
+
+}

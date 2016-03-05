@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<resultMap type="AutoInvestSetting" id="AutoInvestSetting">
+		<result column="SEQ" property="id" />
+		<result column="USER_ID" property="userId" />
+		<result column="USING_FLG" property="enable" />
+		<result column="RETAIN_AMOUNT" property="capital" />
+		<result column="LOAN_AMOUNT" property="amount" />
+		<result column="PERIOD_BEGIN" property="periodBegin" />
+		<result column="PERIOD_END" property="periodEnd" />
+		<result column="AWARD_FLG" property="award" />
+		<result column="BORROW_TYPE" property="borrowType" />
+		<result column="RATE_BEGIN" property="rate" />
+		<result column="BALANCE" property="balance" />
+		<result column="RANK_INDEX" property="sortNum" />
+	</resultMap>
+
+
+	<resultMap type="AutoInvestRecord" id="AutoInvestRecord">
+		<result column="BORROW_USER_ID" property="borrowUser" />
+		<result column="STATUS" property="status" />
+		<result column="BORROW_TITLE" property="title" />
+		<result column="BORROW_RATE" property="rate" />
+		<result column="BORROW_PERIOD" property="period" />
+		<result column="AMOUNT" property="amount" />
+		<result column="BORROW_ID" property="borrowId" />
+	</resultMap>
+
+
+	<select id="QueryDefaultSetting" parameterType="String"
+		resultMap="AutoInvestSetting">
+		SELECT
+		'1' USING_FLG,
+		'1000' LOAN_AMOUNT,
+		0 CREDIT_BEGIN,
+		999999 CREDIT_END,
+		1 PERIOD_BEGIN,
+		12 PERIOD_END,
+		1 PERIOD_TYPE,
+		12
+		RATE_BEGIN,
+		24 RATE_END,
+		UA.USER_ID,
+		0 AWARD_FLG,
+		'2,8' BORROW_TYPE,
+		'0'
+		RETAIN_AMOUNT,
+		'0' RANK_INDEX,
+		0 BEFORE_LOAN_AMOUNT,
+		0 BOR_AMOUNT,
+		UA.BALANCE BALANCE,
+		0 RANK_INDEX
+		FROM DUAL,USERS_ACCOUNT UA
+		WHERE
+		UA.USER_ID=#{USER_ID,jdbcType=VARCHAR}
+	</select>
+
+	<select id="QueryAutoSetting" parameterType="String" resultMap="AutoInvestSetting">
+			<![CDATA[SELECT BAT.USER_ID,
+       BAT.SEQ,
+       BAT.USING_FLG,
+       BAT.LOAN_AMOUNT,
+       BAT.CREDIT_BEGIN,
+       BAT.CREDIT_END,
+       BAT.PERIOD_BEGIN,
+       BAT.PERIOD_END,
+       BAT.PERIOD_TYPE,
+       BAT.RATE_BEGIN,
+       BAT.RATE_END,
+       BAT.AWARD_FLG,
+       BAT.BORROW_TYPE,
+       BAT.RETAIN_AMOUNT,
+       CASE
+         WHEN BAT.USING_FLG = '1' THEN
+          TO_CHAR(OD_T.RANK_INDEX)
+         ELSE
+          '0'
+       END AS RANK_INDEX,
+       OD_T.BEFORE_LOAN_AMOUNT,
+       OD_T.BOR_AMOUNT,
+       UA.BALANCE BALANCE
+  FROM BORROW_AUTO BAT
+  INNER JOIN USERS_ACCOUNT UA
+  ON BAT.USER_ID=UA.USER_ID
+ INNER JOIN (SELECT USER_ID,
+                    SEQ,
+                    RANK() OVER(ORDER BY USING_FLG DESC, VIP_TYPE DESC, UPD_DATE, SEQ) AS RANK_INDEX,
+                    (SUM(IDX_AMOUNT) OVER(ORDER BY USING_FLG DESC,
+                                          VIP_TYPE DESC,
+                                          UPD_DATE,
+                                          SEQ)) - IDX_AMOUNT AS BEFORE_LOAN_AMOUNT,
+                    (SUM(BOR_AMOUNT) OVER(ORDER BY USING_FLG DESC,
+                                          VIP_TYPE DESC,
+                                          UPD_DATE,
+                                          SEQ)) - BOR_AMOUNT AS BOR_AMOUNT
+               FROM (SELECT BA.USER_ID,
+                            BA.LOAN_AMOUNT,
+                            BA.UPD_DATE,
+                            BA.SEQ,
+                            CASE
+                              WHEN BA.USING_FLG = '1' THEN
+                               BA.LOAN_AMOUNT
+                              ELSE
+                               0
+                            END AS IDX_AMOUNT,
+                            CASE
+                              WHEN SIGN(UA.BALANCE + UA.CONTINUE_TOTAL -
+                                        BA.RETAIN_AMOUNT) = -1 THEN
+                               0
+                              ELSE
+                               (CASE
+                                 WHEN LOAN_AMOUNT <=
+                                      (UA.BALANCE + UA.CONTINUE_TOTAL -
+                                      BA.RETAIN_AMOUNT) THEN
+                                  LOAN_AMOUNT
+                                 ELSE
+                                  (UA.BALANCE + UA.CONTINUE_TOTAL -
+                                  BA.RETAIN_AMOUNT) -
+                                  MOD((UA.BALANCE + UA.CONTINUE_TOTAL -
+                                      BA.RETAIN_AMOUNT),
+                                      50)
+                               END)
+                            END AS BOR_AMOUNT,
+                            NVL(BA.USING_FLG, 0) USING_FLG,
+                            BA.RETAIN_AMOUNT,
+                            NVL(UV.VIP_TYPE, 0) VIP_TYPE
+                       FROM BORROW_AUTO BA
+                       LEFT JOIN USERS_ACCOUNT UA
+                         ON BA.USER_ID = UA.USER_ID
+                       LEFT JOIN USERS_VIP UV
+                         ON BA.USER_ID = UV.USER_ID
+                        AND TO_CHAR(SYSDATE, 'yyyy-MM-dd') BETWEEN
+                            UV.START_DATE AND UV.END_DATE
+                      WHERE (BA.USING_FLG = '1' OR BA.USER_ID = #{userId,jdbcType=VARCHAR})) T
+              ORDER BY T.USING_FLG DESC, T.VIP_TYPE DESC, T.UPD_DATE, T.SEQ) OD_T
+    ON BAT.USER_ID = OD_T.USER_ID
+   AND BAT.SEQ = OD_T.SEQ
+ WHERE BAT.USER_ID = #{userId,jdbcType=VARCHAR}
+ ORDER BY OD_T.RANK_INDEX]]>
+	</select>
+
+
+	<select id="QueryAutoInvestRecord" parameterType="String"
+		resultMap="AutoInvestRecord">
+	<![CDATA[SELECT B.BORROW_ID,
+       B.USER_ID BORROW_USER_ID,
+       B.BORROW_TITLE,
+       B.BORROW_RATE,          
+       B.BORROW_PERIOD,         
+       CASE WHEN BT.TENDER_STATUS='0' THEN '筹款中' ELSE  '复审通过' END STATUS,
+       BT.VALID_ACCOUNT_TENDER AMOUNT
+  FROM BORROW_TENDER BT
+ INNER JOIN BORROW B
+    ON BT.BORROW_ID = B.BORROW_ID
+ WHERE BT.USER_ID = #{user_id,jdbcType=VARCHAR} AND BT.AUTO_STATUS = '1'
+   ORDER BY BT.INS_DATE DESC]]>
+	</select>
+
+	<select id="QueryAutoCount" parameterType="java.util.Map"
+		resultType="Int">
+	<![CDATA[SELECT COUNT(*) FROM BORROW_AUTO WHERE USER_ID=#{userId,jdbcType=VARCHAR} AND SEQ=#{id,jdbcType=NUMERIC} ]]>
+	</select>
+
+	<insert id="InsertBorrowAuto" parameterType="AutoInvestSetting">
+		<![CDATA[INSERT INTO BORROW_AUTO(USER_ID,
+		USING_FLG,
+		PERIOD_TYPE,
+		CREDIT_BEGIN,
+		CREDIT_END,
+		PERIOD_BEGIN,
+		PERIOD_END,
+		AWARD_FLG,
+		BORROW_TYPE,
+		RATE_BEGIN,
+		RATE_END,
+		RETAIN_AMOUNT,
+		LOAN_AMOUNT)
+		VALUES 
+		(#{userId,jdbcType=VARCHAR},
+		#{enable,jdbcType=NUMERIC},
+		1,
+		0,
+		9999998,
+		#{periodBegin,jdbcType=NUMERIC},
+		#{periodEnd,jdbcType=NUMERIC},
+		#{award,jdbcType=NUMERIC},
+		#{borrowType,jdbcType=VARCHAR},
+		#{rate,jdbcType=FLOAT},
+		24,
+		#{capital,jdbcType=FLOAT},
+		#{amount,jdbcType=FLOAT})]]>
+	</insert>
+
+
+	<insert id="UpdateBorrowAuto" parameterType="AutoInvestSetting">
+		<![CDATA[
+		UPDATE BORROW_AUTO 
+		SET USING_FLG=#{enable,jdbcType=NUMERIC},
+		AWARD_FLG=#{award,jdbcType=NUMERIC},
+		PERIOD_BEGIN=#{periodBegin,jdbcType=NUMERIC},
+		PERIOD_END=#{periodEnd,jdbcType=NUMERIC},
+		BORROW_TYPE=#{borrowType,jdbcType=VARCHAR},
+		RATE_BEGIN=#{rate,jdbcType=NUMERIC},
+		RETAIN_AMOUNT=#{capital,jdbcType=FLOAT},
+		LOAN_AMOUNT=#{amount,jdbcType=FLOAT}
+		WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+		AND SEQ=#{id,jdbcType=NUMERIC}]]>
+	</insert>
+
+	<update id="UpdateAutoSettingStatus" parameterType="java.util.Map">
+		<![CDATA[UPDATE BORROW_AUTO SET   USING_FLG=#{STATUS,jdbcType=NUMERIC} WHERE  SEQ=#{ID,jdbcType=NUMERIC}]]>
+	</update>
+
+
+	<delete id="DeleteAutoSetting" parameterType="int"> 
+		<![CDATA[
+		DELETE FROM BORROW_AUTO WHERE SEQ=#{seq}
+		]]>
+	</delete>
+
+
+</mapper>
+ 

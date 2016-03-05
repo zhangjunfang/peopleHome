@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<!-- 红包相关的表映射 2015-05-29 gaojunfeng begin -->
+	<!-- 活动信息表 TCC_ACTIVITY -->
+	<resultMap type="TccActivityBean" id="TccActivityBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="NAME" property="name" />
+		<result column="MEMO" property="memo" />
+		<result column="ENABLE" property="enable" />
+		<result column="BEGIN_TIME" property="beginTime" />
+		<result column="END_TIME" property="endTime" />
+		<result column="UPD_USER_ID" property="updUserId" />
+		<result column="INS_DATE" property="insDate" />
+		<result column="COIN_END_TIME" property="coinEndTime" />
+	</resultMap>
+	<!-- 红包键值对配置信息表 TCC_COIN_CONFIG -->
+	<resultMap type="TccCoinConfigBean" id="TccCoinConfigBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="KEY" property="key" />
+		<result column="MEMO" property="memo" />
+		<result column="GROUP_ID" property="groupId" />
+		<result column="VALUE" property="value" />
+		<result column="TYPE" property="type" />
+		<result column="INS_DATE" property="insDate" />
+		<result column="PECENT_VALUE" property="pecentValue" />
+	</resultMap>
+	<!-- 红包机会表 TPA_COIN_CHANCE -->
+	<resultMap type="TpaCoinChanceBean" id="TpaCoinChanceBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="USER_ID" property="userId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="VALID_ACCOUNT_TENDER" property="validAccountTender" />
+		<result column="UPD_USER_ID" property="updUserId" />
+		<result column="ACTIVITY_ID" property="activityId" />
+		<result column="QUANTITY" property="quantity" />
+		<result column="ENABLE" property="enable" />
+		<result column="INS_DATE" property="insDate" />
+		<result column="ROOT" property="root" />
+		<result column="ORG_QUANTITY" property="orgQuantity" />
+		<result column="GROUP_ID" property="groupId" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="NICK_NAME" property="nickName" />
+	</resultMap>
+	<!-- 红包流水表 TPA_USER_COIN_DETAIL -->
+	<resultMap type="TpaUserCoinDetailBean" id="TpaUserCoinDetailBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="BP_FLG" property="bpFlg" />
+		<result column="USER_ID" property="userId" />
+		<result column="GROUP_ID" property="groupId" />
+		<result column="AMOUNT" property="amount" />
+		<result column="MEMO" property="memo" />
+		<result column="STATE" property="state" />
+		<result column="INS_DATE" property="insDate" />
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="GET_TIME" property="getTime" />
+		<result column="END_TIME" property="endTime" />
+	</resultMap>
+	<!-- 红包表 TPA_USER_COIN_DETAIL -->
+	<resultMap type="TpaUserCoinBean" id="TpaUserCoinBean">
+		<result column="RECORD_ID" property="recordId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="USER_ID" property="userId" />
+		<result column="AMOUNT" property="amount" />
+		<result column="FROST" property="frost" />
+	</resultMap>
+
+	<!-- 微信客户端红包机会展现 -->
+	<resultMap type="CoinChange" id="CoinChange">
+		<result column="BORROW_ID" property="borrowId" />
+		<result column="BORROW_TITLE" property="borrowTitle" />
+		<result column="QUANTITY" property="quantity" />
+		<result column="ORG_QUANTITY" property="orgQuantity" />
+		<result column="END_TIME" property="endTime" />
+		<result column="COIN_END_TIME" property="coinEndTime" />
+		<result column="ROOT" property="root" />
+		<result column="MEMO" property="memo" />
+		<result column="PHONE" property="phone" />
+	</resultMap>
+	<!-- 红包相关的表映射 2015-05-29 gaojunfeng end -->
+
+
+	<resultMap type="NotifyBean" id="NotifyBean">
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="AMOUNT" property="amount" />
+		<result column="USER_ID" property="userId" />
+	</resultMap>
+
+	<!-- 活动信息表(TCC_ACTIVITY)相关操作 2015-5-29 gaojunfeng begin -->
+	<!-- RECORD_ID、NAME、MEMO、ENABLE、BEGIN_TIME、END_TIME、UPD_USER_ID、INS_DATE -->
+	<insert id="insertTccActivity" parameterType="TccActivityBean">
+		INSERT INTO
+		TCC_ACTIVITY(NAME, MEMO ,ENABLE, BEGIN_TIME, END_TIME, UPD_USER_ID,
+		INS_DATE,COIN_END_TIME)
+		VALUES(#{name}, #{memo}, #{enable},
+		#{beginTime}, #{endTime}, #{updUserId},
+		sysdate,#{coinEndTime})
+	</insert>
+	<update id="updateTccActivity" parameterType="TccActivityBean">
+		UPDATE
+		TCC_ACTIVITY
+		SET
+		NAME=#{name},
+		MEMO=#{memo},
+		ENABLE=#{enable},
+		BEGIN_TIME=#{beginTime},
+		END_TIME=#{endTime},
+		UPD_USER_ID=#{updUserId},
+		INS_DATE=#{insDate},
+		COIN_END_TIME=#{coinEndTime}
+		WHERE
+		RECORD_ID=#{recordId}
+	</update>
+	<select id="getTccActivityBeanByRecordId" parameterType="int"
+		resultMap="TccActivityBean"> 
+		<![CDATA[SELECT RECORD_ID, NAME, MEMO, ENABLE, BEGIN_TIME, END_TIME, UPD_USER_ID,INS_DATE,COIN_END_TIME
+			     FROM TCC_ACTIVITY WHERE RECORD_ID =#{recordId}]]>
+	</select>
+	<select id="getAllTccActivityBean" resultMap="TccActivityBean"> 
+		<![CDATA[SELECT RECORD_ID, NAME, MEMO, ENABLE, BEGIN_TIME, END_TIME, UPD_USER_ID,INS_DATE,COIN_END_TIME
+			     FROM TCC_ACTIVITY]]>
+	</select>
+	<select id="getAllTccActivityBeanByEnable" resultMap="TccActivityBean"
+		parameterType="int"> 
+		<![CDATA[SELECT RECORD_ID, NAME, MEMO, ENABLE, BEGIN_TIME, END_TIME, UPD_USER_ID,INS_DATE,COIN_END_TIME
+			     FROM TCC_ACTIVITY WHERE ENABLE =#{enable}]]>
+	</select>
+	<!-- 活动信息表相关操作 2015-5-29 gaojunfeng end -->
+
+
+	<!-- 红包属性配置表(TCC_COIN_CONFIG)相关操作 2015-5-29 gaojunfeng begin -->
+	<!-- RECORD_ID、KEY、MEMO、GROUP_ID、VALUE、TYPE、INS_DATE -->
+	<insert id="insertTccCoinConfig" parameterType="TccCoinConfigBean">
+		INSERT INTO
+		TCC_COIN_CONFIG(KEY, MEMO, GROUP_ID, VALUE, TYPE, INS_DATE,
+		PECENT_VALUE)
+		VALUES(#{key}, #{memo}, #{groupId}, #{value}, #{type},
+		sysdate, #{pecentValue})
+	</insert>
+	<update id="updateTccCoinConfig" parameterType="TccCoinConfigBean">
+		UPDATE
+		TCC_COIN_CONFIG SET
+		KEY=#{key},
+		MEMO=#{memo},
+		GROUP_ID=#{groupId},
+		VALUE=#{value},
+		TYPE=#{type},
+		INS_DATE=#{insDate},
+		PECENT_VALUE=#{pecentValue}
+		WHERE
+		RECORD_ID=#{recordId}
+	</update>
+	<select id="getTccCoinConfigByRecordId" parameterType="int"
+		resultMap="TccCoinConfigBean"> 
+		<![CDATA[SELECT RECORD_ID, KEY, MEMO, GROUP_ID, VALUE, TYPE, INS_DATE, PECENT_VALUE
+			     FROM TCC_COIN_CONFIG WHERE RECORD_ID =#{recordId}]]>
+	</select>
+	<select id="getTccCoinConfigBeanByGroupId" parameterType="String"
+		resultMap="TccCoinConfigBean"> 
+		<![CDATA[SELECT RECORD_ID, KEY, MEMO, GROUP_ID, VALUE, TYPE, INS_DATE, PECENT_VALUE
+			     FROM TCC_COIN_CONFIG WHERE GROUP_ID =#{groupId}]]>
+	</select>
+	<select id="getTccCoinConfigBeanByKey" parameterType="String"
+		resultMap="TccCoinConfigBean"> 
+		<![CDATA[SELECT RECORD_ID, KEY, MEMO, GROUP_ID, VALUE, TYPE, INS_DATE, PECENT_VALUE
+			     FROM TCC_COIN_CONFIG WHERE KEY =#{key}]]>
+	</select>
+	<select id="getTccCoinConfigBeanByType" parameterType="int"
+		resultMap="TccCoinConfigBean"> 
+		<![CDATA[SELECT RECORD_ID, KEY, MEMO, GROUP_ID, VALUE, TYPE, INS_DATE, PECENT_VALUE
+			     FROM TCC_COIN_CONFIG WHERE TYPE =#{type}]]>
+	</select>
+	<!-- 红包表相关操作 2015-5-29 gaojunfeng end -->
+
+
+	<!-- 红包机会表(TPA_COIN_CHANCE)相关操作 2015-5-29 gaojunfeng begin -->
+	<!-- RECORD_ID、USER_ID 、BORROW_ID 、VALID_ACCOUNT_TENDER 、UPD_USER_ID 、ACTIVITY_ID 
+		、QUANTITY 、ENABLE、INS_DATE、 ROOT、ORG_QUANTITY、GROUP_ID -->
+	<insert id="insertTpaCoinChance" parameterType="TpaCoinChanceBean">
+		INSERT INTO
+		TPA_COIN_CHANCE(USER_ID,PHONE_NUMBER,BORROW_ID,VALID_ACCOUNT_TENDER,UPD_USER_ID,ACTIVITY_ID,ENABLE,INS_DATE,ROOT,QUANTITY,ORG_QUANTITY,GROUP_ID)
+		SELECT
+		#{userId},#{phoneNumber},#{borrowId},#{validAccountTender,jdbcType=FLOAT},#{updUserId},#{activityId},#{enable},sysdate,#{root},VALUE
+		AS QUANTITY,VALUE AS ORG_QUANTITY,GROUP_ID AS GROUP_ID
+		FROM (SELECT
+		CASE
+		WHEN INSTR(KEY, '-', -1, 1) > 0 THEN
+		SUBSTR(KEY, 0, INSTR(KEY, '-',
+		-1, 1) - 1)
+		ELSE
+		REPLACE(KEY, '>')
+		END MIN_VALUE,
+		CASE
+		WHEN INSTR(KEY, '-',
+		-1, 1) > 0 THEN
+		SUBSTR(KEY, INSTR(KEY, '-', -1, 1) + 1)
+		ELSE
+		NULL
+		END
+		MAX_VALUE,
+		RECORD_ID, MEMO, KEY, GROUP_ID, VALUE, TYPE
+		FROM
+		TCC_COIN_CONFIG
+		WHERE TYPE = 1)
+		WHERE #{validAccountTender} >= MIN_VALUE
+		AND ( MAX_VALUE > #{validAccountTender} OR MAX_VALUE IS NULL)
+	</insert>
+	<update id="updateTpaCoinChance" parameterType="TpaCoinChanceBean">
+		UPDATE
+		TPA_COIN_CHANCE SET
+		USER_ID=#{userId},
+		PHONE_NUMBER=#{phoneNumber},
+		BORROW_ID=#{borrowId},
+		VALID_ACCOUNT_TENDER=#{validAccountTender},
+		UPD_USER_ID=#{updUserId},
+		ACTIVITY_ID=#{activityId},
+		QUANTITY=#{quantity},
+		ENABLE=#{enable},
+		INS_DATE=#{insDate},
+		ROOT=#{root},
+		ORG_QUANTITY=#{orgQuantity},
+		GROUP_ID=#{groupId}
+		WHERE
+		RECORD_ID=#{recordId}
+	</update>
+	<select id="getTpaCoinChanceByRecordId" parameterType="int"
+		resultMap="TpaCoinChanceBean"> 
+		<![CDATA[SELECT A.RECORD_ID,
+       A.USER_ID,
+       A.PHONE_NUMBER,
+       A.BORROW_ID,
+       A.VALID_ACCOUNT_TENDER,
+       A.UPD_USER_ID,
+       A.ACTIVITY_ID,
+       A.QUANTITY,
+       A.ENABLE,
+       A.INS_DATE,
+       A.ROOT,
+       A.ORG_QUANTITY,
+       A.GROUP_ID,
+       B.NICK_NAME,
+       C.BORROW_TITLE
+  FROM TPA_COIN_CHANCE A
+  LEFT OUTER JOIN USERS B
+    ON (A.USER_ID = B.USER_ID)
+ INNER JOIN BORROW C
+    ON (A.BORROW_ID = C.BORROW_ID)
+ WHERE a.RECORD_ID = #{RECORDID}]]>
+	</select>
+	<!-- 红包流水表相关操作 2015-5-29 gaojunfeng end -->
+
+
+	<!-- 红包流水表(TPA_USER_COIN_DETAIL)相关操作 2015-5-29 gaojunfeng begin -->
+	<!-- RECORD_ID、PHONE_NUMBER、BP_FLG、USER_ID、GROUP_ID、 AMOUNT、 MEMO、STATE、INS_DATE、BORROW_ID -->
+	<insert id="insertTpaUserCoinDetail" parameterType="TpaUserCoinDetailBean">
+		INSERT INTO
+		TPA_USER_COIN_DETAIL(PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT,
+		MEMO,STATE,INS_DATE,BORROW_ID)
+		SELECT #{phoneNumber},
+		#{bpFlg},
+		CASE
+		WHEN C.USER_ID IS NOT NULL THEN
+		C.USER_ID
+		WHEN B.USER_ID IS NOT NULL THEN
+		B.USER_ID
+		ELSE
+		NULL
+		END USER_ID,
+		#{groupId},
+		#{amount},
+		#{memo},
+		#{state},
+		SYSDATE,
+		#{borrowId}
+		FROM DUAL,
+		(SELECT CASE
+		WHEN COUNT(USER_ID) > 0 THEN
+		MAX(USER_ID)
+		ELSE
+		NULL
+		END USER_ID
+		FROM (SELECT USER_ID
+		FROM APPROVE_MOBILE AM
+		WHERE AM.PHONE_NUMBER = #{phoneNumber, jdbcType = VARCHAR}
+		ORDER BY INS_DATE DESC)) B,
+		(SELECT MAX(USER_ID) USER_ID
+		FROM TPA_COIN_CHANCE
+		WHERE PHONE_NUMBER = #{phoneNumber, jdbcType = VARCHAR}
+		AND BORROW_ID = #{borrowId}) C
+	</insert>
+
+	<update id="updateTpaUserCoinDetail" parameterType="TpaUserCoinDetailBean">
+		UPDATE
+		TPA_USER_COIN_DETAIL SET
+		PHONE_NUMBER=#{phoneNumber},
+		BP_FLG=#{bpFlg},
+		USER_ID=#{userId},
+		GROUP_ID=#{groupId},
+		AMOUNT=#{amount},
+		MEMO=#{memo},
+		STATE=#{state},
+		INS_DATE=#{insDate},
+		BORROW_ID=#{borrowId}
+		WHERE
+		RECORD_ID=#{recordId}
+	</update>
+	<select id="getAllTpaUserCoinDetailByUserId" parameterType="String"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL WHERE USER_ID=#{userId}  order by INS_DATE desc]]>
+	</select>
+	<select id="getCoinGrapList" parameterType="String"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[SELECT A.RECORD_ID,
+       B.PHONE_NUMBER,
+       A.BP_FLG,
+       A.USER_ID,
+       A.GROUP_ID,
+       A.AMOUNT,
+       A.MEMO,
+       A.STATE,
+       A.INS_DATE,
+       A.BORROW_ID,
+       TO_CHAR(C.END_TIME,'YYYY-MM-DD') END_TIME,
+       TO_CHAR(A.INS_DATE,'YYYY-MM-DD') GET_TIME
+  FROM TPA_USER_COIN_DETAIL A
+ INNER JOIN TPA_COIN_CHANCE B
+    ON A.GROUP_ID = B.RECORD_ID
+ INNER JOIN TCC_ACTIVITY C
+    ON B.ACTIVITY_ID = C.RECORD_ID
+ WHERE A.BP_FLG IN (0, 3)
+   AND A.PHONE_NUMBER = #{PHONE_NUMBER}
+ ORDER BY A.INS_DATE DESC]]>
+	</select>
+	<select id="getCoinUsedList" parameterType="String"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL WHERE BP_FLG=1 AND PHONE_NUMBER=#{phoneNumber} order by INS_DATE desc]]>
+	</select>
+	<select id="getCoinOutOfDateList" parameterType="String"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL WHERE BP_FLG=2 AND PHONE_NUMBER=#{phoneNumber} order by INS_DATE desc]]>
+	</select>
+	<!-- 红包机会表相关操作 2015-5-29 gaojunfeng end -->
+
+
+	<!-- 红包表(TPA_USER_COIN)相关操作 2015-5-29 gaojunfeng begin -->
+	<!-- RECORD_ID、PHONE_NUMBER、USER_ID、AMOUNT、FROST -->
+	<insert id="insertTpaUserCoin" parameterType="TpaUserCoinBean">
+		INSERT INTO
+		TPA_USER_COIN(PHONE_NUMBER,USER_ID,AMOUNT,FROST)
+		select
+		#{phoneNumber},(select user_id
+		from (select user_id
+		from approve_mobile
+		am
+		where am.phone_number = #{phoneNumber,jdbcType=VARCHAR}
+		order by
+		ins_date desc)
+		where 1 >= rownum) user_id,#{amount},#{frost} from dual
+	</insert>
+	<update id="updateTpaUserCoin" parameterType="TpaUserCoinBean">
+		UPDATE
+		TPA_USER_COIN SET
+		PHONE_NUMBER=#{phoneNumber,jdbcType=VARCHAR},
+		USER_ID=#{userId,jdbcType=VARCHAR},
+		AMOUNT=#{amount,jdbcType=FLOAT},
+		FROST=#{frost,jdbcType=FLOAT}
+		WHERE
+		RECORD_ID=#{recordId,jdbcType=NUMERIC}
+	</update>
+	<select id="getAllTpaUserCoinByUserId" parameterType="int"
+		resultMap="TpaUserCoinBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,USER_ID,AMOUNT,FROST
+			     FROM TPA_USER_COIN WHERE USER_ID=#{userId}]]>
+	</select>
+	<select id="getAllTpaUserCoin" resultMap="TpaUserCoinBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,USER_ID,AMOUNT,FROST
+			     FROM TPA_USER_COIN]]>
+	</select>
+	<select id="getTpaUserCoinByPhoneNumber" parameterType="String"
+		resultMap="TpaUserCoinBean"> 
+		<![CDATA[SELECT RECORD_ID,PHONE_NUMBER,USER_ID,AMOUNT,FROST
+			     FROM TPA_USER_COIN WHERE PHONE_NUMBER=#{phoneNumber}]]>
+	</select>
+	<!-- 红包键值对配置信息表相关操作 2015-5-29 gaojunfeng end -->
+
+	<!-- 获取过期红包金额 begin -->
+	<select id="getOutOfDateCoin" parameterType="String" resultType="double"> 
+		<![CDATA[select (b.amount-a.sum) as result 
+		     from(select nvl(sum(tucd.amount),0) as sum, #{phoneNumber} as phone_number
+		         from TPA_USER_COIN_DETAIL tucd 
+		         inner join TPA_COIN_CHANCE tcc on tucd.group_id = tcc.record_id
+		         inner join TCC_ACTIVITY ta on tcc.activity_id = ta.record_id          
+		         where tucd.PHONE_NUMBER = #{phoneNumber} and tucd.bp_flg=0 and trunc(sysdate)<trunc(ta.end_time)
+         		) a  inner join TPA_USER_COIN b on a.phone_number = b.phone_number]]>
+	</select>
+	<!-- 获取过期红包金额 end -->
+	<!-- 查询指定红包机会recordId下指定phoneNumber用户抢红包次数 begin -->
+	<select id="getTpaUserCoinDetailCount" parameterType="map"
+		resultType="int"> 
+		<![CDATA[select count(1) from TPA_USER_COIN_DETAIL tucd 
+					where tucd.GROUP_ID in 
+					(
+						select record_id from TPA_COIN_CHANCE where root=
+								(select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 
+                 		union (select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 					
+					) 
+					and tucd.BP_FLG=0 
+					and tucd.PHONE_NUMBER=#{PHONE_NUMBER,jdbcType=VARCHAR} ]]>
+	</select>
+
+
+
+	<select id="queryGrapedTpaUserCoinDetail" parameterType="map"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[
+			SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL tucd
+			where tucd.BP_FLG=0 and tucd.GROUP_ID in 
+			(
+				select record_id from TPA_COIN_CHANCE where root=
+						(select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 
+               		union (select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 					
+			)
+			and tucd.BP_FLG=0 
+			and tucd.PHONE_NUMBER=#{PHONE_NUMBER,jdbcType=VARCHAR}
+			]]>
+	</select>
+	<!-- 获取用户抢到的红包 end -->
+
+
+
+
+
+	<select id="getTpaUserCoinDetailAmount" parameterType="map"
+		resultType="double"> 
+		<![CDATA[select sum(amount) from TPA_USER_COIN_DETAIL tucd 
+					where tucd.GROUP_ID in 
+					(
+						select record_id from TPA_COIN_CHANCE where root=
+								(select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 
+                 		union (select case when root=0 then record_id else root end from TPA_COIN_CHANCE where record_id=#{RECORD_ID,jdbcType=NUMERIC}) 					
+					) 
+					and tucd.BP_FLG=0 
+					and tucd.PHONE_NUMBER=#{PHONE_NUMBER,jdbcType=VARCHAR} ]]>
+	</select>
+	<!-- 查询指定红包机会recordId下指定phoneNumber用户抢红包次数 end -->
+	<!-- 获取当前红包机会的顶级的电话 begin -->
+	<select id="getPhoneNumberByRoot" parameterType="int"
+		resultType="String"> 
+		<![CDATA[
+			select PHONE_NUMBER from TPA_COIN_CHANCE where RECORD_ID=(select ROOT from TPA_COIN_CHANCE where RECORD_ID=#{recordId})
+		]]>
+	</select>
+	<!-- 获取当前红包机会的顶级的电话 end -->
+	<!-- 查询当前标投资金额下的可用红包金额 begin -->
+	<select id="getValidCoinToUse" parameterType="map" resultType="double"> 
+		<![CDATA[
+			select case
+				when (select tuc.amount from TPA_USER_COIN tuc where tuc.phone_number=#{PHONE_NUMBER,jdbcType=VARCHAR}) <tcc.value*(#{VALID_AMOUNT,jdbcType=DOUBLE})  
+            		then (select tuc.amount from TPA_USER_COIN tuc where tuc.phone_number=#{PHONE_NUMBER,jdbcType=VARCHAR})
+				else tcc.value*(#{VALID_AMOUNT,jdbcType=DOUBLE})
+      			end
+      		from TCC_COIN_CONFIG tcc
+       		inner join borrow b on tcc.key= to_char(b.borrow_period)
+	        where b.borrow_id=#{BORROW_ID,jdbcType=VARCHAR}
+		]]>
+	</select>
+	<!-- 查询当前标投资金额下的可用红包金额 end -->
+	<!-- 根据recordId获取红包流水 begin -->
+	<select id="getTpaUserCoinDetailRecordId" parameterType="int"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[
+			SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL tucd
+			where tucd.RECORD_ID=#{recordId}
+		]]>
+	</select>
+	<!-- 根据recordId获取红包流水 end -->
+
+
+	<!-- 获取分享的红包机会 begin -->
+	<select id="getShareChance" parameterType="map" resultMap="TpaCoinChanceBean"> 
+		<![CDATA[
+		 SELECT RECORD_ID,USER_ID,PHONE_NUMBER,BORROW_ID,VALID_ACCOUNT_TENDER,UPD_USER_ID,ACTIVITY_ID,QUANTITY,ENABLE,INS_DATE, ROOT,ORG_QUANTITY,GROUP_ID
+  				FROM TPA_COIN_CHANCE WHERE PHONE_NUMBER =#{PHONE_NUMBER,jdbcType=VARCHAR} 
+   				and (
+   						(ROOT = 0 and RECORD_ID = #{RECORD_ID}) 
+   						OR (ROOT = 0 and RECORD_ID =(select case when ROOT=0 then RECORD_ID else ROOT end from TPA_COIN_CHANCE where RECORD_ID = #{RECORD_ID,jdbcType=VARCHAR}))
+   					    OR (ROOT = (select case when ROOT=0 then RECORD_ID else ROOT end from TPA_COIN_CHANCE where RECORD_ID = #{RECORD_ID,jdbcType=VARCHAR}))
+   					 )
+		 ]]>
+	</select>
+	<!-- 获取分享的红包机会 end -->
+
+
+	<!-- 分享的红包机会信息插入 begin -->
+	<!-- RECORD_ID、PHONE_NUMBER、BP_FLG、USER_ID、GROUP_ID、 AMOUNT、 MEMO、STATE、INS_DATE、BORROW_ID -->
+	<insert id="insertChanceByRoot" parameterType="map">
+		INSERT INTO
+		TPA_COIN_CHANCE(USER_ID,PHONE_NUMBER,BORROW_ID,VALID_ACCOUNT_TENDER,UPD_USER_ID,ACTIVITY_ID,ENABLE,INS_DATE,ROOT,QUANTITY,ORG_QUANTITY,GROUP_ID)
+		SELECT
+		(select case when count(user_id)>0 then max(user_id) else ' '
+		end from
+		(select user_id from approve_mobile am where am.phone_number =
+		#{PHONE_NUMBER,jdbcType=VARCHAR} order by ins_date desc) where 1 >=
+		rownum) as user_id,
+		#{PHONE_NUMBER},BORROW_ID,VALID_ACCOUNT_TENDER,UPD_USER_ID,ACTIVITY_ID,ENABLE,sysdate,
+		case when root=0 then record_id else root
+		end,ORG_QUANTITY,ORG_QUANTITY,GROUP_ID
+		FROM TPA_COIN_CHANCE where
+		RECORD_ID=#{RECORD_ID}
+	</insert>
+	<!-- 分享的红包机会信息插入 end -->
+
+	<!-- 获取用户抢到的红包 begin -->
+	<select id="getGrapedTpaUserCoinDetail" parameterType="map"
+		resultMap="TpaUserCoinDetailBean"> 
+		<![CDATA[
+			SELECT RECORD_ID,PHONE_NUMBER,BP_FLG,USER_ID,GROUP_ID, AMOUNT, MEMO,STATE,INS_DATE,BORROW_ID
+			     FROM TPA_USER_COIN_DETAIL tucd
+			where tucd.BP_FLG=0 and tucd.GROUP_ID=#{RECORD_ID,jdbcType=NUMERIC} and tucd.PHONE_NUMBER=#{PHONE_NUMBER,jdbcType=VARCHAR}
+			
+			]]>
+	</select>
+	<!-- 获取用户抢到的红包 end -->
+
+
+	<!-- 根据电话和活动ID查询红包机会 -->
+	<select id="getChanceByPnAndAi" parameterType="map"
+		resultMap="TpaCoinChanceBean">
+		<![CDATA[SELECT C.USER_ID as USER_ID, C.PHONE_NUMBER as PHONE_NUMBER,A.BORROW_ID as BORROW_ID,B.VALID_ACCOUNT_tender as VALID_ACCOUNT_TENDER,a.reverify_user_id as UPD_USER_ID, #{activityId,jdbcType=VARCHAR} as activity_id,
+		       0 as QUANTITY,1 as ENABLE, null as INS_DATE, 0 as ROOT,0 as ORG_QUANTITY,0 as GROUP_ID,D.NICK_NAME,A.BORROW_TITLE
+		  FROM BORROW A
+		 INNER JOIN (SELECT USER_ID,BORROW_ID, SUM(VALID_ACCOUNT_TENDER) VALID_ACCOUNT_TENDER
+               FROM BORROW_TENDER
+              WHERE BORROW_ID = #{borrowId,jdbcType=VARCHAR}
+              GROUP BY USER_ID,BORROW_ID) B
+		    ON (A.BORROW_ID = B.BORROW_ID)
+		 INNER JOIN APPROVE_MOBILE C
+		    ON (B.USER_ID = C.USER_ID)
+		 INNER JOIN USERS D
+    	  ON (B.USER_ID=D.USER_ID)
+		 WHERE A.BORROW_ID = #{borrowId,jdbcType=VARCHAR}]]>
+	</select>
+
+	<!-- 根据用户名查询红包组 -->
+	<select id="QueryCoinChance" parameterType="map" resultMap="CoinChange">
+		SELECT A.BORROW_ID,
+		A.BORROW_TITLE,
+		B.QUANTITY,
+		B.ORG_QUANTITY,
+		TO_CHAR(C.END_TIME,'YYYY-MM-DD') END_TIME,
+		TO_CHAR(C.COIN_END_TIME,'YYYY-MM-DD') COIN_END_TIME,
+		B.RECORD_ID ROOT,
+		CASE
+		WHEN B.ROOT = 0 THEN
+		'投资 ' || A.BORROW_TITLE || ' 获取分享机会'
+		ELSE
+		'学习雷锋,红包接力乐不停'
+		END MEMO,
+		B.PHONE_NUMBER PHONE
+
+		FROM
+		BORROW A
+		INNER JOIN
+		TPA_COIN_CHANCE B
+		ON A.BORROW_ID = B.BORROW_ID
+		INNER
+		JOIN TCC_ACTIVITY C
+		ON B.ACTIVITY_ID = C.RECORD_ID
+		WHERE 1=1
+		<if test="USER_ID != null">
+			AND B.USER_ID = #{USER_ID}
+		</if>
+		<if test="PHONE_NUMBER != null">
+			AND B.PHONE_NUMBER = #{USER_ID}
+		</if>
+	</select>
+
+	<select id="QueryCoinChanceByRoot" parameterType="map"
+		resultMap="CoinChange">
+		SELECT A.BORROW_ID,
+		A.BORROW_TITLE,
+		B.QUANTITY,
+		B.ORG_QUANTITY,
+		TO_CHAR(C.END_TIME,'YYYY-MM-DD') END_TIME,
+		TO_CHAR(C.COIN_END_TIME,'YYYY-MM-DD') COIN_END_TIME,
+		B.RECORD_ID ROOT,
+		CASE
+		WHEN B.ROOT = 0 THEN
+		'投资 ' || A.BORROW_TITLE || ' 获取分享机会'
+		ELSE
+		'学习雷锋,红包接力乐不停'
+		END MEMO,
+		B.PHONE_NUMBER PHONE
+
+		FROM
+		BORROW A
+		INNER JOIN
+		TPA_COIN_CHANCE B
+		ON A.BORROW_ID = B.BORROW_ID
+		INNER
+		JOIN TCC_ACTIVITY C
+		ON B.ACTIVITY_ID = C.RECORD_ID
+		WHERE B.RECORD_ID=#{RECORD_ID}
+		<if test="USER_ID != null">
+			AND B.USER_ID = #{USER_ID}
+		</if>
+		<if test="PHONE_NUMBER != null">
+			AND B.PHONE_NUMBER = #{PHONE_NUMBER}
+		</if>
+	</select>
+
+
+	<!-- 获取分享的红包机会 begin -->
+	<select id="getChanceByActivity" parameterType="String"
+		resultMap="TpaCoinChanceBean"> 
+		<![CDATA[
+		 SELECT RECORD_ID,USER_ID,PHONE_NUMBER,BORROW_ID,VALID_ACCOUNT_TENDER,UPD_USER_ID,ACTIVITY_ID,QUANTITY,ENABLE,INS_DATE, ROOT,ORG_QUANTITY,GROUP_ID
+  				FROM TPA_COIN_CHANCE WHERE ACTIVITY_ID =#{ACTIVITY_ID}
+		 ]]>
+	</select>
+	<!-- 获取分享的红包机会 end -->
+
+	<select id="getNotifyBean" parameterType="map" resultMap="NotifyBean"> 
+		<![CDATA[SELECT DISTINCT B.PHONE_NUMBER, AMOUNT, B.USER_ID
+        FROM TPA_USER_COIN_DETAIL A
+        LEFT OUTER JOIN TPA_COIN_CHANCE B
+      ON (A.phone_number = B.phone_number AND A.GROUP_ID = B.RECORD_ID)
+   WHERE B.ACTIVITY_ID = #{ACTIVITY_ID}
+     AND B.BORROW_ID = #{BORROW_ID}
+     AND B.ROOT = 0
+		 ]]>
+	</select>
+
+	<select id="QueryUserCoin" parameterType="String" resultType="String">
+		SELECT AMOUNT FROM TPA_USER_COIN WHERE PHONE_NUMBER = #{PHONE_NUMBER}
+	</select>
+
+</mapper>
+ 

@@ -1,4 +1,5 @@
 content_assist_number_of_computers=19
 eclipse.preferences.version=1
+showUnknownContentTypeMsg=always
 useAnnotationsPrefPage=true
 useQuickDiffPrefPage=true

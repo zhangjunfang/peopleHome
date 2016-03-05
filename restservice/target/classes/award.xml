@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<!-- 抽奖信息相关的表映射 2015-04-17 gaojunfeng begin -->
+	<!-- 奖品信息表 AWARD_INFO AWARD_CODE(奖品编号) AWARD_MSG(奖品信息) AWARD_PERCENT(奖品百分比) -->
+	<resultMap type="AwardInfo" id="AwardInfo">
+		<result column="AWARD_CODE" property="awardCode" />
+		<result column="AWARD_MSG" property="awardMsg" />
+		<result column="AWARD_PERCENT_FROM" property="awardPercentFrom" />
+		<result column="AWARD_PERCENT_END" property="awardPercentEnd" />
+		<result column="MAX_TIMES" property="maxTimes" />
+		<result column="ISAVAILABLE" property="isAvailable" />
+	</resultMap>
+	<!-- 用户抽奖信息表 AWARD_DRAW_INFO USER_ID(用户编号) ODD_TIMES()剩余抽奖次数) SHARE_DATE(分享时间（精确到天）) -->
+	<resultMap type="AwardDrawInfo" id="AwardDrawInfo">
+		<result column="USER_ID" property="userId" />
+		<result column="ODD_TIMES" property="oddTimes" />
+		<result column="SHARE_DATE" property="shareDate" />
+	</resultMap>
+	<!-- 用户中奖情况表 AWARD_WIN_INFO USER_ID(用户编号) AWARD_CODE(奖品编号) AWARD_DATE(中奖时间) -->
+	<resultMap type="AwardWinInfo" id="AwardWinInfo">
+		<result column="ID" property="id" />
+		<result column="USER_ID" property="userId" />
+		<result column="AWARD_CODE" property="awardCode" />
+		<result column="WIN_DATE" property="winDate" />
+	</resultMap>
+	<!-- 抽奖信息相关的表映射 2015-04-17 gaojunfeng end -->
+
+
+	<resultMap type="UserAwardInfo" id="UserAwardInfo">
+		<result column="WIN_DATE" property="winDate" />
+		<result column="NICK_NAME" property="nickName" />
+		<result column="AWARD_MSG" property="awardName" />
+		<result column="IS_GAIN" property="isGain" />
+	</resultMap>
+
+
+
+	<!-- 奖品信息从查询 -->
+	<select id="QueryAwardInfo" resultMap="AwardInfo">
+			<![CDATA[SELECT AWARD_CODE,AWARD_MSG,AWARD_PERCENT_FROM,AWARD_PERCENT_END, MAX_TIMES,ISAVAILABLE FROM AWARD_INFO WHERE　ISAVAILABLE=1]]>
+	</select>
+
+	<!-- 查询指定用户的抽奖信息 -->
+	<select id="QueryAwardDrawInfoByUserId" parameterType="String"
+		resultMap="AwardDrawInfo"> 
+		<![CDATA[SELECT USER_ID,ODD_TIMES,SHARE_DATE FROM AWARD_DRAW_INFO WHERE USER_ID =#{userId}]]>
+	</select>
+
+	<!-- 用户抽奖信息插入(首次插入数据抽奖次数默认为1) -->
+	<insert id="InsertAwardDrawInfo" parameterType="String">
+		INSERT INTO
+		AWARD_DRAW_INFO(USER_ID, ODD_TIMES ,SHARE_DATE)
+		VALUES(#{userId},1,null)
+	</insert>
+
+	<!-- 更新指定用户的抽奖信息 -->
+	<update id="UpdateAwardDrawInfo" parameterType="AwardDrawInfo">
+		UPDATE
+		AWARD_DRAW_INFO SET
+		ODD_TIMES=#{oddTimes},
+		SHARE_DATE=#{shareDate,jdbcType=TIMESTAMP}
+		WHERE
+		USER_ID=#{userId}
+	</update>
+
+	<!-- 用户中奖信息插入 -->
+	<insert id="InsertAwardWinInfo" parameterType="AwardWinInfo">
+		INSERT INTO
+		AWARD_WIN_INFO(ID, USER_ID, AWARD_CODE ,WIN_DATE)
+		VALUES(AWARD_WIN_INFO_ID_SEQUENCE.NEXTVAL,#{userId},#{awardCode},sysdate)
+	</insert>
+
+	<!-- 查询指定用户的抽中VIP次数 -->
+	<select id="QueryAwardDrawInfoCountOfVIP" parameterType="String"
+		resultType="int"> 
+		<![CDATA[SELECT COUNT(1) FROM AWARD_WIN_INFO WHERE USER_ID =#{userId} AND AWARD_CODE=1]]>
+	</select>
+
+	<!-- 查询指定用户的今日抽奖次数 -->
+	<select id="QueryDrawTimesOfToday" parameterType="String"
+		resultType="int"> 
+		<![CDATA[SELECT COUNT(1) FROM AWARD_WIN_INFO WHERE USER_ID =#{userId} AND trunc(WIN_DATE)=trunc(sysdate)]]>
+	</select>
+
+	<!-- 更新指定用户的抽奖信息 -->
+	<update id="CountAwardDrawInfoByUserId" parameterType="String">
+		<![CDATA[
+		UPDATE AWARD_DRAW_INFO
+		SET ODD_TIMES = ODD_TIMES +
+		(
+			select case
+			when count(awi.user_id) < 1 then 1 
+			else 0
+			end draw_count 
+			from AWARD_WIN_INFO awi
+			where awi.user_id = #{userId}
+			and trunc(awi.win_date) = trunc(sysdate)
+		)
+		WHERE USER_ID = #{userId}
+		]]>
+	</update>
+
+	<!-- 用户分享朋友圈成功时增加其抽奖次数 -->
+	<update id="UpdateDrawCountByShare" parameterType="String">
+		<![CDATA[
+		UPDATE AWARD_DRAW_INFO
+		SET ODD_TIMES = ODD_TIMES + 1, SHARE_DATE = SYSDATE 
+		WHERE (SHARE_DATE IS NULL OR SHARE_DATE <TRUNC(SYSDATE))
+		AND USER_ID =#{userId}
+		]]>
+	</update>
+
+	<select id="QueryUserAwardInfo" parameterType="String"
+		resultMap="UserAwardInfo"> 
+		<![CDATA[SELECT TO_CHAR(WIN_DATE, 'yyyy-mm-dd') WIN_DATE,
+       U.NICK_NAME,
+       B.AWARD_MSG,
+       CASE WHEN A.AWARD_CODE=4 THEN 1 ELSE  A.IS_GAIN END IS_GAIN
+  FROM AWARD_WIN_INFO A
+ INNER JOIN AWARD_INFO B
+    ON (A.AWARD_CODE = B.AWARD_CODE)
+ INNER JOIN USERS U
+    ON (A.USER_ID = U.USER_ID)
+ WHERE A.USER_ID =#{userId}
+   AND B.AWARD_CODE <> 6]]>
+	</select>
+
+</mapper>
+ 

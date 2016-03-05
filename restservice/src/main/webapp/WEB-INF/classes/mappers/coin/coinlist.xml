@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jujin.mapper">
+
+	<!-- 红包流水 -->
+	<resultMap type="CoinItem" id="CoinItem">
+		<result column="USER_ID" property="userId" />
+		<result column="PHONE_NUMBER" property="phoneNumber" />
+		<result column="MEMO" property="memo" />
+		<result column="AMOUNT" property="amount" />
+		<result column="BP_FLG" property="bpFlg" />
+		<result column="INS_DATE" property="insDate" />
+		<result column="START_TIME" property="startDate" />
+		<result column="END_TIME" property="endDate" />
+		<result column="NAME" property="actName" />
+		<result column="ACTIVITY_ID" property="actId" />
+		<result column="ACT_MEMO" property="actMemo" />
+	</resultMap>
+
+
+	<!-- 聚金币过期 -->
+	<select id="QueryUserCoinOverdue" parameterType="String"
+		resultMap="CoinItem">
+		SELECT DETAIL.USER_ID, DETAIL.PHONE_NUMBER, DETAIL.MEMO,
+		DETAIL.AMOUNT,BP_FLG,DETAIL.INS_DATE,ACT.NAME,ACT.MEMO
+		ACT_MEMO,ACT.ACTIVITY_ID,
+		CASE WHEN act.expiration_type=1 THEN
+		DETAIL.INS_DATE END START_TIME,
+		CASE WHEN act.expiration_type=1 THEN
+		ADD_MONTHS(DETAIL.INS_DATE,1) ELSE ACT.COIN_END_TIME END END_TIME
+		FROM TPA_USER_COIN_DETAIL DETAIL
+		INNER JOIN TCC_ACTIVITY ACT
+		ON DETAIL.ACTIVITY_ID = ACT.ACTIVITY_ID
+		WHERE DETAIL.USER_ID=#{USER_ID,jdbcType=VARCHAR}
+		AND DETAIL.STATE=1
+		ORDER BY DETAIL.INS_DATE DESC
+	</select>
+
+	<!-- 聚金币获取 -->
+	<select id="QueryUserCoinGet" parameterType="String" resultMap="CoinItem">
+		SELECT DETAIL.USER_ID, DETAIL.PHONE_NUMBER, DETAIL.MEMO,
+		DETAIL.AMOUNT,BP_FLG,DETAIL.INS_DATE,ACT.NAME,
+		ACT.MEMO ACT_MEMO,
+		ACT.ACTIVITY_ID,
+		CASE WHEN act.expiration_type=1 THEN DETAIL.INS_DATE
+		END START_TIME,
+		CASE WHEN act.expiration_type=1 THEN
+		ADD_MONTHS(DETAIL.INS_DATE,1) ELSE ACT.COIN_END_TIME END END_TIME
+		FROM TPA_USER_COIN_DETAIL DETAIL
+		INNER JOIN TCC_ACTIVITY ACT
+		ON DETAIL.ACTIVITY_ID = ACT.ACTIVITY_ID
+		WHERE BP_FLG = '0'
+		AND DETAIL.USER_ID=#{USER_ID,jdbcType=VARCHAR}
+		ORDER BY DETAIL.INS_DATE DESC
+	</select>
+
+	<!-- 聚金币使用 -->
+	<select id="QueryUserCoinUse" parameterType="String" resultMap="CoinItem">
+		SELECT DETAIL.USER_ID, DETAIL.PHONE_NUMBER, DETAIL.MEMO,
+		ROUND(DETAIL.AMOUNT,2) AMOUNT,BP_FLG,DETAIL.INS_DATE,
+		CASE WHEN
+		act.expiration_type=1 THEN DETAIL.INS_DATE END START_TIME,
+		CASE WHEN
+		act.expiration_type=1 THEN ADD_MONTHS(DETAIL.INS_DATE,1) ELSE
+		ACT.COIN_END_TIME END END_TIME
+		FROM TPA_USER_COIN_DETAIL DETAIL
+		INNER JOIN TCC_ACTIVITY ACT
+		ON DETAIL.ACTIVITY_ID=ACT.ACTIVITY_ID
+		WHERE DETAIL.BP_FLG='1'
+		AND DETAIL.STATE&lt;>'1'
+		AND
+		DETAIL.USER_ID=#{USER_ID,jdbcType=VARCHAR}
+		ORDER BY DETAIL.INS_DATE
+		DESC
+	</select>
+
+</mapper>
+ 

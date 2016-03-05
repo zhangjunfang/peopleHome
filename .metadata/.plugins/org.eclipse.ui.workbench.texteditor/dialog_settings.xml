@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="452" key="DIALOG_X_ORIGIN"/>
+		<item value="234" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item value="Pool" key="selection"/>
+		<item value="false" key="isRegEx"/>
+		<item value="configuration" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="pool"/>
-			<item value="Pool"/>
-			<item value="sessionIdGenerator"/>
-			<item value="SessionIdGenerator"/>
-			<item value="executor"/>
-			<item value="dirty"/>
-			<item value="Executor"/>
-			<item value="maxInactiveInterval"/>
+			<item value="configuration"/>
+			<item value="buildSqlSessionFactory"/>
+			<item value="mapperLocations"/>
+			<item value="MapperLocations"/>
+			<item value="SqlSessionFactory"/>
+			<item value="sqlSessionFactory"/>
+			<item value="abstract"/>
+			<item value="UserNickName"/>
 		</list>
+		<list key="replacehistory">
+			<item value="com.ocean.ddl"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="273" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value="400" key="DIALOG_HEIGHT"/>
+		<item value="768" key="DIALOG_X_ORIGIN"/>
+		<item value="230" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

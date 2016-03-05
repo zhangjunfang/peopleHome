@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="UserNickName" type="com.jujin.entity.UserNickName" />
+		<typeAlias alias="User" type="com.jujin.entity.User" />
+		<typeAlias alias="UserEmail" type="com.jujin.entity.UserEmail" />
+		<typeAlias alias="UserPhone" type="com.jujin.entity.UserPhone" />
+		<typeAlias alias="UserIdentityCard" type="com.jujin.entity.UserIdentityCard" />
+		<typeAlias alias="UserInfo" type="com.jujin.entity.UserInfo" />
+		<typeAlias alias="UserNickName" type="com.jujin.entity.UserNickName" />
+		<typeAlias alias="Account" type="com.jujin.entity.account.Account" />
+		<typeAlias alias="AccountCenter" type="com.jujin.entity.account.AccountCenter" />
+		<typeAlias alias="AccountLog" type="com.jujin.entity.account.AccountLog" />
+		<typeAlias alias="AccountLogType" type="com.jujin.entity.account.AccountLogType" />
+		<typeAlias alias="DataPoint" type="com.jujin.entity.account.DataPoint" />
+		<typeAlias alias="EarnFriendsRank" type="com.jujin.entity.account.EarnFriendsRank" />
+		<typeAlias alias="EarningsRank" type="com.jujin.entity.account.EarningsRank" />
+		<typeAlias alias="FriendInvestment" type="com.jujin.entity.account.FriendInvestment" />
+		<typeAlias alias="InviteReward" type="com.jujin.entity.account.InviteReward" />
+		<typeAlias alias="Message" type="com.jujin.entity.account.Message" />
+		<typeAlias alias="RecoveLog" type="com.jujin.entity.account.RecoveLog" />
+		<typeAlias alias="RecoveEntity" type="com.jujin.entity.account.RecoveEntity" />
+		<typeAlias alias="RecoveEntityDetail"
+			type="com.jujin.entity.account.RecoveEntityDetail" />
+		<typeAlias alias="UserBankCard" type="com.jujin.entity.account.UserBankCard" />
+		<typeAlias alias="FriendInvestment" type="com.jujin.entity.account.FriendInvestment" />
+		<typeAlias alias="Borrow" type="com.jujin.entity.borrow.Borrow" />
+		<typeAlias alias="BorrowInfo" type="com.jujin.entity.borrow.BorrowInfo" />
+		<typeAlias alias="RepayCredit" type="com.jujin.entity.borrow.RepayCredit" />
+		<typeAlias alias="TenderLog" type="com.jujin.entity.borrow.TenderLog" />
+		<typeAlias alias="BorrowInfoItem" type="com.jujin.entity.borrow.BorrowInfoItem" />
+		<typeAlias alias="UserIncomeInfo" type="com.jujin.entity.borrow.UserIncomeInfo" />
+		<typeAlias alias="RecoveLogItem" type="com.jujin.entity.account.RecoveLogItem" />
+		<typeAlias alias="UserAccountInfo" type="com.jujin.entity.UserAccountInfo" />
+		<typeAlias alias="WxBindBean" type="com.jujin.entity.WxBindBean" />
+		<typeAlias alias="RegisterEntity" type="com.jujin.entity.account.RegisterEntity" />
+		<typeAlias alias="UserFriendInterestRank"
+			type="com.jujin.entity.user.UserFriendInterestRank" />
+		<typeAlias alias="UserRoi" type="com.jujin.entity.account.UserRoi" />
+		<typeAlias alias="UserAttestation" type="com.jujin.entity.UserAttestation" />
+		<!-- 抽奖相关 gaojunfeng 2015-04-17 begin -->
+		<typeAlias alias="AwardInfo" type="com.jujin.entity.award.AwardInfo" />
+		<typeAlias alias="AwardDrawInfo" type="com.jujin.entity.award.AwardDrawInfo" />
+		<typeAlias alias="AwardWinInfo" type="com.jujin.entity.award.AwardWinInfo" />
+		<!-- 抽奖相关 gaojunfeng 2015-04-17 end -->
+		<!-- 红包相关 gaojunfeng 2015-5-29 begin -->
+		<typeAlias alias="TccActivityBean" type="com.jujin.entity.coin.TccActivityBean" />
+		<typeAlias alias="TccCoinConfigBean" type="com.jujin.entity.coin.TccCoinConfigBean" />
+		<typeAlias alias="TpaCoinChanceBean" type="com.jujin.entity.coin.TpaCoinChanceBean" />
+		<typeAlias alias="TpaUserCoinBean" type="com.jujin.entity.coin.TpaUserCoinBean" />
+		<typeAlias alias="TpaUserCoinDetailBean"
+			type="com.jujin.entity.coin.TpaUserCoinDetailBean" />
+		<typeAlias alias="CoinChange" type="com.jujin.entity.coin.CoinChange" />
+		<typeAlias alias="NotifyBean" type="com.jujin.entity.coin.NotifyBean" />
+		<!-- 红包相关 gaojunfeng 2015-5-29 end -->
+		<!-- 余额生息相关 gaojunfeng 2015-7-9 begin -->
+		<typeAlias alias="InterestDetail" type="com.jujin.entity.interest.InterestDetail" />
+		<!-- 余额生息相关 gaojunfeng 2015-7-9 end -->
+		<typeAlias alias="UserAwardInfo" type="com.jujin.entity.award.UserAwardInfo" />
+		<typeAlias alias="Ticket" type="com.jujin.entity.ticket.Ticket" />
+		<typeAlias alias="TzjBaseBean"
+			type="com.jujin.touzhijia.entity.account.TzjBaseBean" />
+		<typeAlias alias="BorrowBean"
+			type="com.wicket.loan.web.borrow.publish.bean.BorrowBean" />
+		<typeAlias alias="ExamBean" type="com.jujin.exam.ExamBean" />
+		<typeAlias alias="ExamUser" type="com.jujin.exam.ExamUser" />
+		<typeAlias alias="Coupon" type="com.jujin.entity.account.Coupon" />
+		<typeAlias alias="InterestBean" type="com.jujin.entity.interest.InterestBean" />
+		<typeAlias alias="UserFeedBack" type="com.jujin.entity.feed.FeedBack" />
+		<typeAlias alias="UserFeedType" type="com.jujin.entity.feed.FeedType" />
+
+
+		<typeAlias alias="AutoInvestRecord" type="com.jujin.entity.auto.AutoInvestRecord" />
+		<typeAlias alias="AutoInvestSetting" type="com.jujin.entity.auto.AutoInvestSetting" />
+		<typeAlias alias="CurrentActivityBean" type="com.jujin.entity.CurrentActivityBean" />
+		<typeAlias alias="ClientTicket" type="com.jujin.entity.security.ClientTicket" />
+
+		<!-- 西瓜理财 zhengsx 2015-10-21 -->
+		<typeAlias alias="BorrowInfoDTO"
+			type="com.jujin.entity.xglc.borrow.BorrowInfoDTO" />
+		<typeAlias alias="BorrowUpdateInfoDTO"
+			type="com.jujin.entity.xglc.borrow.BorrowUpdateInfoDTO" />
+		<typeAlias alias="LoginBean" type="com.wicket.loan.web.login.bean.LoginBean" />
+		<typeAlias alias="OrderInfoDTO"
+			type="com.jujin.entity.xglc.transaction.OrderInfoDTO" />
+		<typeAlias alias="RecoverDTO"
+			type="com.jujin.entity.xglc.transaction.RecoverDTO" />
+		<typeAlias alias="DebtInfoDTO"
+			type="com.jujin.entity.xglc.transaction.DebtInfoDTO" />
+		<typeAlias alias="LastRecoverInfo"
+			type="com.jujin.entity.xglc.transaction.LastRecoverInfo" />
+		<typeAlias alias="LoginInfoDTO"
+			type="com.jujin.entity.xglc.transaction.LoginInfoDTO" />
+		<!-- 首页指示器 -->
+		<typeAlias alias="BorrowInvestIndicate"
+			type="com.jujin.entity.borrow.BorrowInvestIndicate" />
+
+
+		<typeAlias alias="BorrowAttestationItem"
+			type="com.jujin.entity.borrow.BorrowAttestationItem" />
+		<typeAlias alias="CoinItem" type="com.jujin.entity.coin.CoinItem" />
+		<typeAlias alias="AppVersion" type="com.jujin.entity.common.AppVersion" />
+		<typeAlias alias="DeviceLocInfo" type="com.jujin.entity.common.DeviceLocInfo" />
+		<typeAlias alias="Location" type="com.jujin.entity.common.Location" />
+		<typeAlias alias="AddressComponent" type="com.jujin.entity.common.AddressComponent" />
+		<typeAlias alias="KeyValuePair" type="com.jujin.entity.borrow.KeyValuePair" />
+
+		<typeAlias alias="XglcUser" type="com.jujin.entity.xglc.XglcUser" />
+
+		<typeAlias alias="BorrowRepay" type="com.jujin.entity.borrow.BorrowRepay" />
+
+		<typeAlias alias="BorrowTransfer" type="com.jujin.entity.borrow.BorrowTransfer" />
+
+
+		<typeAlias alias="ZhaiQuan" type="com.jujin.entity.borrow.ZhaiQuan" />
+		<!-- <typeAlias alias="XglcUserTender" type="com.jujin.entity.xglc.XglcUserTender" 
+			/> -->
+
+
+
+
+
+
+
+		<!-- 签到 zhengsx 2015-11-03 -->
+		<typeAlias alias="SignConfBean" type="com.jujin.entity.sign.SignConfBean" />
+		<typeAlias alias="SignDetailBean" type="com.jujin.entity.sign.SignDetailBean" />
+		<typeAlias alias="SplashItem" type="com.jujin.entity.splash.SplashItem" />
+
+		<!-- 抽奖 zhengsx 2015-11-07 -->
+		<typeAlias alias="AwardSet" type="com.jujin.entity.luckDraw.AwardSet" />
+		<typeAlias alias="BorrowRecord" type="com.jujin.entity.luckDraw.BorrowRecord" />
+		<typeAlias alias="AwardRecord" type="com.jujin.entity.luckDraw.AwardRecord" />
+		<typeAlias alias="ScrollAwardRecord"
+			type="com.jujin.entity.luckDraw.ScrollAwardRecord" />
+		<typeAlias alias="UserOddTimes" type="com.jujin.entity.luckDraw.UserOddTimes" />
+
+
+
+		<!-- 多赚 -->
+		<typeAlias alias="DzBorrowInfo" type="com.jujin.entity.duozhuan.DzBorrowInfo" />
+		<typeAlias alias="Subscribes" type="com.jujin.entity.duozhuan.Subscribes" />
+	</typeAliases>
+
+	<plugins>
+		<plugin interceptor="com.jujin.common.PageInterceptor">
+		</plugin>
+	</plugins>
+
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+
+			<dataSource type="JNDI">
+				<property name="data_source" value="jdbc/datasource" />
+				<property name="env.encoding" value="UTF8" />
+			</dataSource>
+
+
+			<!-- <dataSource type="POOLED"> <property name="driver" value="oracle.jdbc.OracleDriver"/> 
+				<property name="url" value="jdbc:oracle:thin:@//114.215.100.75:1521/DEVDEV"/> 
+				<property name="username" value="loanadmin" /> <property name="password" 
+				value="123456" /> </dataSource> -->
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="./mappers/account/account.xml" />
+		<mapper resource="borrow.xml" />
+		<mapper resource="user.xml" />
+		<!-- 抽奖相关 gaojunfeng 2015-04-17 begin -->
+		<mapper resource="award.xml" />
+
+		<!-- 余额生息相关 gaojunfeng 2015-07-9 -->
+		<mapper resource="./mappers/account/interset.xml" />
+
+
+		<mapper resource="ticket.xml" />
+		<mapper resource="examsqlmapper.xml" />
+		<mapper resource="activity.xml" />
+		<mapper resource="feedback.xml" />
+		<mapper resource="./mappers/security/security.xml" />
+		<mapper resource="./mappers/auto/auto.xml" />
+		<mapper resource="./mappers/common/common.xml" />
+		<!-- 抽奖相关 gaojunfeng 2015-04-17 end -->
+		<!-- 红包相关 gaojunfeng 2015-05-29 begin -->
+		<mapper resource="./mappers/coin/coin.xml" />
+		<mapper resource="./mappers/coin/coinlist.xml" />
+		<mapper resource="./mappers/splash/splash.xml" />
+		<!-- <mapper resource="./mappers/xglc/xglc.xml" /> -->
+		<mapper resource="xglcdbresource.xml" />
+		<mapper resource="sign.xml" />
+		<mapper resource="luckDraw.xml" />
+		<mapper resource="duozhuan.xml" />
+
+	</mappers>
+</configuration>
